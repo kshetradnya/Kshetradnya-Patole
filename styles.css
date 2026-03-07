@@ -255,8 +255,8 @@ main,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 17%;
-  transform: translateZ(58px) scale(1.1);
+  object-position: 50% 13%;
+  transform: translateX(-1.2%) translateY(-0.8%) translateZ(58px) scale(1.14);
   opacity: 0;
   pointer-events: none;
   -webkit-mask-image: radial-gradient(
@@ -643,6 +643,11 @@ main,
 .theme-elegant .project-card,
 .theme-elegant .tool-card {
   animation: elegantPulse 5.5s ease-in-out infinite;
+}
+
+.theme-elegant .first-name {
+  font-size: clamp(1.2rem, 3.25vw, 2.75rem);
+  letter-spacing: 0.001em;
 }
 
 .theme-elegant .project-card:nth-child(2n),
