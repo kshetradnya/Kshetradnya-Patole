@@ -248,6 +248,34 @@ main,
   transform: translateZ(42px) scale(1.18);
 }
 
+.layer-head-alt {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 14%;
+  transform: translateZ(58px) scale(1.18);
+  clip-path: ellipse(29% 23% at 50% 29%);
+  opacity: 0;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(
+    circle var(--reveal-size, 34px) at var(--reveal-x, 50%) var(--reveal-y, 30%),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 62%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: radial-gradient(
+    circle var(--reveal-size, 34px) at var(--reveal-x, 50%) var(--reveal-y, 30%),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 62%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  transition: opacity 140ms ease;
+}
+
+.portrait-mask.revealing .layer-head-alt {
+  opacity: 1;
+}
+
 .layer-shade {
   background: linear-gradient(110deg, rgba(0, 0, 0, 0.2), transparent 42%, rgba(0, 0, 0, 0.32));
   mix-blend-mode: multiply;
@@ -559,7 +587,9 @@ main,
 }
 
 .theme-waves .first-name {
-  animation: shimmer 4.5s linear infinite, waveText 2.8s ease-in-out infinite;
+  font-size: clamp(1.7rem, 4.25vw, 3.55rem);
+  letter-spacing: 0.004em;
+  animation: shimmer 4.5s linear infinite, waveText 3.2s ease-in-out infinite;
 }
 
 .theme-waves .project-card,
@@ -585,10 +615,10 @@ main,
 @keyframes waveText {
   0%,
   100% {
-    letter-spacing: 0.01em;
+    letter-spacing: 0.004em;
   }
   50% {
-    letter-spacing: 0.035em;
+    letter-spacing: 0.015em;
   }
 }
 

@@ -27,14 +27,37 @@ if (stage && mask) {
     mask.style.setProperty("--my", `${(py * 100).toFixed(2)}%`);
   };
 
+  const updateHeadReveal = (clientX, clientY) => {
+    const rect = mask.getBoundingClientRect();
+    const px = ((clientX - rect.left) / rect.width) * 100;
+    const py = ((clientY - rect.top) / rect.height) * 100;
+    const clampedX = Math.max(0, Math.min(100, px));
+    const clampedY = Math.max(0, Math.min(100, py));
+    const trailSize =
+      fluidCursorTrail && window.matchMedia("(hover: hover)").matches
+        ? fluidCursorTrail.getBoundingClientRect().width * 0.5
+        : 34;
+
+    mask.style.setProperty("--reveal-x", `${clampedX.toFixed(2)}%`);
+    mask.style.setProperty("--reveal-y", `${clampedY.toFixed(2)}%`);
+    mask.style.setProperty("--reveal-size", `${trailSize.toFixed(2)}px`);
+  };
+
+  stage.addEventListener("pointerenter", (event) => {
+    mask.classList.add("revealing");
+    updateHeadReveal(event.clientX, event.clientY);
+  });
+
   stage.addEventListener("pointermove", (event) => {
     updateTilt(event.clientX, event.clientY);
+    updateHeadReveal(event.clientX, event.clientY);
   });
 
   stage.addEventListener("pointerleave", () => {
     mask.style.transform = "rotateX(0deg) rotateY(0deg)";
     mask.style.setProperty("--mx", "50%");
     mask.style.setProperty("--my", "20%");
+    mask.classList.remove("revealing");
   });
 
   if (window.matchMedia("(hover: none)").matches) {
