@@ -927,6 +927,11 @@ main,
 .theme-elegant .first-name {
   font-size: clamp(1.2rem, 3.25vw, 2.75rem);
   letter-spacing: 0.001em;
+  padding-right: 0.08em;
+}
+
+.theme-elegant .hero h1 {
+  overflow: visible;
 }
 
 .theme-elegant .project-card:nth-child(2n),
