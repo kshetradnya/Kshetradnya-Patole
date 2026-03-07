@@ -926,11 +926,13 @@ main,
 
 .theme-elegant .first-name {
   display: inline-block;
-  font-size: clamp(1rem, 2.7vw, 2.25rem);
-  letter-spacing: 0;
-  transform: scaleX(0.95);
-  transform-origin: left center;
-  padding-right: 0.14em;
+  font-size: clamp(0.92rem, 2.45vw, 2.05rem);
+  letter-spacing: -0.01em;
+  padding-right: 0.2em;
+  background: linear-gradient(108deg, #0e1430 0%, #22396f 62%, #ff6e4a 100%);
+  -webkit-text-stroke: 0.45px rgba(16, 20, 38, 0.2);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: shimmer 4.6s linear infinite, elegantNamePulse 3.8s ease-in-out infinite;
 }
 
 .theme-elegant .hero h1 {
@@ -1019,6 +1021,18 @@ main,
   50% {
     letter-spacing: 0.02em;
     opacity: 0.78;
+  }
+}
+
+@keyframes elegantNamePulse {
+  0%,
+  100% {
+    letter-spacing: -0.01em;
+    filter: saturate(1);
+  }
+  50% {
+    letter-spacing: 0;
+    filter: saturate(1.08);
   }
 }
 
