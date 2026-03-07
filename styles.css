@@ -124,15 +124,18 @@ main,
   margin: 0.6rem 0 1rem;
   line-height: 0.94;
   position: relative;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .first-name {
   display: block;
   font-family: var(--display-font);
-  font-size: clamp(2rem, 5.1vw, 4.6rem);
+  font-size: clamp(1.55rem, 4.2vw, 3.85rem);
   font-weight: 800;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.003em;
   white-space: nowrap;
+  max-width: 100%;
   background: linear-gradient(120deg, #0f1430, #222e5c, #ff5f3a);
   -webkit-background-clip: text;
   background-clip: text;
@@ -587,8 +590,8 @@ main,
 }
 
 .theme-waves .first-name {
-  font-size: clamp(1.7rem, 4.25vw, 3.55rem);
-  letter-spacing: 0.004em;
+  font-size: clamp(1.25rem, 3.4vw, 2.65rem);
+  letter-spacing: 0.001em;
   animation: shimmer 4.5s linear infinite, waveText 3.2s ease-in-out infinite;
 }
 
@@ -698,7 +701,14 @@ main,
 
 @media (max-width: 1120px) {
   .first-name {
-    font-size: clamp(1.85rem, 5vw, 4rem);
+    font-size: clamp(1.35rem, 3.8vw, 3rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .first-name {
+    font-size: clamp(1.2rem, 5vw, 2.6rem);
+    letter-spacing: 0;
   }
 }
 
@@ -758,7 +768,7 @@ main,
   }
 
   .first-name {
-    font-size: clamp(1.34rem, 8.8vw, 2.5rem);
+    font-size: clamp(1.1rem, 7.6vw, 2.2rem);
     line-height: 1;
     white-space: nowrap;
   }
