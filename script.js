@@ -43,21 +43,28 @@ if (stage && mask) {
     mask.style.setProperty("--reveal-size", `${trailSize.toFixed(2)}px`);
   };
 
-  stage.addEventListener("pointerenter", (event) => {
+  mask.addEventListener("pointerenter", (event) => {
     mask.classList.add("revealing");
     updateHeadReveal(event.clientX, event.clientY);
   });
 
   stage.addEventListener("pointermove", (event) => {
     updateTilt(event.clientX, event.clientY);
+  });
+
+  mask.addEventListener("pointermove", (event) => {
     updateHeadReveal(event.clientX, event.clientY);
+  });
+
+  mask.addEventListener("pointerleave", () => {
+    mask.classList.remove("revealing");
+    mask.style.setProperty("--reveal-size", "0px");
   });
 
   stage.addEventListener("pointerleave", () => {
     mask.style.transform = "rotateX(0deg) rotateY(0deg)";
     mask.style.setProperty("--mx", "50%");
     mask.style.setProperty("--my", "20%");
-    mask.classList.remove("revealing");
   });
 
   if (window.matchMedia("(hover: none)").matches) {
