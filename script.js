@@ -35,8 +35,8 @@ if (stage && mask) {
     const clampedY = Math.max(0, Math.min(100, py));
     const trailSize =
       fluidCursorTrail && window.matchMedia("(hover: hover)").matches
-        ? fluidCursorTrail.getBoundingClientRect().width * 0.5
-        : 34;
+        ? fluidCursorTrail.getBoundingClientRect().width * 0.9
+        : 52;
 
     mask.style.setProperty("--reveal-x", `${clampedX.toFixed(2)}%`);
     mask.style.setProperty("--reveal-y", `${clampedY.toFixed(2)}%`);
