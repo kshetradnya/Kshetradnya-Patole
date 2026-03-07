@@ -929,10 +929,11 @@ main,
   font-size: clamp(0.92rem, 2.45vw, 2.05rem);
   letter-spacing: -0.01em;
   padding-right: 0.2em;
-  background: linear-gradient(108deg, #0e1430 0%, #22396f 62%, #ff6e4a 100%);
+  background: linear-gradient(108deg, #0b1130 0%, #20408a 42%, #ff6e4a 74%, #ffd09a 100%);
+  background-size: 260% auto;
   -webkit-text-stroke: 0.45px rgba(16, 20, 38, 0.2);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
-  animation: shimmer 4.6s linear infinite, elegantNamePulse 3.8s ease-in-out infinite;
+  animation: shimmer 3.6s linear infinite, elegantNamePulse 3.4s ease-in-out infinite;
 }
 
 .theme-elegant .hero h1 {
@@ -956,8 +957,12 @@ main,
   animation: elegantScript 6s ease-in-out infinite;
 }
 
+.theme-elegant .portrait-stage {
+  animation: elegantFloat 6.2s ease-in-out infinite;
+}
+
 .theme-elegant .portrait-mask {
-  animation: elegantBreath 6.8s ease-in-out infinite;
+  animation: elegantBreathGlow 6.8s ease-in-out infinite;
 }
 
 .theme-elegant .cta,
@@ -1009,6 +1014,32 @@ main,
   }
   50% {
     transform: rotateX(-0.5deg) rotateY(0.5deg) scale(1.012);
+  }
+}
+
+@keyframes elegantFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes elegantBreathGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 40px 50px rgba(16, 20, 38, 0.24),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    filter: saturate(1);
+  }
+  50% {
+    box-shadow:
+      0 52px 66px rgba(16, 20, 38, 0.3),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.42);
+    filter: saturate(1.08);
   }
 }
 
