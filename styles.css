@@ -301,6 +301,198 @@ main,
   padding: 4.2rem 0;
 }
 
+.resume {
+  padding: 2.4rem 0 4rem;
+}
+
+.resume-layout {
+  margin-top: 1.6rem;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+.resume-board {
+  position: relative;
+  padding: 1.4rem 1.3rem;
+  border-radius: 16px;
+  border: 1px solid rgba(16, 20, 38, 0.1);
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(255, 245, 231, 0.86)),
+    repeating-linear-gradient(
+      0deg,
+      rgba(16, 20, 38, 0.03) 0 1px,
+      transparent 1px 34px
+    );
+  box-shadow: 0 24px 42px rgba(16, 20, 38, 0.16);
+  transform: rotate(-0.6deg);
+  transition: transform 260ms ease, box-shadow 260ms ease;
+}
+
+.resume-board:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 0 30px 52px rgba(16, 20, 38, 0.2);
+}
+
+.tape {
+  position: absolute;
+  top: -11px;
+  width: 84px;
+  height: 22px;
+  background: rgba(255, 234, 188, 0.6);
+  border: 1px solid rgba(16, 20, 38, 0.08);
+  backdrop-filter: blur(1px);
+}
+
+.tape-left {
+  left: 18px;
+  transform: rotate(-12deg);
+}
+
+.tape-right {
+  right: 20px;
+  transform: rotate(10deg);
+}
+
+.resume-kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.resume-board h3 {
+  margin: 0.45rem 0 0.25rem;
+  font-family: var(--display-font);
+  font-size: clamp(1.4rem, 2.3vw, 2.2rem);
+}
+
+.resume-subline {
+  margin: 0;
+  color: var(--muted);
+}
+
+.resume-chips {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.resume-chips span {
+  padding: 0.35rem 0.62rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--stroke);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.resume-actions {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.resume-btn,
+.resume-link {
+  border-radius: 999px;
+  border: 1px solid var(--stroke);
+  background: #ffffff;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.62rem 0.92rem;
+  cursor: pointer;
+}
+
+.resume-btn {
+  background: linear-gradient(90deg, var(--accent-soft), #ffffff);
+}
+
+.resume-note {
+  border: 1px solid rgba(16, 20, 38, 0.08);
+  border-radius: 14px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.resume-note p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.resume-note p + p {
+  margin-top: 0.7rem;
+}
+
+.resume-note code {
+  font-family: "Space Mono", monospace;
+  background: rgba(16, 20, 38, 0.08);
+  padding: 0.16rem 0.28rem;
+  border-radius: 4px;
+  color: var(--ink);
+}
+
+.resume-modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(5, 10, 22, 0.66);
+  backdrop-filter: blur(4px);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.resume-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.resume-modal-card {
+  width: min(1000px, 94vw);
+  height: min(86vh, 760px);
+  background: #ffffff;
+  border: 1px solid rgba(16, 20, 38, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  transform: translateY(10px) scale(0.98);
+  transition: transform 220ms ease;
+}
+
+.resume-modal.open .resume-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.resume-close {
+  justify-self: end;
+  margin: 0.7rem 0.75rem 0.45rem;
+  border: 1px solid var(--stroke);
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.42rem 0.8rem;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.resume-modal iframe {
+  border: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .project-grid,
 .tool-grid {
   margin-top: 1.8rem;
@@ -806,6 +998,10 @@ main,
 
   .project-grid,
   .tool-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-layout {
     grid-template-columns: 1fr;
   }
 }

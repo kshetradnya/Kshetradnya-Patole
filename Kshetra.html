@@ -29,6 +29,7 @@
       <nav class="main-nav" id="mainNav">
         <a href="#work">Work</a>
         <a href="#tools">Tools</a>
+        <a href="#resume">Resume</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -150,6 +151,46 @@
         </div>
       </section>
 
+      <section class="resume section reveal" id="resume">
+        <div class="section-head">
+          <p class="eyebrow">Career Snapshot</p>
+          <h2>Resume Showcase</h2>
+        </div>
+
+        <div class="resume-layout">
+          <article class="resume-board" id="resumeBoard">
+            <span class="tape tape-left" aria-hidden="true"></span>
+            <span class="tape tape-right" aria-hidden="true"></span>
+            <p class="resume-kicker">Designer CV</p>
+            <h3>Kshetradnya Patole</h3>
+            <p class="resume-subline">Visual Storytelling • Branding • Digital Media</p>
+            <div class="resume-chips">
+              <span>3+ Years</span>
+              <span>Logos</span>
+              <span>Posters</span>
+              <span>Infographics</span>
+              <span>Social Campaigns</span>
+            </div>
+            <div class="resume-actions">
+              <button class="resume-btn" id="viewResumeBtn" type="button">View Resume</button>
+              <a class="resume-link" href="assets/KP-Resume.pdf" target="_blank" rel="noopener noreferrer">Open PDF</a>
+              <a class="resume-link" href="assets/KP-Resume.pdf" download>Download</a>
+            </div>
+          </article>
+
+          <aside class="resume-note">
+            <p>
+              Add your file here:
+              <code>assets/KP-Resume.pdf</code>
+            </p>
+            <p>
+              This section is designed like a mini portfolio artifact so recruiters can
+              preview your profile before opening the full PDF.
+            </p>
+          </aside>
+        </div>
+      </section>
+
       <section class="about section reveal" id="about">
         <div class="section-head">
           <p class="eyebrow">About</p>
@@ -172,6 +213,17 @@
     <div class="theme-bubble" id="themeBubble" aria-live="polite"></div>
     <div class="fluid-cursor" id="fluidCursor" aria-hidden="true"></div>
     <div class="fluid-cursor-trail" id="fluidCursorTrail" aria-hidden="true"></div>
+    <div class="resume-modal" id="resumeModal" aria-hidden="true">
+      <div class="resume-modal-card">
+        <button class="resume-close" id="resumeClose" aria-label="Close resume viewer">Close</button>
+        <iframe
+          id="resumeFrame"
+          src="assets/KP-Resume.pdf#view=FitH"
+          title="Kshetradnya Patole Resume"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>

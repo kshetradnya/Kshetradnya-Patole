@@ -6,6 +6,9 @@ const styleBtn = document.getElementById("styleBtn");
 const themeBubble = document.getElementById("themeBubble");
 const fluidCursor = document.getElementById("fluidCursor");
 const fluidCursorTrail = document.getElementById("fluidCursorTrail");
+const viewResumeBtn = document.getElementById("viewResumeBtn");
+const resumeModal = document.getElementById("resumeModal");
+const resumeClose = document.getElementById("resumeClose");
 
 if (stage && mask) {
   const maxY = 95;
@@ -152,6 +155,34 @@ if (styleBtn) {
 }
 
 showThemeBubble(activeTheme.label);
+
+if (viewResumeBtn && resumeModal && resumeClose) {
+  const closeResumeModal = () => {
+    resumeModal.classList.remove("open");
+    resumeModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  };
+
+  viewResumeBtn.addEventListener("click", () => {
+    resumeModal.classList.add("open");
+    resumeModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  });
+
+  resumeClose.addEventListener("click", closeResumeModal);
+
+  resumeModal.addEventListener("click", (event) => {
+    if (event.target === resumeModal) {
+      closeResumeModal();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && resumeModal.classList.contains("open")) {
+      closeResumeModal();
+    }
+  });
+}
 
 if (fluidCursor && fluidCursorTrail && window.matchMedia("(hover: hover)").matches) {
   let targetX = window.innerWidth / 2;
