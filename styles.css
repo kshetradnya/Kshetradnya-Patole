@@ -415,28 +415,97 @@ main,
   background: linear-gradient(90deg, var(--accent-soft), #ffffff);
 }
 
-.resume-note {
+.resume-visual {
   border: 1px solid rgba(16, 20, 38, 0.08);
   border-radius: 14px;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.7);
+  display: grid;
+  gap: 0.95rem;
 }
 
-.resume-note p {
-  margin: 0;
+.resume-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.stat-tile {
+  border: 1px solid rgba(16, 20, 38, 0.1);
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.65rem;
+  text-align: center;
+}
+
+.stat-tile strong {
+  display: block;
+  font-family: var(--display-font);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.stat-tile span {
   color: var(--muted);
+  font-size: 0.78rem;
 }
 
-.resume-note p + p {
-  margin-top: 0.7rem;
+.skill-bars {
+  display: grid;
+  gap: 0.55rem;
 }
 
-.resume-note code {
-  font-family: "Space Mono", monospace;
-  background: rgba(16, 20, 38, 0.08);
-  padding: 0.16rem 0.28rem;
-  border-radius: 4px;
-  color: var(--ink);
+.skill-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.skill-row span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.skill-row b {
+  position: relative;
+  width: 120px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(16, 20, 38, 0.12);
+  overflow: hidden;
+}
+
+.skill-row b::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--w, 75%);
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), #ffb19f);
+}
+
+.resume-mini-timeline {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.resume-mini-timeline span {
+  position: relative;
+  padding-left: 1rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.resume-mini-timeline span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.42rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
 }
 
 .resume-modal {
