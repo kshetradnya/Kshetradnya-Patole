@@ -158,28 +158,12 @@
         </div>
 
         <div class="resume-layout">
-          <article class="resume-board" id="resumeBoard">
-            <span class="tape tape-left" aria-hidden="true"></span>
-            <span class="tape tape-right" aria-hidden="true"></span>
-            <p class="resume-kicker">Designer CV</p>
-            <h3>Kshetradnya Patole</h3>
-            <p class="resume-subline">Visual Storytelling • Branding • Digital Media</p>
-            <div class="resume-chips">
-              <span>3+ Years</span>
-              <span>Logos</span>
-              <span>Posters</span>
-              <span>Infographics</span>
-              <span>Social Campaigns</span>
+          <article class="resume-main-card">
+            <div class="resume-topline">
+              <p class="resume-kicker">Graphic Designer Snapshot</p>
+              <h3>Kshetradnya Patole</h3>
             </div>
-            <div class="resume-actions">
-              <button class="resume-btn" id="viewResumeBtn" type="button">View Resume</button>
-              <a class="resume-link" href="assets/KP-Resume.pdf" target="_blank" rel="noopener noreferrer">Open PDF</a>
-              <a class="resume-link" href="assets/KP-Resume.pdf" download>Download</a>
-            </div>
-          </article>
-
-          <aside class="resume-visual">
-            <div class="resume-stats">
+            <div class="resume-stats-grid">
               <div class="stat-tile">
                 <strong>3+</strong>
                 <span>Years</span>
@@ -198,18 +182,30 @@
               </div>
             </div>
 
+            <div class="strength-grid">
+              <span class="strength-pill">🎯 Branding Systems</span>
+              <span class="strength-pill">🧠 Visual Storytelling</span>
+              <span class="strength-pill">📣 Campaign Graphics</span>
+              <span class="strength-pill">🧩 Infographic Design</span>
+            </div>
+
             <div class="skill-bars">
-              <div class="skill-row"><span>Branding</span><b style="--w: 92%"></b></div>
+              <div class="skill-row"><span>Brand Identity</span><b style="--w: 92%"></b></div>
               <div class="skill-row"><span>Poster Design</span><b style="--w: 88%"></b></div>
-              <div class="skill-row"><span>Social Visuals</span><b style="--w: 90%"></b></div>
+              <div class="skill-row"><span>Social Graphics</span><b style="--w: 90%"></b></div>
               <div class="skill-row"><span>Infographics</span><b style="--w: 84%"></b></div>
             </div>
 
             <div class="resume-mini-timeline">
-              <span>Debate Team Branding</span>
-              <span>Climate Awareness Campaign</span>
-              <span>School Election Visuals</span>
+              <span class="resume-chip">Debate Team Branding</span>
+              <span class="resume-chip">Climate Awareness Campaign</span>
+              <span class="resume-chip">School Election Visuals</span>
             </div>
+          </article>
+
+          <aside class="resume-dive-card">
+            <p>Portfolio-backed profile with campaign and school branding work.</p>
+            <a class="dive-btn" href="assets/KP-Resume.pdf" target="_blank" rel="noopener noreferrer">A deeper dive</a>
           </aside>
         </div>
       </section>
@@ -235,18 +231,6 @@
 
     <div class="theme-bubble" id="themeBubble" aria-live="polite"></div>
     <div class="fluid-cursor" id="fluidCursor" aria-hidden="true"></div>
-    <div class="fluid-cursor-trail" id="fluidCursorTrail" aria-hidden="true"></div>
-    <div class="resume-modal" id="resumeModal" aria-hidden="true">
-      <div class="resume-modal-card">
-        <button class="resume-close" id="resumeClose" aria-label="Close resume viewer">Close</button>
-        <iframe
-          id="resumeFrame"
-          src="assets/KP-Resume.pdf#view=FitH"
-          title="Kshetradnya Patole Resume"
-          loading="lazy"
-        ></iframe>
-      </div>
-    </div>
 
     <script src="script.js"></script>
   </body>

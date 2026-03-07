@@ -5,10 +5,6 @@ const mainNav = document.getElementById("mainNav");
 const styleBtn = document.getElementById("styleBtn");
 const themeBubble = document.getElementById("themeBubble");
 const fluidCursor = document.getElementById("fluidCursor");
-const fluidCursorTrail = document.getElementById("fluidCursorTrail");
-const viewResumeBtn = document.getElementById("viewResumeBtn");
-const resumeModal = document.getElementById("resumeModal");
-const resumeClose = document.getElementById("resumeClose");
 
 if (stage && mask) {
   const maxY = 95;
@@ -36,14 +32,14 @@ if (stage && mask) {
     const py = ((clientY - rect.top) / rect.height) * 100;
     const clampedX = Math.max(0, Math.min(100, px));
     const clampedY = Math.max(0, Math.min(100, py));
-    const trailSize =
-      fluidCursorTrail && window.matchMedia("(hover: hover)").matches
-        ? fluidCursorTrail.getBoundingClientRect().width * 0.9
+    const cursorSize =
+      fluidCursor && window.matchMedia("(hover: hover)").matches
+        ? fluidCursor.getBoundingClientRect().width * 0.62
         : 52;
 
     mask.style.setProperty("--reveal-x", `${clampedX.toFixed(2)}%`);
     mask.style.setProperty("--reveal-y", `${clampedY.toFixed(2)}%`);
-    mask.style.setProperty("--reveal-size", `${trailSize.toFixed(2)}px`);
+    mask.style.setProperty("--reveal-size", `${cursorSize.toFixed(2)}px`);
   };
 
   mask.addEventListener("pointerenter", (event) => {
@@ -156,69 +152,32 @@ if (styleBtn) {
 
 showThemeBubble(activeTheme.label);
 
-if (viewResumeBtn && resumeModal && resumeClose) {
-  const closeResumeModal = () => {
-    resumeModal.classList.remove("open");
-    resumeModal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  };
-
-  viewResumeBtn.addEventListener("click", () => {
-    resumeModal.classList.add("open");
-    resumeModal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  });
-
-  resumeClose.addEventListener("click", closeResumeModal);
-
-  resumeModal.addEventListener("click", (event) => {
-    if (event.target === resumeModal) {
-      closeResumeModal();
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && resumeModal.classList.contains("open")) {
-      closeResumeModal();
-    }
-  });
-}
-
-if (fluidCursor && fluidCursorTrail && window.matchMedia("(hover: hover)").matches) {
+if (fluidCursor && window.matchMedia("(hover: hover)").matches) {
   let targetX = window.innerWidth / 2;
   let targetY = window.innerHeight / 2;
-  let dotX = targetX;
-  let dotY = targetY;
-  let ringX = targetX;
-  let ringY = targetY;
+  let cursorX = targetX;
+  let cursorY = targetY;
 
   document.addEventListener("pointermove", (event) => {
     targetX = event.clientX;
     targetY = event.clientY;
     fluidCursor.style.opacity = "1";
-    fluidCursorTrail.style.opacity = "1";
   });
 
   document.addEventListener("pointerdown", () => {
     fluidCursor.style.transform = "translate3d(-50%, -50%, 0) scale(0.84)";
-    fluidCursorTrail.style.transform = "translate3d(-50%, -50%, 0) scale(0.92)";
   });
 
   document.addEventListener("pointerup", () => {
     fluidCursor.style.transform = "translate3d(-50%, -50%, 0) scale(1)";
-    fluidCursorTrail.style.transform = "translate3d(-50%, -50%, 0) scale(1)";
   });
 
   const animateCursor = () => {
-    dotX += (targetX - dotX) * 0.35;
-    dotY += (targetY - dotY) * 0.35;
-    ringX += (targetX - ringX) * 0.16;
-    ringY += (targetY - ringY) * 0.16;
+    cursorX += (targetX - cursorX) * 0.22;
+    cursorY += (targetY - cursorY) * 0.22;
 
-    fluidCursor.style.left = `${dotX}px`;
-    fluidCursor.style.top = `${dotY}px`;
-    fluidCursorTrail.style.left = `${ringX}px`;
-    fluidCursorTrail.style.top = `${ringY}px`;
+    fluidCursor.style.left = `${cursorX}px`;
+    fluidCursor.style.top = `${cursorY}px`;
 
     requestAnimationFrame(animateCursor);
   };
