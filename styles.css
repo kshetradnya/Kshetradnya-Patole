@@ -125,7 +125,7 @@ main,
   line-height: 0.94;
   position: relative;
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .first-name {
@@ -925,9 +925,12 @@ main,
 }
 
 .theme-elegant .first-name {
-  font-size: clamp(1.2rem, 3.25vw, 2.75rem);
-  letter-spacing: 0.001em;
-  padding-right: 0.08em;
+  display: inline-block;
+  font-size: clamp(1rem, 2.7vw, 2.25rem);
+  letter-spacing: 0;
+  transform: scaleX(0.95);
+  transform-origin: left center;
+  padding-right: 0.14em;
 }
 
 .theme-elegant .hero h1 {
