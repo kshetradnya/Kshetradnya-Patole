@@ -820,3 +820,10 @@ main,
     display: none;
   }
 }
+
+/* Hide embedded gist UI so code text does not appear on page */
+.gist,
+.gist-data,
+.gist-meta {
+  display: none !important;
+}
