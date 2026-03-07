@@ -659,6 +659,35 @@ main,
   background: rgba(255, 95, 58, 0.5);
 }
 
+.theme-elegant .hero-copy {
+  animation: elegantLift 900ms ease both;
+}
+
+.theme-elegant .last-name {
+  animation: elegantScript 6s ease-in-out infinite;
+}
+
+.theme-elegant .portrait-mask {
+  animation: elegantBreath 6.8s ease-in-out infinite;
+}
+
+.theme-elegant .cta,
+.theme-elegant .style-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-elegant .cta::before,
+.theme-elegant .style-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform: translateX(-120%);
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.7) 50%, transparent 65%);
+  animation: elegantSheen 4.4s ease-in-out infinite;
+}
+
 .theme-scrapbook .fluid-cursor {
   background: rgba(43, 31, 42, 0.48);
 }
@@ -670,6 +699,50 @@ main,
   }
   50% {
     box-shadow: 0 16px 28px rgba(16, 20, 38, 0.16);
+  }
+}
+
+@keyframes elegantLift {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes elegantBreath {
+  0%,
+  100% {
+    transform: rotateX(0deg) rotateY(0deg) scale(1);
+  }
+  50% {
+    transform: rotateX(-0.5deg) rotateY(0.5deg) scale(1.012);
+  }
+}
+
+@keyframes elegantScript {
+  0%,
+  100% {
+    letter-spacing: 0;
+    opacity: 0.62;
+  }
+  50% {
+    letter-spacing: 0.02em;
+    opacity: 0.78;
+  }
+}
+
+@keyframes elegantSheen {
+  0%,
+  70%,
+  100% {
+    transform: translateX(-120%);
+  }
+  82% {
+    transform: translateX(120%);
   }
 }
 
