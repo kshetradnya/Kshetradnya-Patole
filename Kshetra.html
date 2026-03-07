@@ -11,18 +11,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Syne:wght@700;800&family=Allura&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Syne:wght@700;800&family=Allura&family=Space+Mono:wght@400;700&family=Caveat:wght@600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body class="theme-elegant">
     <div class="noise"></div>
 
     <header class="site-header">
       <a class="brand" href="#top">KP</a>
-      <nav class="main-nav">
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+        Menu
+      </button>
+
+      <nav class="main-nav" id="mainNav">
         <a href="#work">Work</a>
+        <a href="#tools">Tools</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -40,7 +46,11 @@
             I craft playful and premium visual systems through branding, social design,
             and motion-first storytelling.
           </p>
-          <a class="cta" href="#work">Explore Projects</a>
+
+          <div class="hero-actions">
+            <a class="cta" href="#work">Explore Projects</a>
+            <button class="style-btn" id="styleBtn" type="button">Not Feeling this Vibe?</button>
+          </div>
         </div>
 
         <div class="portrait-stage" id="portraitStage" aria-label="3D portrait showcase">
@@ -62,34 +72,74 @@
 
         <div class="project-grid">
           <a class="project-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
-            <img src="https://images.unsplash.com/photo-1523726491678-bf852e717f6a?auto=format&fit=crop&w=1200&q=80" alt="Brand identity project preview" />
+            <img src="projects/project-brand-identity.jpg" alt="Brand identity project preview" />
             <div class="project-meta">
               <h3>Brand Identity System</h3>
               <p>Logo, typography, and packaging concept.</p>
+              <small>Image file: `project-brand-identity.jpg`</small>
             </div>
           </a>
 
           <a class="project-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
-            <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80" alt="Editorial poster project preview" />
+            <img src="projects/project-editorial-poster.jpg" alt="Editorial poster project preview" />
             <div class="project-meta">
               <h3>Editorial Poster Series</h3>
               <p>Layered type and dynamic compositions.</p>
+              <small>Image file: `project-editorial-poster.jpg`</small>
             </div>
           </a>
 
           <a class="project-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
-            <img src="https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1200&q=80" alt="Social media campaign project preview" />
+            <img src="projects/project-social-campaign.jpg" alt="Social media campaign project preview" />
             <div class="project-meta">
               <h3>Social Campaign Kit</h3>
               <p>Motion-first templates and ad creatives.</p>
+              <small>Image file: `project-social-campaign.jpg`</small>
             </div>
           </a>
 
           <a class="project-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
-            <img src="https://images.unsplash.com/photo-1604871000636-074fa5117945?auto=format&fit=crop&w=1200&q=80" alt="UI and web visuals project preview" />
+            <img src="projects/project-web-direction.jpg" alt="Web visual direction project preview" />
             <div class="project-meta">
               <h3>Web Visual Direction</h3>
               <p>Design language and digital assets.</p>
+              <small>Image file: `project-web-direction.jpg`</small>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section class="tools section reveal" id="tools">
+        <div class="section-head">
+          <p class="eyebrow">Tool Workflow</p>
+          <h2>Canva, Figma, Photoshop</h2>
+        </div>
+
+        <div class="tool-grid">
+          <a class="tool-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
+            <img class="tool-project" src="projects/canva-project.jpg" alt="Canva project preview" />
+            <img class="tool-logo" src="logos/canva-logo.png" alt="Canva logo" />
+            <div class="tool-meta">
+              <h3>Canva Projects</h3>
+              <p>Hover to preview logo, click to open drive folder.</p>
+            </div>
+          </a>
+
+          <a class="tool-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
+            <img class="tool-project" src="projects/figma-project.jpg" alt="Figma project preview" />
+            <img class="tool-logo" src="logos/figma-logo.png" alt="Figma logo" />
+            <div class="tool-meta">
+              <h3>Figma Projects</h3>
+              <p>Hover to preview logo, click to open drive folder.</p>
+            </div>
+          </a>
+
+          <a class="tool-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
+            <img class="tool-project" src="projects/photoshop-project.jpg" alt="Photoshop project preview" />
+            <img class="tool-logo" src="logos/photoshop-logo.png" alt="Adobe Photoshop logo" />
+            <div class="tool-meta">
+              <h3>Adobe Photoshop Projects</h3>
+              <p>Hover to preview logo, click to open drive folder.</p>
             </div>
           </a>
         </div>
@@ -98,11 +148,13 @@
       <section class="about section reveal" id="about">
         <div class="section-head">
           <p class="eyebrow">About</p>
-          <h2>Design With Intent</h2>
+          <h2>About Me</h2>
         </div>
         <p>
-          I focus on strong visual hierarchy, expressive typography, and meaningful motion.
-          Every piece is designed to communicate clearly while staying memorable.
+          Graphic designer with 3+ years of experience creating logos, social media
+          graphics, posters, and infographics. Designed branding materials for my school’s
+          debate team and visual campaigns for student initiatives including climate awareness
+          and school elections. Interested in visual storytelling, branding, and digital media.
         </p>
       </section>
     </main>
@@ -111,6 +163,8 @@
       <p>Let’s collaborate on your next visual project.</p>
       <a href="mailto:xetraskool@gmail.com">xetraskool@gmail.com</a>
     </footer>
+
+    <div class="theme-bubble" id="themeBubble" aria-live="polite"></div>
 
     <script src="script.js"></script>
   </body>

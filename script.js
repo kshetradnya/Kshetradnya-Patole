@@ -1,5 +1,9 @@
 const stage = document.getElementById("portraitStage");
 const mask = document.getElementById("portraitMask");
+const menuToggle = document.getElementById("menuToggle");
+const mainNav = document.getElementById("mainNav");
+const styleBtn = document.getElementById("styleBtn");
+const themeBubble = document.getElementById("themeBubble");
 
 if (stage && mask) {
   const maxY = 95;
@@ -31,18 +35,32 @@ if (stage && mask) {
     mask.style.setProperty("--my", "20%");
   });
 
-  // Subtle autonomous motion on touch devices where hover is unavailable.
   if (window.matchMedia("(hover: none)").matches) {
     let t = 0;
     const animate = () => {
       t += 0.014;
+      const bounds = stage.getBoundingClientRect();
       const x = (Math.sin(t) * 0.5 + 0.5) * stage.clientWidth;
       const y = (Math.cos(t * 0.7) * 0.2 + 0.45) * stage.clientHeight;
-      updateTilt(stage.getBoundingClientRect().left + x, stage.getBoundingClientRect().top + y);
+      updateTilt(bounds.left + x, bounds.top + y);
       requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
   }
+}
+
+if (menuToggle && mainNav) {
+  menuToggle.addEventListener("click", () => {
+    const isOpen = mainNav.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  mainNav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      mainNav.classList.remove("open");
+      menuToggle.setAttribute("aria-expanded", "false");
+    });
+  });
 }
 
 const reveals = document.querySelectorAll(".reveal");
@@ -62,3 +80,43 @@ const observer = new IntersectionObserver(
 );
 
 reveals.forEach((item) => observer.observe(item));
+
+const themes = [
+  { key: "theme-elegant", label: "Elegant" },
+  { key: "theme-scrapbook", label: "Scrapbook" },
+  { key: "theme-waves", label: "Waves" }
+];
+
+let activeTheme = themes[0];
+let bubbleTimeout;
+
+const applyTheme = (theme) => {
+  document.body.classList.remove(...themes.map((t) => t.key));
+  document.body.classList.add(theme.key);
+  activeTheme = theme;
+};
+
+const showThemeBubble = (label) => {
+  if (!themeBubble) {
+    return;
+  }
+
+  themeBubble.textContent = `This is ${label} style. The current style is ${label}.`;
+  themeBubble.classList.add("show");
+
+  window.clearTimeout(bubbleTimeout);
+  bubbleTimeout = window.setTimeout(() => {
+    themeBubble.classList.remove("show");
+  }, 2200);
+};
+
+if (styleBtn) {
+  styleBtn.addEventListener("click", () => {
+    const available = themes.filter((theme) => theme.key !== activeTheme.key);
+    const next = available[Math.floor(Math.random() * available.length)];
+    applyTheme(next);
+    showThemeBubble(next.label);
+  });
+}
+
+showThemeBubble(activeTheme.label);
