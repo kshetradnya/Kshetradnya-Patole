@@ -4,6 +4,8 @@ const menuToggle = document.getElementById("menuToggle");
 const mainNav = document.getElementById("mainNav");
 const styleBtn = document.getElementById("styleBtn");
 const themeBubble = document.getElementById("themeBubble");
+const fluidCursor = document.getElementById("fluidCursor");
+const fluidCursorTrail = document.getElementById("fluidCursorTrail");
 
 if (stage && mask) {
   const maxY = 95;
@@ -120,3 +122,45 @@ if (styleBtn) {
 }
 
 showThemeBubble(activeTheme.label);
+
+if (fluidCursor && fluidCursorTrail && window.matchMedia("(hover: hover)").matches) {
+  let targetX = window.innerWidth / 2;
+  let targetY = window.innerHeight / 2;
+  let dotX = targetX;
+  let dotY = targetY;
+  let ringX = targetX;
+  let ringY = targetY;
+
+  document.addEventListener("pointermove", (event) => {
+    targetX = event.clientX;
+    targetY = event.clientY;
+    fluidCursor.style.opacity = "1";
+    fluidCursorTrail.style.opacity = "1";
+  });
+
+  document.addEventListener("pointerdown", () => {
+    fluidCursor.style.transform = "translate3d(-50%, -50%, 0) scale(0.84)";
+    fluidCursorTrail.style.transform = "translate3d(-50%, -50%, 0) scale(0.92)";
+  });
+
+  document.addEventListener("pointerup", () => {
+    fluidCursor.style.transform = "translate3d(-50%, -50%, 0) scale(1)";
+    fluidCursorTrail.style.transform = "translate3d(-50%, -50%, 0) scale(1)";
+  });
+
+  const animateCursor = () => {
+    dotX += (targetX - dotX) * 0.35;
+    dotY += (targetY - dotY) * 0.35;
+    ringX += (targetX - ringX) * 0.16;
+    ringY += (targetY - ringY) * 0.16;
+
+    fluidCursor.style.left = `${dotX}px`;
+    fluidCursor.style.top = `${dotY}px`;
+    fluidCursorTrail.style.left = `${ringX}px`;
+    fluidCursorTrail.style.top = `${ringY}px`;
+
+    requestAnimationFrame(animateCursor);
+  };
+
+  requestAnimationFrame(animateCursor);
+}
