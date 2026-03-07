@@ -8,8 +8,8 @@ const fluidCursor = document.getElementById("fluidCursor");
 const fluidCursorTrail = document.getElementById("fluidCursorTrail");
 
 if (stage && mask) {
-  const maxY = 95;
-  const maxX = 10;
+  const maxY = 4;
+  const maxX = 1.2;
 
   const updateTilt = (clientX, clientY) => {
     const rect = stage.getBoundingClientRect();
@@ -70,10 +70,10 @@ if (stage && mask) {
   if (window.matchMedia("(hover: none)").matches) {
     let t = 0;
     const animate = () => {
-      t += 0.014;
+      t += 0.009;
       const bounds = stage.getBoundingClientRect();
-      const x = (Math.sin(t) * 0.5 + 0.5) * stage.clientWidth;
-      const y = (Math.cos(t * 0.7) * 0.2 + 0.45) * stage.clientHeight;
+      const x = (Math.sin(t) * 0.24 + 0.5) * stage.clientWidth;
+      const y = (Math.cos(t * 0.65) * 0.08 + 0.46) * stage.clientHeight;
       updateTilt(bounds.left + x, bounds.top + y);
       requestAnimationFrame(animate);
     };
@@ -112,6 +112,52 @@ const observer = new IntersectionObserver(
 );
 
 reveals.forEach((item) => observer.observe(item));
+
+const killerTitle = document.getElementById("killerTitle");
+if (killerTitle) {
+  const label = killerTitle.textContent || "";
+  killerTitle.textContent = "";
+
+  for (const char of label) {
+    const span = document.createElement("span");
+    if (char === " ") {
+      span.className = "killer-space";
+      span.textContent = "\u00A0";
+    } else {
+      span.className = "killer-letter";
+      span.textContent = char;
+    }
+    killerTitle.appendChild(span);
+  }
+
+  if (window.gsap && window.ScrollTrigger) {
+    window.gsap.registerPlugin(window.ScrollTrigger);
+
+    const letters = killerTitle.querySelectorAll(".killer-letter");
+    window.gsap.set(letters, { x: 0, y: 0, rotation: 0, opacity: 1 });
+
+    const explosion = window.gsap.timeline({
+      scrollTrigger: {
+        trigger: killerTitle,
+        start: "top 74%",
+        end: "+=340",
+        scrub: 1
+      }
+    });
+
+    explosion.to(letters, {
+      x: () => window.gsap.utils.random(-230, 230),
+      y: () => window.gsap.utils.random(-170, 170),
+      rotation: () => window.gsap.utils.random(-180, 180),
+      opacity: 0.08,
+      ease: "power3.out",
+      stagger: {
+        each: 0.015,
+        from: "random"
+      }
+    });
+  }
+}
 
 const themes = [
   { key: "theme-elegant", label: "Elegant" },
