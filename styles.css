@@ -36,6 +36,53 @@ body {
   overflow-x: hidden;
 }
 
+.puzzle-intro {
+  position: fixed;
+  inset: 0;
+  background: #080b14;
+  display: grid;
+  place-items: center;
+  z-index: 80;
+  transition: opacity 620ms ease, visibility 620ms ease;
+}
+
+.puzzle-intro.done {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.puzzle-stage {
+  position: relative;
+  width: min(62vw, 560px);
+  aspect-ratio: 3 / 4;
+  transform-style: preserve-3d;
+}
+
+.puzzle-piece {
+  position: absolute;
+  width: var(--pw);
+  height: var(--ph);
+  left: var(--px);
+  top: var(--py);
+  background-image: url("image.png");
+  background-size: 100% 100%;
+  background-position: var(--bx) var(--by);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
+  transition:
+    transform 900ms cubic-bezier(0.2, 0.75, 0.2, 1),
+    opacity 540ms ease;
+}
+
+.puzzle-piece.assembled {
+  transform: translate3d(0, 0, 0) rotate(0deg) !important;
+}
+
+.puzzle-piece.shatter {
+  opacity: 0;
+}
+
 .noise {
   position: fixed;
   inset: 0;
@@ -317,30 +364,10 @@ main,
   font-size: clamp(1.8rem, 3vw, 3.4rem);
 }
 
-.killer-header {
-  padding: 1.2rem 0 3.4rem;
-  text-align: center;
-}
-
-.killer-title {
-  margin: 0.5rem 0 0;
-  font-family: var(--display-font);
-  font-size: clamp(2rem, 8vw, 8.4rem);
-  line-height: 0.9;
-  letter-spacing: 0.01em;
-  user-select: none;
-  cursor: default;
-}
-
 .killer-letter {
   display: inline-block;
   will-change: transform, opacity;
   transform-origin: center center;
-}
-
-.killer-space {
-  display: inline-block;
-  width: 0.32em;
 }
 
 .work,
@@ -612,13 +639,6 @@ main,
   margin: 0.35rem 0 0;
   color: var(--muted);
   line-height: 1.7;
-}
-
-.project-meta small {
-  color: var(--muted);
-  display: inline-block;
-  margin-top: 0.45rem;
-  font-size: 0.75rem;
 }
 
 .project-card:hover,
@@ -962,6 +982,31 @@ main,
   z-index: 0;
 }
 
+.theme-elegant::before {
+  content: "";
+  position: fixed;
+  inset: -18% -12%;
+  background:
+    radial-gradient(circle at 25% 35%, rgba(255, 110, 74, 0.13), transparent 38%),
+    radial-gradient(circle at 72% 58%, rgba(24, 38, 82, 0.15), transparent 42%);
+  animation: elegantBgFlow 12s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.theme-scrapbook::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(12deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(78deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 34px 34px, 34px 34px;
+  animation: scrapbookBgShift 9s steps(7, end) infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .theme-waves .fluid-cursor {
   background: rgba(0, 162, 255, 0.44);
 }
@@ -1155,6 +1200,24 @@ main,
   }
 }
 
+@keyframes elegantBgFlow {
+  0% {
+    transform: translate3d(-1.5%, 1%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(1.8%, -1%, 0) scale(1.06);
+  }
+}
+
+@keyframes scrapbookBgShift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(18px, 10px, 0);
+  }
+}
+
 @media (max-width: 1120px) {
   .first-name {
     font-size: clamp(1.35rem, 3.8vw, 3rem);
@@ -1191,6 +1254,10 @@ main,
   .project-grid,
   .tool-grid {
     grid-template-columns: 1fr;
+  }
+
+  .puzzle-stage {
+    width: min(74vw, 430px);
   }
 
   .resume-layout {

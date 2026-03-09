@@ -6,6 +6,52 @@ const styleBtn = document.getElementById("styleBtn");
 const themeBubble = document.getElementById("themeBubble");
 const fluidCursor = document.getElementById("fluidCursor");
 const fluidCursorTrail = document.getElementById("fluidCursorTrail");
+const puzzleIntro = document.getElementById("puzzleIntro");
+const puzzleStage = document.getElementById("puzzleStage");
+
+if (puzzleIntro && puzzleStage) {
+  const rows = 5;
+  const cols = 4;
+  const pieceW = 100 / cols;
+  const pieceH = 100 / rows;
+  const pieces = [];
+
+  for (let r = 0; r < rows; r += 1) {
+    for (let c = 0; c < cols; c += 1) {
+      const piece = document.createElement("div");
+      piece.className = "puzzle-piece";
+      piece.style.setProperty("--pw", `${pieceW}%`);
+      piece.style.setProperty("--ph", `${pieceH}%`);
+      piece.style.setProperty("--px", `${c * pieceW}%`);
+      piece.style.setProperty("--py", `${r * pieceH}%`);
+      piece.style.setProperty("--bx", `${(c / (cols - 1)) * 100}%`);
+      piece.style.setProperty("--by", `${(r / (rows - 1)) * 100}%`);
+      const scatterX = (Math.random() - 0.5) * 1100;
+      const scatterY = (Math.random() - 0.5) * 760;
+      const scatterR = (Math.random() - 0.5) * 120;
+      piece.style.transform = `translate3d(${scatterX}px, ${scatterY}px, 0) rotate(${scatterR}deg)`;
+      piece.style.transitionDelay = `${(r + c) * 28}ms`;
+      puzzleStage.appendChild(piece);
+      pieces.push(piece);
+    }
+  }
+
+  requestAnimationFrame(() => {
+    pieces.forEach((piece) => piece.classList.add("assembled"));
+  });
+
+  window.setTimeout(() => {
+    pieces.forEach((piece, index) => {
+      const shatterX = (Math.random() - 0.5) * 1300;
+      const shatterY = (Math.random() - 0.5) * 950;
+      const shatterR = (Math.random() - 0.5) * 240;
+      piece.style.transitionDelay = `${index * 12}ms`;
+      piece.style.transform = `translate3d(${shatterX}px, ${shatterY}px, 0) rotate(${shatterR}deg)`;
+      piece.classList.add("shatter");
+    });
+    puzzleIntro.classList.add("done");
+  }, 1850);
+}
 
 if (stage && mask) {
   const maxY = 4;
@@ -113,49 +159,49 @@ const observer = new IntersectionObserver(
 
 reveals.forEach((item) => observer.observe(item));
 
-const killerTitle = document.getElementById("killerTitle");
-if (killerTitle) {
-  const label = killerTitle.textContent || "";
-  killerTitle.textContent = "";
-
-  for (const char of label) {
-    const span = document.createElement("span");
-    if (char === " ") {
-      span.className = "killer-space";
-      span.textContent = "\u00A0";
-    } else {
+const nameExplode = document.querySelectorAll(".name-explode");
+if (nameExplode.length > 0) {
+  nameExplode.forEach((node) => {
+    const label = node.textContent || "";
+    node.textContent = "";
+    for (const char of label) {
+      const span = document.createElement("span");
       span.className = "killer-letter";
-      span.textContent = char;
+      span.textContent = char === " " ? "\u00A0" : char;
+      node.appendChild(span);
     }
-    killerTitle.appendChild(span);
-  }
+  });
 
   if (window.gsap && window.ScrollTrigger) {
     window.gsap.registerPlugin(window.ScrollTrigger);
+    const letters = document.querySelectorAll(".name-explode .killer-letter");
+    const heroHeading = document.querySelector(".hero h1");
 
-    const letters = killerTitle.querySelectorAll(".killer-letter");
-    window.gsap.set(letters, { x: 0, y: 0, rotation: 0, opacity: 1 });
+    window.gsap.set(letters, { x: 0, y: 0, rotation: 0, opacity: 1, scale: 1 });
 
-    const explosion = window.gsap.timeline({
-      scrollTrigger: {
-        trigger: killerTitle,
-        start: "top 74%",
-        end: "+=340",
-        scrub: 1
-      }
-    });
+    if (heroHeading) {
+      const explosion = window.gsap.timeline({
+        scrollTrigger: {
+          trigger: heroHeading,
+          start: "top 46%",
+          end: "+=460",
+          scrub: 1
+        }
+      });
 
-    explosion.to(letters, {
-      x: () => window.gsap.utils.random(-230, 230),
-      y: () => window.gsap.utils.random(-170, 170),
-      rotation: () => window.gsap.utils.random(-180, 180),
-      opacity: 0.08,
-      ease: "power3.out",
-      stagger: {
-        each: 0.015,
-        from: "random"
-      }
-    });
+      explosion.to(letters, {
+        x: () => window.gsap.utils.random(-190, 190),
+        y: () => window.gsap.utils.random(-130, 130),
+        rotation: () => window.gsap.utils.random(-150, 150),
+        opacity: 0.14,
+        scale: () => window.gsap.utils.random(0.72, 1.32),
+        ease: "power3.out",
+        stagger: {
+          each: 0.014,
+          from: "random"
+        }
+      });
+    }
   }
 }
 
