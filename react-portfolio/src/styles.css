@@ -1,0 +1,57 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  font-family: "Outfit", sans-serif;
+  background: #0f1324;
+  color: #f5f7ff;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.react-head {
+  width: min(1100px, 95vw);
+  margin: 0 auto 0.8rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.react-head h1 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.react-head p {
+  margin: 0.35rem 0 0;
+  opacity: 0.84;
+  font-size: 0.88rem;
+}
+
+.site-frame-wrap {
+  width: min(1100px, 95vw);
+  margin: 0 auto;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+}
+
+.site-frame {
+  width: 100%;
+  min-height: 88vh;
+  border: 0;
+  display: block;
+  background: #fff;
+}
