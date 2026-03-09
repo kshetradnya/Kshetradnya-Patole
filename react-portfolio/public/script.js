@@ -11,10 +11,13 @@ const puzzleStage = document.getElementById("puzzleStage");
 const puzzleGiveUp = document.getElementById("puzzleGiveUp");
 const giveupTimer = document.getElementById("giveupTimer");
 const quoteOverlay = document.getElementById("quoteOverlay");
+const mercyBtn = document.getElementById("mercyBtn");
+const mercyAudio = document.getElementById("mercyAudio");
 const projectGrid = document.getElementById("projectGrid");
 const projectsPrev = document.getElementById("projectsPrev");
 const projectsNext = document.getElementById("projectsNext");
 const QUIT_LOCK_KEY = "kpPuzzleQuitLocked";
+let mercyInProgress = false;
 
 const lockWholeSite = () => {
   document.body.classList.add("gave-up", "access-locked");
@@ -26,6 +29,47 @@ const lockWholeSite = () => {
 
 if (window.localStorage.getItem(QUIT_LOCK_KEY) === "1") {
   lockWholeSite();
+}
+
+if (mercyBtn) {
+  mercyBtn.addEventListener("click", () => {
+    if (!document.body.classList.contains("access-locked") || mercyInProgress) {
+      return;
+    }
+
+    mercyInProgress = true;
+    document.body.classList.add("mercy-active");
+
+    const finishMercy = () => {
+      if (!mercyInProgress) {
+        return;
+      }
+      mercyInProgress = false;
+      document.body.classList.remove("mercy-active");
+      window.localStorage.removeItem(QUIT_LOCK_KEY);
+      window.setTimeout(() => {
+        window.location.reload();
+      }, 120);
+    };
+
+    let fallbackTimer = window.setTimeout(finishMercy, 7200);
+
+    if (mercyAudio) {
+      mercyAudio.loop = false;
+      mercyAudio.currentTime = 0;
+      mercyAudio.onended = () => {
+        window.clearTimeout(fallbackTimer);
+        finishMercy();
+      };
+      const maybePlay = mercyAudio.play();
+      if (maybePlay && typeof maybePlay.catch === "function") {
+        maybePlay.catch(() => {
+          window.clearTimeout(fallbackTimer);
+          fallbackTimer = window.setTimeout(finishMercy, 2600);
+        });
+      }
+    }
+  });
 }
 
 if (puzzleIntro && puzzleStage && !document.body.classList.contains("access-locked")) {
