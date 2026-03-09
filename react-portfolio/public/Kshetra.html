@@ -18,6 +18,7 @@
   </head>
   <body class="theme-elegant">
     <div class="puzzle-intro" id="puzzleIntro" aria-hidden="true">
+      <p class="puzzle-hint">Complete the puzzle to enter</p>
       <div class="puzzle-stage" id="puzzleStage"></div>
     </div>
     <div class="noise"></div>
@@ -81,7 +82,9 @@
           <h2>Visual Projects</h2>
         </div>
 
-        <div class="project-grid">
+        <div class="project-slider">
+          <button class="slide-btn prev" id="projectsPrev" aria-label="Previous project slide">‹</button>
+          <div class="project-grid" id="projectGrid">
           <a class="project-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
             <img src="projects/brandi.png" alt="Brand identity project preview" />
             <div class="project-meta">
@@ -113,6 +116,8 @@
               <p>Design language and digital assets.</p>
             </div>
           </a>
+          </div>
+          <button class="slide-btn next" id="projectsNext" aria-label="Next project slide">›</button>
         </div>
       </section>
 
@@ -122,7 +127,7 @@
           <h2>Canva, Figma, Photoshop</h2>
         </div>
 
-        <div class="tool-grid">
+        <div class="tool-grid side-scroll-item">
           <a class="tool-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
             <img class="tool-project" src="projects/canva-project.jpg" alt="Canva project preview" />
             <img class="tool-logo" src="logos/Clogo.png" alt="Canva logo" />
@@ -158,7 +163,7 @@
           <h2>Resume Showcase</h2>
         </div>
 
-        <div class="resume-layout">
+        <div class="resume-layout side-scroll-item">
           <article class="resume-main-card">
             <div class="resume-topline">
               <p class="resume-kicker">Graphic Designer Snapshot</p>
@@ -216,7 +221,7 @@
           <p class="eyebrow">About</p>
           <h2>About Me</h2>
         </div>
-        <p>
+        <p class="side-scroll-item">
           Graphic designer with 3+ years of experience creating logos, social media
           graphics, posters, and infographics. Designed branding materials for my school’s
           debate team and visual campaigns for student initiatives including climate awareness
@@ -224,7 +229,7 @@
         </p>
       </section>
 
-      <section class="collab section reveal" id="collab">
+      <section class="collab section reveal side-scroll-item" id="collab">
         <p class="eyebrow">Next Project</p>
         <h2>Ready To Build Something Bold?</h2>
         <a class="collab-btn" href="mailto:xetraskool@gmail.com">Let’s Collaborate</a>

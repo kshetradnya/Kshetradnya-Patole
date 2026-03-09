@@ -8,49 +8,108 @@ const fluidCursor = document.getElementById("fluidCursor");
 const fluidCursorTrail = document.getElementById("fluidCursorTrail");
 const puzzleIntro = document.getElementById("puzzleIntro");
 const puzzleStage = document.getElementById("puzzleStage");
+const projectGrid = document.getElementById("projectGrid");
+const projectsPrev = document.getElementById("projectsPrev");
+const projectsNext = document.getElementById("projectsNext");
 
 if (puzzleIntro && puzzleStage) {
-  const rows = 5;
+  const rows = 4;
   const cols = 4;
-  const pieceW = 100 / cols;
-  const pieceH = 100 / rows;
+  const stageRect = puzzleStage.getBoundingClientRect();
+  const pieceW = stageRect.width / cols;
+  const pieceH = stageRect.height / rows;
+  const snapDistance = Math.min(pieceW, pieceH) * 0.18;
   const pieces = [];
+  let solvedCount = 0;
+  let activePiece = null;
+  let grabOffsetX = 0;
+  let grabOffsetY = 0;
 
   for (let r = 0; r < rows; r += 1) {
     for (let c = 0; c < cols; c += 1) {
       const piece = document.createElement("div");
       piece.className = "puzzle-piece";
-      piece.style.setProperty("--pw", `${pieceW}%`);
-      piece.style.setProperty("--ph", `${pieceH}%`);
-      piece.style.setProperty("--px", `${c * pieceW}%`);
-      piece.style.setProperty("--py", `${r * pieceH}%`);
-      piece.style.setProperty("--bx", `${(c / (cols - 1)) * 100}%`);
-      piece.style.setProperty("--by", `${(r / (rows - 1)) * 100}%`);
-      const scatterX = (Math.random() - 0.5) * 1100;
-      const scatterY = (Math.random() - 0.5) * 760;
-      const scatterR = (Math.random() - 0.5) * 120;
-      piece.style.transform = `translate3d(${scatterX}px, ${scatterY}px, 0) rotate(${scatterR}deg)`;
-      piece.style.transitionDelay = `${(r + c) * 28}ms`;
+      const targetX = c * pieceW;
+      const targetY = r * pieceH;
+      piece.style.width = `${pieceW}px`;
+      piece.style.height = `${pieceH}px`;
+      piece.style.left = `${Math.random() * (stageRect.width - pieceW)}px`;
+      piece.style.top = `${Math.random() * (stageRect.height - pieceH)}px`;
+      piece.style.backgroundSize = `${stageRect.width}px ${stageRect.height}px`;
+      piece.style.backgroundPosition = `${-targetX}px ${-targetY}px`;
+      piece.dataset.targetX = String(targetX);
+      piece.dataset.targetY = String(targetY);
+      piece.dataset.locked = "false";
       puzzleStage.appendChild(piece);
       pieces.push(piece);
     }
   }
 
-  requestAnimationFrame(() => {
-    pieces.forEach((piece) => piece.classList.add("assembled"));
+  const pointerMove = (event) => {
+    if (!activePiece) {
+      return;
+    }
+    const bounds = puzzleStage.getBoundingClientRect();
+    const x = event.clientX - bounds.left - grabOffsetX;
+    const y = event.clientY - bounds.top - grabOffsetY;
+    activePiece.style.left = `${Math.max(0, Math.min(bounds.width - pieceW, x))}px`;
+    activePiece.style.top = `${Math.max(0, Math.min(bounds.height - pieceH, y))}px`;
+  };
+
+  const pointerUp = () => {
+    if (!activePiece) {
+      return;
+    }
+    const targetX = Number(activePiece.dataset.targetX);
+    const targetY = Number(activePiece.dataset.targetY);
+    const currentX = parseFloat(activePiece.style.left);
+    const currentY = parseFloat(activePiece.style.top);
+    const distance = Math.hypot(currentX - targetX, currentY - targetY);
+
+    if (distance <= snapDistance) {
+      activePiece.style.left = `${targetX}px`;
+      activePiece.style.top = `${targetY}px`;
+      activePiece.dataset.locked = "true";
+      activePiece.classList.add("assembled");
+      solvedCount += 1;
+    }
+
+    activePiece = null;
+
+    if (solvedCount === pieces.length) {
+      pieces.forEach((piece, index) => {
+        const shatterX = (Math.random() - 0.5) * 1300;
+        const shatterY = (Math.random() - 0.5) * 950;
+        const shatterR = (Math.random() - 0.5) * 280;
+        piece.style.setProperty("--sx", `${shatterX}px`);
+        piece.style.setProperty("--sy", `${shatterY}px`);
+        piece.style.setProperty("--sr", `${shatterR}deg`);
+        piece.style.animationDelay = `${index * 16}ms`;
+        piece.classList.add("shatter");
+      });
+      window.setTimeout(() => {
+        puzzleIntro.classList.add("done");
+      }, 980);
+    }
+  };
+
+  puzzleStage.addEventListener("pointerdown", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement) || !target.classList.contains("puzzle-piece")) {
+      return;
+    }
+    if (target.dataset.locked === "true") {
+      return;
+    }
+    activePiece = target;
+    const pieceRect = target.getBoundingClientRect();
+    grabOffsetX = event.clientX - pieceRect.left;
+    grabOffsetY = event.clientY - pieceRect.top;
+    target.style.zIndex = String(50 + solvedCount);
   });
 
-  window.setTimeout(() => {
-    pieces.forEach((piece, index) => {
-      const shatterX = (Math.random() - 0.5) * 1300;
-      const shatterY = (Math.random() - 0.5) * 950;
-      const shatterR = (Math.random() - 0.5) * 240;
-      piece.style.transitionDelay = `${index * 12}ms`;
-      piece.style.transform = `translate3d(${shatterX}px, ${shatterY}px, 0) rotate(${shatterR}deg)`;
-      piece.classList.add("shatter");
-    });
-    puzzleIntro.classList.add("done");
-  }, 1850);
+  window.addEventListener("pointermove", pointerMove);
+  window.addEventListener("pointerup", pointerUp);
 }
 
 if (stage && mask) {
@@ -159,6 +218,16 @@ const observer = new IntersectionObserver(
 
 reveals.forEach((item) => observer.observe(item));
 
+if (projectGrid && projectsPrev && projectsNext) {
+  const getStep = () => Math.max(280, Math.floor(projectGrid.clientWidth * 0.92));
+  projectsNext.addEventListener("click", () => {
+    projectGrid.scrollBy({ left: getStep(), behavior: "smooth" });
+  });
+  projectsPrev.addEventListener("click", () => {
+    projectGrid.scrollBy({ left: -getStep(), behavior: "smooth" });
+  });
+}
+
 const nameExplode = document.querySelectorAll(".name-explode");
 if (nameExplode.length > 0) {
   nameExplode.forEach((node) => {
@@ -202,6 +271,25 @@ if (nameExplode.length > 0) {
         }
       });
     }
+
+    const sideItems = window.gsap.utils.toArray(".side-scroll-item");
+    sideItems.forEach((item, idx) => {
+      window.gsap.fromTo(
+        item,
+        { x: idx % 2 === 0 ? -120 : 120, opacity: 0.2 },
+        {
+          x: 0,
+          opacity: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: item,
+            start: "top 84%",
+            end: "top 52%",
+            scrub: 1
+          }
+        }
+      );
+    });
   }
 }
 
