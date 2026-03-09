@@ -8,38 +8,80 @@ const fluidCursor = document.getElementById("fluidCursor");
 const fluidCursorTrail = document.getElementById("fluidCursorTrail");
 const puzzleIntro = document.getElementById("puzzleIntro");
 const puzzleStage = document.getElementById("puzzleStage");
+const puzzleGiveUp = document.getElementById("puzzleGiveUp");
 const projectGrid = document.getElementById("projectGrid");
 const projectsPrev = document.getElementById("projectsPrev");
 const projectsNext = document.getElementById("projectsNext");
 
 if (puzzleIntro && puzzleStage) {
-  const rows = 4;
-  const cols = 4;
+  const rows = 3;
+  const cols = 3;
   const stageRect = puzzleStage.getBoundingClientRect();
   const pieceW = stageRect.width / cols;
   const pieceH = stageRect.height / rows;
   const snapDistance = Math.min(pieceW, pieceH) * 0.18;
   const pieces = [];
+  const pieceState = new WeakMap();
   let solvedCount = 0;
   let activePiece = null;
   let grabOffsetX = 0;
   let grabOffsetY = 0;
+  let targetDragX = 0;
+  let targetDragY = 0;
+  let dragFrame = 0;
+  let introFinished = false;
+
+  const endIntro = () => {
+    if (introFinished) {
+      return;
+    }
+    introFinished = true;
+    window.setTimeout(() => {
+      puzzleIntro.classList.add("done");
+    }, 980);
+  };
+
+  const shatterPieces = () => {
+    pieces.forEach((piece, index) => {
+      const shatterX = (Math.random() - 0.5) * 1300;
+      const shatterY = (Math.random() - 0.5) * 950;
+      const shatterR = (Math.random() - 0.5) * 280;
+      piece.style.setProperty("--sx", `${shatterX}px`);
+      piece.style.setProperty("--sy", `${shatterY}px`);
+      piece.style.setProperty("--sr", `${shatterR}deg`);
+      piece.style.animationDelay = `${index * 16}ms`;
+      piece.classList.add("shatter");
+    });
+    endIntro();
+  };
 
   for (let r = 0; r < rows; r += 1) {
     for (let c = 0; c < cols; c += 1) {
-      const piece = document.createElement("div");
-      piece.className = "puzzle-piece";
       const targetX = c * pieceW;
       const targetY = r * pieceH;
+
+      const slot = document.createElement("div");
+      slot.className = "puzzle-slot";
+      slot.style.width = `${pieceW}px`;
+      slot.style.height = `${pieceH}px`;
+      slot.style.left = `${targetX}px`;
+      slot.style.top = `${targetY}px`;
+      puzzleStage.appendChild(slot);
+
+      const piece = document.createElement("div");
+      piece.className = "puzzle-piece";
+      const startX = Math.random() * (stageRect.width - pieceW);
+      const startY = Math.random() * (stageRect.height - pieceH);
       piece.style.width = `${pieceW}px`;
       piece.style.height = `${pieceH}px`;
-      piece.style.left = `${Math.random() * (stageRect.width - pieceW)}px`;
-      piece.style.top = `${Math.random() * (stageRect.height - pieceH)}px`;
+      piece.style.left = `${startX}px`;
+      piece.style.top = `${startY}px`;
       piece.style.backgroundSize = `${stageRect.width}px ${stageRect.height}px`;
       piece.style.backgroundPosition = `${-targetX}px ${-targetY}px`;
       piece.dataset.targetX = String(targetX);
       piece.dataset.targetY = String(targetY);
       piece.dataset.locked = "false";
+      pieceState.set(piece, { x: startX, y: startY });
       puzzleStage.appendChild(piece);
       pieces.push(piece);
     }
@@ -52,23 +94,26 @@ if (puzzleIntro && puzzleStage) {
     const bounds = puzzleStage.getBoundingClientRect();
     const x = event.clientX - bounds.left - grabOffsetX;
     const y = event.clientY - bounds.top - grabOffsetY;
-    activePiece.style.left = `${Math.max(0, Math.min(bounds.width - pieceW, x))}px`;
-    activePiece.style.top = `${Math.max(0, Math.min(bounds.height - pieceH, y))}px`;
+    targetDragX = Math.max(0, Math.min(bounds.width - pieceW, x));
+    targetDragY = Math.max(0, Math.min(bounds.height - pieceH, y));
   };
 
   const pointerUp = () => {
     if (!activePiece) {
       return;
     }
+    activePiece.classList.remove("dragging");
     const targetX = Number(activePiece.dataset.targetX);
     const targetY = Number(activePiece.dataset.targetY);
-    const currentX = parseFloat(activePiece.style.left);
-    const currentY = parseFloat(activePiece.style.top);
+    const state = pieceState.get(activePiece) || { x: 0, y: 0 };
+    const currentX = state.x;
+    const currentY = state.y;
     const distance = Math.hypot(currentX - targetX, currentY - targetY);
 
     if (distance <= snapDistance) {
       activePiece.style.left = `${targetX}px`;
       activePiece.style.top = `${targetY}px`;
+      pieceState.set(activePiece, { x: targetX, y: targetY });
       activePiece.dataset.locked = "true";
       activePiece.classList.add("assembled");
       solvedCount += 1;
@@ -77,19 +122,7 @@ if (puzzleIntro && puzzleStage) {
     activePiece = null;
 
     if (solvedCount === pieces.length) {
-      pieces.forEach((piece, index) => {
-        const shatterX = (Math.random() - 0.5) * 1300;
-        const shatterY = (Math.random() - 0.5) * 950;
-        const shatterR = (Math.random() - 0.5) * 280;
-        piece.style.setProperty("--sx", `${shatterX}px`);
-        piece.style.setProperty("--sy", `${shatterY}px`);
-        piece.style.setProperty("--sr", `${shatterR}deg`);
-        piece.style.animationDelay = `${index * 16}ms`;
-        piece.classList.add("shatter");
-      });
-      window.setTimeout(() => {
-        puzzleIntro.classList.add("done");
-      }, 980);
+      shatterPieces();
     }
   };
 
@@ -102,14 +135,40 @@ if (puzzleIntro && puzzleStage) {
       return;
     }
     activePiece = target;
+    activePiece.classList.add("dragging");
     const pieceRect = target.getBoundingClientRect();
     grabOffsetX = event.clientX - pieceRect.left;
     grabOffsetY = event.clientY - pieceRect.top;
+    targetDragX = parseFloat(target.style.left);
+    targetDragY = parseFloat(target.style.top);
     target.style.zIndex = String(50 + solvedCount);
   });
 
+  const animateDrag = () => {
+    if (activePiece) {
+      const state = pieceState.get(activePiece) || {
+        x: parseFloat(activePiece.style.left) || 0,
+        y: parseFloat(activePiece.style.top) || 0
+      };
+      state.x += (targetDragX - state.x) * 0.34;
+      state.y += (targetDragY - state.y) * 0.34;
+      activePiece.style.left = `${state.x}px`;
+      activePiece.style.top = `${state.y}px`;
+      pieceState.set(activePiece, state);
+    }
+    dragFrame = requestAnimationFrame(animateDrag);
+  };
+  dragFrame = requestAnimationFrame(animateDrag);
+
   window.addEventListener("pointermove", pointerMove);
   window.addEventListener("pointerup", pointerUp);
+
+  if (puzzleGiveUp) {
+    puzzleGiveUp.addEventListener("click", () => {
+      puzzleIntro.classList.add("bombed");
+      shatterPieces();
+    });
+  }
 }
 
 if (stage && mask) {
