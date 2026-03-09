@@ -9,6 +9,8 @@ const fluidCursorTrail = document.getElementById("fluidCursorTrail");
 const puzzleIntro = document.getElementById("puzzleIntro");
 const puzzleStage = document.getElementById("puzzleStage");
 const puzzleGiveUp = document.getElementById("puzzleGiveUp");
+const giveupTimer = document.getElementById("giveupTimer");
+const quoteOverlay = document.getElementById("quoteOverlay");
 const projectGrid = document.getElementById("projectGrid");
 const projectsPrev = document.getElementById("projectsPrev");
 const projectsNext = document.getElementById("projectsNext");
@@ -86,6 +88,31 @@ if (puzzleIntro && puzzleStage) {
       pieces.push(piece);
     }
   }
+
+  // Make puzzle solvable: place each piece in a shuffled slot (derangement style).
+  const slotPositions = [];
+  for (let r = 0; r < rows; r += 1) {
+    for (let c = 0; c < cols; c += 1) {
+      slotPositions.push({ x: c * pieceW, y: r * pieceH });
+    }
+  }
+  const permutation = slotPositions.map((_, idx) => idx);
+  for (let i = permutation.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [permutation[i], permutation[j]] = [permutation[j], permutation[i]];
+  }
+  for (let i = 0; i < permutation.length; i += 1) {
+    if (permutation[i] === i) {
+      const swapWith = i === permutation.length - 1 ? i - 1 : i + 1;
+      [permutation[i], permutation[swapWith]] = [permutation[swapWith], permutation[i]];
+    }
+  }
+  pieces.forEach((piece, idx) => {
+    const pick = slotPositions[permutation[idx]];
+    piece.style.left = `${pick.x}px`;
+    piece.style.top = `${pick.y}px`;
+    pieceState.set(piece, { x: pick.x, y: pick.y });
+  });
 
   const pointerMove = (event) => {
     if (!activePiece) {
@@ -165,8 +192,33 @@ if (puzzleIntro && puzzleStage) {
 
   if (puzzleGiveUp) {
     puzzleGiveUp.addEventListener("click", () => {
-      puzzleIntro.classList.add("bombed");
+      if (introFinished) {
+        return;
+      }
       shatterPieces();
+      document.body.classList.add("gave-up");
+
+      if (giveupTimer) {
+        let remaining = 3;
+        giveupTimer.hidden = false;
+        giveupTimer.textContent = `Website self-destruct in ${remaining}`;
+        const tick = window.setInterval(() => {
+          remaining -= 1;
+          if (remaining > 0) {
+            giveupTimer.textContent = `Website self-destruct in ${remaining}`;
+          } else {
+            window.clearInterval(tick);
+            giveupTimer.hidden = true;
+            document.body.classList.add("site-exploding");
+            window.setTimeout(() => {
+              if (quoteOverlay) {
+                quoteOverlay.classList.add("show");
+                quoteOverlay.setAttribute("aria-hidden", "false");
+              }
+            }, 780);
+          }
+        }, 1000);
+      }
     });
   }
 }
