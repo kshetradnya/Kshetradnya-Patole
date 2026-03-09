@@ -45,6 +45,19 @@ if (puzzleIntro && puzzleStage && !document.body.classList.contains("access-lock
   let targetDragY = 0;
   let dragFrame = 0;
   let introFinished = false;
+  let dragZ = 120;
+
+  const refreshPieceStack = () => {
+    let unsolvedZ = 30;
+    pieces.forEach((piece) => {
+      if (piece.dataset.locked === "true") {
+        piece.style.zIndex = "8";
+      } else {
+        piece.style.zIndex = String(unsolvedZ);
+        unsolvedZ += 1;
+      }
+    });
+  };
 
   const endIntro = () => {
     if (introFinished) {
@@ -126,6 +139,7 @@ if (puzzleIntro && puzzleStage && !document.body.classList.contains("access-lock
     piece.style.top = `${pick.y}px`;
     pieceState.set(piece, { x: pick.x, y: pick.y });
   });
+  refreshPieceStack();
 
   const pointerMove = (event) => {
     if (!activePiece) {
@@ -157,6 +171,9 @@ if (puzzleIntro && puzzleStage && !document.body.classList.contains("access-lock
       activePiece.dataset.locked = "true";
       activePiece.classList.add("assembled");
       solvedCount += 1;
+      refreshPieceStack();
+    } else {
+      refreshPieceStack();
     }
 
     activePiece = null;
@@ -181,7 +198,8 @@ if (puzzleIntro && puzzleStage && !document.body.classList.contains("access-lock
     grabOffsetY = event.clientY - pieceRect.top;
     targetDragX = parseFloat(target.style.left);
     targetDragY = parseFloat(target.style.top);
-    target.style.zIndex = String(50 + solvedCount);
+    target.style.zIndex = String(dragZ);
+    dragZ += 1;
   });
 
   const animateDrag = () => {
