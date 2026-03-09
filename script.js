@@ -14,8 +14,21 @@ const quoteOverlay = document.getElementById("quoteOverlay");
 const projectGrid = document.getElementById("projectGrid");
 const projectsPrev = document.getElementById("projectsPrev");
 const projectsNext = document.getElementById("projectsNext");
+const QUIT_LOCK_KEY = "kpPuzzleQuitLocked";
 
-if (puzzleIntro && puzzleStage) {
+const lockWholeSite = () => {
+  document.body.classList.add("gave-up", "access-locked");
+  if (quoteOverlay) {
+    quoteOverlay.classList.add("show");
+    quoteOverlay.setAttribute("aria-hidden", "false");
+  }
+};
+
+if (window.localStorage.getItem(QUIT_LOCK_KEY) === "1") {
+  lockWholeSite();
+}
+
+if (puzzleIntro && puzzleStage && !document.body.classList.contains("access-locked")) {
   const rows = 3;
   const cols = 3;
   const stageRect = puzzleStage.getBoundingClientRect();
@@ -209,12 +222,10 @@ if (puzzleIntro && puzzleStage) {
           } else {
             window.clearInterval(tick);
             giveupTimer.hidden = true;
+            window.localStorage.setItem(QUIT_LOCK_KEY, "1");
             document.body.classList.add("site-exploding");
             window.setTimeout(() => {
-              if (quoteOverlay) {
-                quoteOverlay.classList.add("show");
-                quoteOverlay.setAttribute("aria-hidden", "false");
-              }
+              lockWholeSite();
             }, 780);
           }
         }, 1000);

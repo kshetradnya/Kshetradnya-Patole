@@ -458,6 +458,16 @@ main,
   transform-origin: center center;
 }
 
+.first-name .killer-letter {
+  background: inherit;
+  background-size: inherit;
+  background-position: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
 .work,
 .tools {
   padding: 4.2rem 0;
@@ -1000,6 +1010,28 @@ body.gave-up a[href="#resume"] {
   display: none !important;
 }
 
+body.access-locked {
+  overflow: hidden;
+}
+
+body.access-locked .puzzle-intro {
+  opacity: 0;
+  visibility: hidden;
+}
+
+body.access-locked .site-header,
+body.access-locked main,
+body.access-locked .site-footer,
+body.access-locked .theme-bubble,
+body.access-locked .fluid-cursor,
+body.access-locked .fluid-cursor-trail,
+body.access-locked .noise,
+body.access-locked .giveup-timer {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 @keyframes shimmer {
   0% {
     background-position: 0% 50%;
@@ -1071,6 +1103,12 @@ body.gave-up a[href="#resume"] {
   color: #281d2d;
   -webkit-text-fill-color: #281d2d;
   vertical-align: middle;
+}
+
+.theme-scrapbook .first-name .killer-letter {
+  background: none;
+  color: #281d2d;
+  -webkit-text-fill-color: #281d2d;
 }
 
 .theme-scrapbook .last-name {
