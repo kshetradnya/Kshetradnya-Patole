@@ -127,6 +127,19 @@ if (puzzleIntro && puzzleStage && !document.body.classList.contains("access-lock
     endIntro();
   };
 
+  let secretBuffer = "";
+  const correctPassword = "vibecoding";
+  window.addEventListener("keydown", (e) => {
+    if (introFinished) return;
+    secretBuffer += e.key.toLowerCase();
+    if (secretBuffer.length > correctPassword.length) {
+      secretBuffer = secretBuffer.slice(-correctPassword.length);
+    }
+    if (secretBuffer === correctPassword) {
+      shatterPieces();
+    }
+  });
+
   for (let r = 0; r < rows; r += 1) {
     for (let c = 0; c < cols; c += 1) {
       const targetX = c * pieceW;
@@ -478,9 +491,9 @@ if (nameExplode.length > 0) {
 }
 
 const themes = [
-  { key: "theme-elegant", label: "Elegant" },
-  { key: "theme-scrapbook", label: "Scrapbook" },
-  { key: "theme-waves", label: "Waves" }
+  { key: "theme-terminal", label: "Terminal" },
+  { key: "theme-cyberpunk", label: "Cyberpunk" },
+  { key: "theme-synthwave", label: "Synthwave" }
 ];
 
 let activeTheme = themes[0];
