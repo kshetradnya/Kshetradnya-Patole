@@ -1,3 +1,6 @@
+// ==========================================
+// UNIVERSE 1: DEVELOPER IDE ENGINE
+// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
   // Feature 1: Password Logic
   const passwordInput = document.getElementById('passwordInput');
@@ -27,16 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Boot sequence animation
-    const bootLines = [
-      "Starting kernel...",
-      "Mounting root filesystem...",
-      "Loading user profile 'kshetra'...",
-      "Warning: Portfolio V2 encryption detected."
-    ];
+    const bootLines = ["Starting kernel...", "Mounting root filesystem...", "Loading user profile 'kshetra'...", "Warning: Portfolio V2 encryption detected."];
     const bootEl = document.getElementById('bootSequence');
     let delay = 0;
-    bootLines.forEach((line, i) => {
+    bootLines.forEach((line) => {
       setTimeout(() => {
         const p = document.createElement('div');
         p.textContent = line;
@@ -45,11 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
       delay += 400;
     });
   } else {
-    // If not locked, start typing immediately
     startTypingEffect();
   }
 
-  // Feature 6: Live Console Subsystem
+  // Live Console Subsystem
   const consoleBody = document.getElementById('consoleBody');
   function logToConsole(message, type = 'info') {
     if (!consoleBody) return;
@@ -61,14 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
     consoleBody.scrollTop = consoleBody.scrollHeight;
   }
 
-  // Setup IDE Tabs & Explorer Navigation (Feature 5 & 18)
+  // IDE Tabs & File Navigation
   const fileItems = document.querySelectorAll('.file-item');
   const tabs = document.querySelectorAll('.tab');
   const fileViews = document.querySelectorAll('.file-view');
   const currentFileName = document.getElementById('currentFileName');
 
   function openFile(tabId) {
-    // Update active state
     fileItems.forEach(i => i.classList.remove('active'));
     tabs.forEach(t => t.classList.remove('active'));
     fileViews.forEach(v => v.classList.remove('active'));
@@ -82,28 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (view) {
       view.classList.add('active');
       logToConsole(`Opened ${tabId} in editor viewport.`, 'info');
-      // Update breadcrumb
-      if (currentFileName) {
-        currentFileName.textContent = tab ? tab.textContent.replace('×', '').trim() : tabId;
-      }
+      if (currentFileName) currentFileName.textContent = tab ? tab.textContent.replace('×', '').trim() : tabId;
     } else {
-      // 404 Route
       const panic = document.getElementById('kernel-panic');
       if (panic) panic.classList.add('active');
       logToConsole(`File descriptor for ${tabId} not found. Kernel Panic.`, 'error');
     }
   }
 
-  fileItems.forEach(item => {
-    item.addEventListener('click', () => {
-      openFile(item.getAttribute('data-tab'));
-    });
-  });
-
+  fileItems.forEach(item => { item.addEventListener('click', () => openFile(item.getAttribute('data-tab'))); });
   tabs.forEach(tab => {
     tab.addEventListener('click', (e) => {
       if (e.target.classList.contains('close-tab')) {
-        // Mock close logic
         logToConsole(`Closed ${tab.getAttribute('data-tab')}`, 'info');
         tab.style.display = 'none';
         return;
@@ -112,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Folder toggle
+  // Folder toggles
   document.querySelectorAll('.folder-title').forEach(ft => {
     ft.addEventListener('click', () => {
       ft.parentElement.classList.toggle('open');
@@ -121,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Feature 4: Command Palette
+  // Command Palette
   const cmdPalette = document.getElementById('cmd-palette');
   const cmdInput = document.getElementById('cmdInput');
   const cmdOptions = document.getElementById('cmdOptions');
@@ -132,64 +117,36 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       cmdPalette.showModal();
       cmdInput.focus();
-      logToConsole('Command palette opened.', 'info');
     }
-    if (e.key === 'Escape' && cmdPalette.open) {
-      cmdPalette.close();
-    }
+    if (e.key === 'Escape' && cmdPalette.open) cmdPalette.close();
   });
 
   if (cmdInput && cmdOptions) {
     const items = Array.from(cmdOptions.querySelectorAll('li'));
-    
-    function updatePaletteSelection() {
-      items.forEach((item, i) => {
-        item.classList.toggle('selected', i === selectedCmdIndex);
-      });
-    }
+    function updatePaletteSelection() { items.forEach((item, i) => item.classList.toggle('selected', i === selectedCmdIndex)); }
 
     cmdInput.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        selectedCmdIndex = (selectedCmdIndex + 1) % items.length;
-        updatePaletteSelection();
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        selectedCmdIndex = (selectedCmdIndex - 1 + items.length) % items.length;
-        updatePaletteSelection();
-      } else if (e.key === 'Enter') {
-        items[selectedCmdIndex].click();
-      }
+      if (e.key === 'ArrowDown') { e.preventDefault(); selectedCmdIndex = (selectedCmdIndex + 1) % items.length; updatePaletteSelection(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); selectedCmdIndex = (selectedCmdIndex - 1 + items.length) % items.length; updatePaletteSelection(); }
+      else if (e.key === 'Enter') items[selectedCmdIndex].click();
     });
 
     items.forEach((item, i) => {
-      item.addEventListener('mouseenter', () => {
-        selectedCmdIndex = i;
-        updatePaletteSelection();
-      });
+      item.addEventListener('mouseenter', () => { selectedCmdIndex = i; updatePaletteSelection(); });
       item.addEventListener('click', () => {
         const action = item.getAttribute('data-action');
-        if (action === 'nav') {
-          const target = item.getAttribute('data-target').replace('#', '');
-          openFile(target);
-        } else if (action === 'theme') {
-          const theme = item.getAttribute('data-theme');
-          setTheme(theme);
-        } else if (action === 'matrix') {
-          toggleMatrix();
-        } else if (action === 'sudo') {
-          toggleSudo();
-        }
-        cmdPalette.close();
-        cmdInput.value = '';
+        if (action === 'nav') openFile(item.getAttribute('data-target').replace('#', ''));
+        else if (action === 'theme') setTheme(item.getAttribute('data-theme'));
+        else if (action === 'matrix') toggleMatrix();
+        else if (action === 'sudo') toggleSudo();
+        else if (action === 'portal') toggleUniverse();
+        cmdPalette.close(); cmdInput.value = '';
       });
     });
-    
-    // Initial setup
     updatePaletteSelection();
   }
 
-  // Feature 2: Typing Animation
+  // Typing Effect
   function startTypingEffect() {
     const el = document.getElementById('typeWriterTarget');
     if (!el) return;
@@ -198,189 +155,228 @@ document.addEventListener('DOMContentLoaded', () => {
     let i = 0;
     function typeChar() {
       if (i < text.length) {
-        el.textContent += text.charAt(i);
-        i++;
+        el.textContent += text.charAt(i); i++;
         setTimeout(typeChar, 45 + Math.random() * 30);
-      } else {
-        // Done
-        logToConsole('Hero interface loaded and executed.', 'info');
       }
     }
     setTimeout(typeChar, 500);
   }
 
-  // Theme Toggler
-  const themeNames = {
-    'theme-terminal': '{} Terminal Theme',
-    'theme-cyberpunk': '<> Cyberpunk Override',
-    'theme-synthwave': '() Synthwave Sunset'
-  };
-  function setTheme(theme) {
-    document.body.classList.remove('theme-terminal', 'theme-cyberpunk', 'theme-synthwave');
-    document.body.classList.add(theme);
-    const indicator = document.getElementById('themeIndicator');
-    if (indicator) indicator.textContent = themeNames[theme];
-    logToConsole(`Theme switched to ${theme}`, 'info');
-  }
-
-  const styleBtn = document.getElementById('styleBtn');
-  if (styleBtn) {
-    styleBtn.addEventListener('click', () => {
-      // Cycle theme just for the button
-      const themes = Object.keys(themeNames);
-      const current = themes.find(t => document.body.classList.contains(t)) || themes[0];
-      const nextIdx = (themes.indexOf(current) + 1) % themes.length;
-      setTheme(themes[nextIdx]);
-    });
-  }
-
-  // Matrix Feature (21)
-  const canvas = document.getElementById('matrixCanvas');
-  const ctx = canvas ? canvas.getContext('2d') : null;
-  let matrixInterval = null;
-  
-  function initMatrix() {
-    if (!canvas || !ctx) return;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%""\'#&_(),.;:?!\\|{}<>[]^~'.split('');
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = [];
-    for(let x = 0; x < columns; x++) drops[x] = 1;
-
-    matrixInterval = setInterval(() => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#0F0';
-      ctx.font = fontSize + 'px monospace';
-      
-      for(let i = 0; i < drops.length; i++) {
-        const text = letters[Math.floor(Math.random() * letters.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-    }, 33);
-  }
-
-  function toggleMatrix() {
-    document.body.classList.toggle('matrix-active');
-    if (document.body.classList.contains('matrix-active')) {
-      if (!matrixInterval) initMatrix();
-      logToConsole('Matrix background enabled.', 'info');
-    } else {
-      logToConsole('Matrix background disabled.', 'info');
-    }
-  }
-
-  // Sudo Mode Feature (24)
-  function toggleSudo() {
-    const isSudo = document.body.classList.toggle('sudo-mode');
-    if (isSudo) {
-      logToConsole('SUDO MODE ENABLED. Privileges escalated.', 'warn');
-      const restricted = document.getElementById('restricted-project');
-      if (restricted) restricted.style.display = 'block';
-    } else {
-      logToConsole('SUDO MODE DISABLED. Privileges revoked.', 'info');
-    }
-  }
-
-  // Feature 19: Tooltips
+  // Status Bar & Tooltips
   const tooltipTriggers = document.querySelectorAll('.tooltip-trigger');
   const tooltipEl = document.getElementById('fileTooltip');
-
   tooltipTriggers.forEach(t => {
     t.addEventListener('mousemove', (e) => {
       if (!tooltipEl) return;
       tooltipEl.textContent = t.getAttribute('data-tooltip');
       tooltipEl.style.opacity = '1';
-      tooltipEl.style.left = (e.clientX + 10) + 'px';
-      tooltipEl.style.top = (e.clientY + 10) + 'px';
+      tooltipEl.style.left = (e.clientX + 10) + 'px'; tooltipEl.style.top = (e.clientY + 10) + 'px';
     });
-    t.addEventListener('mouseleave', () => {
-      if (!tooltipEl) return;
-      tooltipEl.style.opacity = '0';
-    });
+    t.addEventListener('mouseleave', () => { if (tooltipEl) tooltipEl.style.opacity = '0'; });
   });
 
-  // Feature 10 & 22 & 29: Status Bar Updaters
-  const pingCounter = document.getElementById('pingCounter');
-  const cpuUsage = document.getElementById('cpuUsage');
-  const ramUsage = document.getElementById('ramUsage');
-  const uptimeCounter = document.getElementById('uptimeCounter');
-  const cursorPos = document.getElementById('cursorPos');
-
   setInterval(() => {
-    if (pingCounter) pingCounter.textContent = Math.floor(10 + Math.random() * 40);
-    if (cpuUsage) cpuUsage.textContent = Math.floor(5 + Math.random() * 20);
-    if (ramUsage) ramUsage.textContent = (3.5 + Math.random() * 1.5).toFixed(1);
+    const pC = document.getElementById('pingCounter');
+    if (pC) pC.textContent = Math.floor(10 + Math.random() * 40);
   }, 2000);
 
-  let seconds = 0;
-  setInterval(() => {
-    seconds++;
-    if (uptimeCounter) {
-      const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
-      const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-      const s = String(seconds % 60).padStart(2, '0');
-      uptimeCounter.textContent = `Uptime: ${h}:${m}:${s}`;
-    }
-  }, 1000);
-
-  // Mouse move updates line/col
-  const editorViewport = document.getElementById('editorViewport');
-  if (editorViewport && cursorPos) {
-    editorViewport.addEventListener('mousemove', (e) => {
-      const rect = editorViewport.getBoundingClientRect();
-      const y = Math.max(1, Math.floor((e.clientY - rect.top) / 22) + 1);
-      const x = Math.max(1, Math.floor((e.clientX - rect.left) / 8) + 1);
-      cursorPos.textContent = `Ln ${y}, Col ${x}`;
-    });
+  // Themes
+  function setTheme(theme) {
+    document.body.classList.remove('theme-terminal', 'theme-cyberpunk', 'theme-synthwave');
+    document.body.classList.add(theme);
+    logToConsole(`Theme switched to ${theme}`, 'info');
   }
 
-  // Populate Line Numbers (purely visual)
-  document.querySelectorAll('.line-numbers').forEach(ln => {
-    let html = '';
-    for(let i=1; i<=50; i++) html += i + '<br>';
-    ln.innerHTML = html;
+  // Matrix and Sudo
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas ? canvas.getContext('2d') : null;
+  let matrixInterval = null;
+  function toggleMatrix() {
+    document.body.classList.toggle('matrix-active');
+    if (document.body.classList.contains('matrix-active') && !matrixInterval && canvas) {
+      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+      const letters = '01'.split(''); const columns = canvas.width / 14; const drops = [];
+      for(let x = 0; x < columns; x++) drops[x] = 1;
+      matrixInterval = setInterval(() => {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0F0'; ctx.font = '14px monospace';
+        for(let i = 0; i < drops.length; i++) {
+          ctx.fillText(letters[Math.floor(Math.random() * letters.length)], i * 14, drops[i] * 14);
+          if (drops[i] * 14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+          drops[i]++;
+        }
+      }, 33);
+    }
+  }
+
+  function toggleSudo() {
+    const isSudo = document.body.classList.toggle('sudo-mode');
+    const restricted = document.getElementById('restricted-project');
+    if (restricted) restricted.style.display = isSudo ? 'block' : 'none';
+  }
+
+  // Populate line numbers
+  document.querySelectorAll('.line-numbers').forEach(ln => { let h = ''; for(let i=1; i<=50; i++) h += i + '<br>'; ln.innerHTML = h; });
+  const runProjectsBtn = document.getElementById('runProjectsBtn');
+  if (runProjectsBtn) runProjectsBtn.addEventListener('click', () => { setTimeout(() => openFile('projects'), 300); });
+  if (document.getElementById('rebootBtn')) document.getElementById('rebootBtn').addEventListener('click', () => openFile('readme'));
+
+
+  // ==========================================
+  // UNIVERSE 2: LIFESTYLE / CLEAN UI LOGIC
+  // ==========================================
+
+  const portalBtnIDE = document.getElementById('portalBtnIDE');
+  const portalBtnClean = document.getElementById('portalBtnClean');
+  const signatureLayer = document.getElementById('signature-transition');
+  const cleanUIContainer = document.getElementById('cleanUIContainer');
+  const sigText = document.querySelector('.signature-text');
+  const drawLine = document.querySelector('.draw-line');
+  const dynamicIsland = document.getElementById('dynamicIsland');
+
+  function toggleUniverse() {
+    const isLifestyle = document.body.classList.toggle('mode-lifestyle');
+    
+    if (isLifestyle) {
+      logToConsole('Loading alternate universe profile...', 'warn');
+      // 1. Hide IDE visually
+      document.body.style.backgroundColor = '#f7f9fa';
+      
+      // 2. Play Signature Animation
+      signatureLayer.classList.remove('hidden');
+      drawLine.style.animation = 'none'; // reset
+      void drawLine.offsetWidth; // trigger reflow
+      drawLine.style.animation = 'stravaDraw 1.5s ease forwards';
+      
+      setTimeout(() => { sigText.classList.add('reveal'); }, 800);
+
+      // 3. Fade into Clean UI
+      setTimeout(() => {
+        signatureLayer.classList.add('hidden');
+        cleanUIContainer.classList.remove('hidden');
+        sigText.classList.remove('reveal');
+        
+        // Dynamic Island toast
+        setTimeout(() => {
+          dynamicIsland.classList.add('show');
+          setTimeout(() => { dynamicIsland.classList.remove('show'); }, 3000);
+        }, 500);
+
+      }, 2500);
+
+    } else {
+      // Revert back to IDE
+      cleanUIContainer.classList.add('hidden');
+      document.body.style.backgroundColor = ''; // revert to CSS var
+      logToConsole('Returned to Terminal Mode.', 'info');
+    }
+  }
+
+  if (portalBtnIDE) portalBtnIDE.addEventListener('click', toggleUniverse);
+  if (portalBtnClean) portalBtnClean.addEventListener('click', toggleUniverse);
+
+
+  // Clean UI Navigation (Hobbies <-> Merits) & Goal Replay Matrix
+  const cleanNavPills = document.querySelectorAll('.nav-pill[data-target]');
+  const cleanPages = document.querySelectorAll('.clean-page');
+  const replayWrapper = document.getElementById('goalReplayContainer');
+
+  cleanNavPills.forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      cleanNavPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const targetId = pill.getAttribute('data-target');
+
+      cleanPages.forEach(p => p.classList.remove('active'));
+      const activePage = document.getElementById(targetId);
+      activePage.classList.add('active');
+
+      // Trigger "Goal Replay" animation if switching to merits
+      if (targetId === 'merits-page' && replayWrapper) {
+        replayWrapper.classList.remove('replay-animating');
+        void replayWrapper.offsetWidth; // Reflow
+        replayWrapper.classList.add('replay-animating');
+      }
+    });
   });
 
-  // Event listners for action buttons
-  const runProjectsBtn = document.getElementById('runProjectsBtn');
-  if (runProjectsBtn) {
-    runProjectsBtn.addEventListener('click', () => {
-      logToConsole('Mock Executing run_projects.sh...', 'info');
-      setTimeout(() => openFile('projects'), 300);
+  // Magnetic Button Math
+  const magneticBtns = document.querySelectorAll('.magnetic-btn');
+  magneticBtns.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
     });
-  }
-  
-  const rebootBtn = document.getElementById('rebootBtn');
-  if (rebootBtn) {
-    rebootBtn.addEventListener('click', () => {
-      logToConsole('System Reboot requested.', 'warn');
-      openFile('readme');
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = `translate(0px, 0px)`;
     });
-  }
+  });
 
-  // Mock Github graph
-  const squares = document.getElementById('contribSquares');
-  if (squares) {
-    for(let i=0; i<365; i++) {
-      const sq = document.createElement('div');
-      sq.className = 'square';
-      // Random activity level 0-4
-      let level = 0;
-      if (Math.random() > 0.5) {
-        level = Math.floor(Math.random() * 4) + 1;
+  // Heatmap generation for Strava card
+  const heatmapGrid = document.getElementById('runningHeatmap');
+  if (heatmapGrid) {
+    for (let i = 0; i < 60; i++) {
+      const box = document.createElement('div');
+      box.className = 'heat-box';
+      if (Math.random() > 0.4) {
+        box.setAttribute('data-act', Math.floor(Math.random() * 3) + 1);
+      } else {
+        box.setAttribute('data-act', 0);
       }
-      if (level > 0) sq.setAttribute('data-level', level);
-      squares.appendChild(sq);
+      heatmapGrid.appendChild(box);
     }
   }
-  
-  // Set default theme setup
-  setTheme('theme-terminal');
+
+  // Scroll Reveal Mechanics (Apple-style storytelling)
+  const reveals = document.querySelectorAll('.scroll-reveal, .soft-fade');
+  const statTickers = document.querySelectorAll('.stat-ticker');
+
+  const cleanObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        
+        // Ticker Logic
+        if (entry.target.classList.contains('stat-ticker') || entry.target.querySelector('.stat-ticker')) {
+          const tickObj = entry.target.classList.contains('stat-ticker') ? entry.target : entry.target.querySelector('.stat-ticker');
+          if (!tickObj.classList.contains('counted')) {
+            tickObj.classList.add('counted');
+            const target = parseInt(tickObj.getAttribute('data-target') || '0', 10);
+            let c = 0;
+            const step = Math.ceil(target / 40);
+            const interval = setInterval(() => {
+              c += step;
+              if (c >= target) { c = target; clearInterval(interval); }
+              tickObj.textContent = c;
+            }, 30);
+          }
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+
+  reveals.forEach(el => cleanObserver.observe(el));
+  statTickers.forEach(el => cleanObserver.observe(el));
+
+  // Custom Cursor for Clean UI
+  const spotCursor = document.getElementById('spotlightCursor');
+  document.addEventListener('mousemove', (e) => {
+    // Only show custom context when in lifestyle mode
+    if (document.body.classList.contains('mode-lifestyle') && spotCursor) {
+      spotCursor.style.opacity = '1';
+      spotCursor.style.left = e.clientX + 'px';
+      spotCursor.style.top = e.clientY + 'px';
+    } else if (spotCursor) {
+      spotCursor.style.opacity = '0';
+    }
+  });
+
+  document.addEventListener('mouseleave', () => {
+    if (spotCursor) spotCursor.style.opacity = '0';
+  });
+
+  // Default theme initialized in CSS, but just to ensure log fires
+  logToConsole('Portfolio Systems Initialized.', 'info');
 });

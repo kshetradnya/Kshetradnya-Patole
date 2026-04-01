@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kshetradnya Patole | Developer</title>
+    <title>Kshetradnya Patole | Developer & Lifestyle</title>
     <meta
       name="description"
       content="Portfolio of Kshetradnya Patole, a computer science student building scalable web applications, AI models, and robotics projects."
@@ -11,12 +11,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600;800&family=Caveat:wght@600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="theme-terminal access-locked">
+    
+    <!-- ========================================== -->
+    <!-- UNIVERSE 1: DEVELOPER IDE (Existing)       -->
+    <!-- ========================================== -->
+    
     <!-- Feature 21: Matrix Rain Background Layer -->
     <canvas id="matrixCanvas" class="hidden-layer"></canvas>
     
@@ -30,6 +35,7 @@
         </div>
         <div class="password-prompt">
           <label for="passwordInput">[sudo] password for kshetra: </label>
+          <!-- Fixed opacity/typing so user can see they are typing -->
           <input type="password" id="passwordInput" autocomplete="off" autofocus />
           <span id="fakeCursor" class="blinking-cursor"></span>
         </div>
@@ -53,6 +59,8 @@
         <li data-action="theme" data-theme="theme-synthwave">Theme: Synthwave Sunset</li>
         <li data-action="matrix">Action: Toggle Matrix Rain Background</li>
         <li data-action="sudo">Action: Enable Sudo Mode</li>
+        <!-- New Portal Command -->
+        <li data-action="portal" class="portal-link">>> Portal: Enter Clean Lifestyle Profile</li>
       </ul>
       <p class="palette-footer">Hold `Esc` to close • Use `↑/↓` to navigate</p>
     </dialog>
@@ -117,22 +125,18 @@
           </div>
         </div>
 
-        <div class="breadcrumbs"> <!-- Feature 17: Breadcrumbs -->
+        <div class="breadcrumbs">
           <span class="path">~/portfolio/src/<span id="currentFileName">README.md</span></span>
         </div>
 
-        <!-- 
-          Editor Viewport: 
-          Holds the different sections as if they were files being opened. 
-        -->
+        <!-- Editor Viewport -->
         <div class="editor-viewport" id="editorViewport">
           
-          <!-- FILE: README.md (Hero) -->
+          <!-- FILE: README.md -->
           <section class="file-view active" id="readme">
             <div class="line-numbers"></div>
             <div class="code-content">
               <h1><span class="syntax-keyword">const</span> <span class="syntax-variable">dev</span> = <span class="syntax-string">"Kshetradnya Patole"</span>;</h1>
-              <!-- Feature 2: Typing effect, Feature 3: Glitch text -->
               <h2 class="hero-role glitch-text" data-text="Software Engineer & CS Major" id="typeWriterTarget"></h2>
               
               <div class="live-repl">
@@ -146,19 +150,19 @@
                 <span class="user-prompt">➜  ~</span> <span class="blinking-cursor"></span>
               </div>
 
-              <!-- Feature 30: Code Runner Buttons -->
               <div class="hero-actions">
                 <button class="run-btn" id="runProjectsBtn"><span class="run-icon">▶</span> ./run_projects.sh</button>
                 <button class="style-btn" id="styleBtn" title="Ctrl+K to toggle theme menu">Switch IDE Theme</button>
+                <!-- BIG NEW FEATURE: Toggle Button to Lifestyle Mode -->
+                <button class="portal-btn magnetic-btn" id="portalBtnIDE">Load Personal/Hobbies ➞</button>
               </div>
             </div>
           </section>
 
-          <!-- FILE: projects.json (Work) -->
+          <!-- FILE: projects.json -->
           <section class="file-view" id="projects">
             <div class="line-numbers"></div>
             <div class="code-content">
-              <!-- Feature 8: JSON Block Formatting -->
               <div class="json-viewer">
                 <span class="syntax-bracket">{</span>
                 <div class="json-indent">
@@ -170,7 +174,6 @@
                       <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Interactive Biology"</span><span class="syntax-comma">,</span>
                       <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"WebGL simulation of cellular processes and ecosystems."</span><span class="syntax-comma">,</span>
                       <br><span class="syntax-key">"stack"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span><span class="syntax-string">"Three.js"</span>, <span class="syntax-string">"React"</span>, <span class="syntax-string">"GLSL"</span><span class="syntax-bracket">]</span><span class="syntax-comma">,</span>
-                      <!-- Feature 19: Hover File tooltips -->
                       <br><span class="syntax-key">"preview"</span><span class="syntax-colon">:</span> <span class="syntax-string tooltip-trigger" data-tooltip="size: 2.1MB | type: image/png">"img/bio-sim.png"</span>
                     </div>
                     <span class="syntax-bracket">}</span><span class="syntax-comma">,</span>
@@ -194,7 +197,6 @@
                       <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Full-stack app for writing practice and spacing algorithms."</span><span class="syntax-comma">,</span>
                       <br><span class="syntax-key">"stack"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span><span class="syntax-string">"Node.js"</span>, <span class="syntax-string">"Express"</span>, <span class="syntax-string">"MongoDB"</span><span class="syntax-bracket">]</span>
                     </div>
-                    <!-- Feature 24: Sudo unlocked content visually represented -->
                     <span class="syntax-bracket">}</span><span class="syntax-comma sudo-hidden">,</span>
                   </div>
                   
@@ -215,11 +217,10 @@
             </div>
           </section>
 
-          <!-- FILE: resume.log (Resume) -->
+          <!-- FILE: resume.log -->
           <section class="file-view" id="resume">
             <div class="line-numbers"></div>
             <div class="code-content">
-              <!-- Feature 7: Git Commit History Timeline -->
               <div class="git-log">
                 <div class="commit">
                   <div class="commit-hash">commit <span class="hash-text">a1b2c3d</span></div>
@@ -253,8 +254,6 @@
                   </div>
                 </div>
               </div>
-              
-              <!-- Feature 14: GitHub Contribution Graph Mock -->
               <div class="contrib-graph">
                 <p><strong>Activity Graph</strong></p>
                 <div class="squares" id="contribSquares"></div>
@@ -266,33 +265,22 @@
           <section class="file-view" id="about">
             <div class="line-numbers"></div>
             <div class="code-content">
-              <!-- Feature 13: Man Page style -->
               <div class="man-page">
                 <h3 class="man-header">KSHETRADNYA(1)          User Commands         KSHETRADNYA(1)</h3>
-                
                 <h4>NAME</h4>
                 <p class="man-indent">kshetradnya - Full-stack developer, AI enthusiast, problem solver</p>
-                
                 <h4>SYNOPSIS</h4>
                 <p class="man-indent"><strong>kshetradnya</strong> [<strong>--code</strong>] [<strong>--debug</strong>] [<strong>--optimize</strong>]</p>
-                
                 <h4>DESCRIPTION</h4>
                 <p class="man-indent">
                   Computer Science student with experience building full-stack web applications, AI models, and optimizing algorithms. Developed internal tools for student organizations and contributed to open-source robotics projects.
                 </p>
-                
                 <h4>OPTIONS</h4>
                 <div class="man-indent">
-                  <p><strong>--code</strong><br>
-                     Writes clean, scalable, and maintainable software architectures.</p>
-                  
-                  <p><strong>--debug</strong><br>
-                     Locates and crushes bugs efficiently without caffeine crash.</p>
-                  
-                  <p><strong>--learn</strong><br>
-                     Continuously assimilates bleeding-edge technologies and frameworks.</p>
+                  <p><strong>--code</strong><br> Writes clean, scalable, and maintainable software architectures.</p>
+                  <p><strong>--debug</strong><br> Locates and crushes bugs efficiently without caffeine crash.</p>
+                  <p><strong>--learn</strong><br> Continuously assimilates bleeding-edge technologies and frameworks.</p>
                 </div>
-
                 <h3 class="man-footer">Portfolio V2            2026-04-01             KSHETRADNYA(1)</h3>
               </div>
             </div>
@@ -305,7 +293,6 @@
               <div class="contact-terminal">
                 <p><span class="syntax-comment"># Ready to build something bold?</span></p>
                 <p><span class="syntax-keyword">echo</span> <span class="syntax-string">"Let's collaborate on your next tech stack architecture."</span></p>
-                
                 <div class="clone-box">
                   <span class="syntax-keyword">git clone</span> <a class="clone-url tooltip-trigger" href="mailto:xetraskool@gmail.com" data-tooltip="Click to copy or email">git@xetraskool.com:collaboration.git</a>
                 </div>
@@ -313,20 +300,18 @@
             </div>
           </section>
 
-          <!-- Feature 23: 404 Kernel Panic Error State -->
+          <!-- Feature 23: 404 Kernel Panic -->
           <section class="file-view error-state" id="kernel-panic">
             <div class="code-content">
               <h2 class="panic-text">KERNEL PANIC - NOT SYNCING</h2>
               <p>Fatal exception: VFS: Unable to mount root fs on unknown-block(0,0)</p>
-              <p>The requested file descriptor or sector could not be located.</p>
-              <button class="run-btn panic-reboot" id="rebootBtn">&gt; REBOOT SYSTEM (Nav to README.md)</button>
+              <button class="run-btn panic-reboot" id="rebootBtn">&gt; REBOOT SYSTEM</button>
             </div>
           </section>
 
         </div>
       </main>
-
-    </div><!-- End IDE Container -->
+    </div>
 
     <!-- Feature 6 & 26: Bottom Panel / Live Console Log -->
     <footer class="terminal-console" id="terminalConsole" aria-hidden="true">
@@ -342,41 +327,196 @@
       </div>
     </footer>
 
-    <!-- Feature 10 & 22 & 28 & 29: Status Bar (Uptime, Ping, Version, CPU) -->
+    <!-- Feature 10 & 22 & 28 & 29: Status Bar -->
     <div class="status-bar" id="statusBar" aria-hidden="true">
       <div class="status-left">
-        <span class="status-item branch">
-          <span class="icon git">ᚠ</span> main*
-        </span>
-        <span class="status-item error">
-          <span class="icon">⊗</span> 0
-        </span>
-        <span class="status-item warning">
-          <span class="icon">⚠</span> 0
-        </span>
-        <!-- Feature 28 -->
-        <span class="status-item info">
-          v1.0.4 - latest build
-        </span>
+        <span class="status-item branch"><span class="icon git">ᚠ</span> main*</span>
+        <span class="status-item error"><span class="icon">⊗</span> 0</span>
+        <span class="status-item warning"><span class="icon">⚠</span> 0</span>
+        <span class="status-item info">v2.0.0 - latest build</span>
       </div>
       <div class="status-right">
-        <!-- Feature 22 -->
         <span class="status-item uptime" id="uptimeCounter">Uptime: 00:00:00</span>
-        <!-- Feature 10 -->
         <span class="status-item cpu">CPU: <span id="cpuUsage">12</span>% | RAM: <span id="ramUsage">4.2</span>GB</span>
-        <!-- Feature 29 -->
         <span class="status-item ping">Ping: <span id="pingCounter">24</span>ms</span>
-        <span class="status-item language">
-          UTF-8
-        </span>
-        <span class="status-item cursor-pos" id="cursorPos">
-          Ln 1, Col 1
-        </span>
-        <span class="status-item theme-indicator" id="themeIndicator">
-          {} Terminal Theme
-        </span>
+        <span class="status-item cursorPos" id="cursorPos">Ln 1, Col 1</span>
+        <span class="status-item theme-indicator" id="themeIndicator">{} Terminal Theme</span>
       </div>
     </div>
+
+    <!-- ========================================== -->
+    <!-- SIGNATURE TRANSITION LAYER (Strava-style)  -->
+    <!-- ========================================== -->
+    
+    <div id="signature-transition" class="signature-layer hidden">
+      <div class="signature-container">
+        <!-- SVG signature that accurately spells the name using Caveat cursive font -->
+        <svg viewBox="0 0 800 200" class="signature-svg">
+          <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="'Caveat', cursive" font-size="90" fill="none" stroke="var(--strava-orange, #fc4c02)" stroke-width="2.5" class="draw-line">Kshetradnya Patole</text>
+        </svg>
+        <h2 class="signature-text" style="display:none;">Kshetradnya Patole</h2>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- UNIVERSE 2: CLEAN UI (Hobbies & Merits)    -->
+    <!-- ========================================== -->
+    
+    <div class="clean-ui-container hidden" id="cleanUIContainer" aria-hidden="true">
+      <div class="fluid-liquid-bg"></div> <!-- Lava lamp morphing blobs -->
+
+      <!-- Dynamic Island Notification -->
+      <div class="dynamic-island" id="dynamicIsland">
+        <div class="island-content">
+          <span class="island-icon heartbeat">❤️</span>
+          <span class="island-text">Profile Switched: Personal Mode</span>
+        </div>
+      </div>
+
+      <!-- Floating Capsule Nav -->
+      <nav class="capsule-nav">
+        <button class="nav-pill active magnetic-btn" data-target="hobbies-page">Hobbies</button>
+        <button class="nav-pill magnetic-btn" data-target="merits-page">Merits</button>
+        <button class="nav-pill magnetic-btn" id="portalBtnClean">❮ CLI</button>
+      </nav>
+
+      <!-- Custom Spotlight Cursor -->
+      <div class="spotlight-cursor" id="spotlightCursor"></div>
+
+      <!-- Viewport morphing container -->
+      <div class="clean-viewport">
+
+        <!-- ================= PAGE: HOBBIES ================= -->
+        <div class="clean-page active" id="hobbies-page">
+          <header class="clean-hero scroll-reveal">
+            <h1 class="soft-fade">Beyond the Code</h1>
+            <p class="soft-fade">Living a balanced life through movement and perspective.</p>
+          </header>
+
+          <section class="hobbies-section scroll-reveal">
+            <h2 class="marquee-bg">RUNNING RUNNING RUNNING</h2>
+            <div class="strava-card glass-card foil-tilt">
+              <div class="card-header">
+                <h3><span class="heartbeat">🔴</span> Running Activity</h3>
+                <span class="stat-ticker" data-target="500">0</span> km YTD
+              </div>
+              
+              <!-- Weekly Performance Graph Placeholder -->
+              <div class="weekly-performance">
+                <p style="font-size: 0.85rem; color: #666; font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase;">Weekly Performance Graph (Ready for Data)</p>
+                <div class="bar-chart" id="weeklyPerformanceGraph">
+                  <!-- Monday to Sunday placeholders -->
+                  <div class="bar-col"><div class="bar" style="height: 40%;"></div><span class="day-label">M</span></div>
+                  <div class="bar-col"><div class="bar" style="height: 60%;"></div><span class="day-label">T</span></div>
+                  <div class="bar-col"><div class="bar" style="height: 30%;"></div><span class="day-label">W</span></div>
+                  <div class="bar-col"><div class="bar" style="height: 80%;"></div><span class="day-label">T</span></div>
+                  <div class="bar-col"><div class="bar" style="height: 50%;"></div><span class="day-label">F</span></div>
+                  <div class="bar-col"><div class="bar" style="height: 90%;"></div><span class="day-label">S</span></div>
+                  <div class="bar-col"><div class="bar" style="height: 100%;"></div><span class="day-label">S</span></div>
+                </div>
+              </div>
+
+              <div class="heatmap-grid" id="runningHeatmap">
+                <!-- Javascript will populate heatmap squares -->
+              </div>
+            </div>
+          </section>
+
+          <section class="hobbies-section scroll-reveal">
+            <h2 class="marquee-bg">PHOTOGRAPHY PHOTOGRAPHY</h2>
+            <div class="parallax-photography">
+              <!-- Polaroid tilt hover cards -->
+              <div class="polaroid magnetic-btn photo-1">
+                <img src="projects/brandi.png" alt="Photography Specimen 1">
+                <p class="caption">Nature Walk - 24mm</p>
+              </div>
+              <div class="polaroid magnetic-btn photo-2">
+                <img src="projects/peposter.png" alt="Photography Specimen 2">
+                <p class="caption">Urban Decay</p>
+              </div>
+              <div class="polaroid magnetic-btn photo-3">
+                <img src="projects/socialcampaign.png" alt="Photography Specimen 3">
+                <p class="caption">Macrolife</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= PAGE: MERITS (Goal Replay Trigger) ================= -->
+        <div class="clean-page" id="merits-page">
+          
+          <header class="clean-hero scroll-reveal">
+            <h1 class="soft-fade">Milestones & Merits</h1>
+            <p class="soft-fade">Tracking the journey on the field and in academia.</p>
+          </header>
+
+          <!-- The specific Goal Replay Wrapper -->
+          <div class="goal-replay-wrapper" id="goalReplayContainer">
+            
+            <section class="football-timeline-section scroll-reveal">
+              <!-- Interactive Soccer Pitch Context -->
+              <div class="soccer-pitch">
+                <div class="pitch-lines"></div>
+                <div class="center-circle"></div>
+              </div>
+
+              <!-- Draggable horizontal timeline -->
+              <div class="timeline-container scroll-storytelling">
+                <div class="timeline-track">
+                  
+                  <div class="timeline-node" data-year="2019 - 2024">
+                    <div class="node-dot progress-ring"></div>
+                    <div class="node-content glass-card foil-tilt">
+                      <h3>Football Journey</h3>
+                      <p>Through dense training and competitive leagues, building stamina, teamwork, and leadership on the pitch.</p>
+                      <div class="stat-rings">
+                        <svg class="ring" viewBox="0 0 36 36"><path class="circle" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /></svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="timeline-node" data-year="Grade 9">
+                    <div class="node-dot progress-ring"></div>
+                    <div class="node-content glass-card foil-tilt">
+                      <h3>Winner: EOE</h3>
+                      <p>Secured the championship at the school-hosted multi-disciplinary fair tournament (Element of Enterprise / Science Fair).</p>
+                    </div>
+                  </div>
+
+                  <div class="timeline-node" data-year="Academic">
+                    <div class="node-dot progress-ring"></div>
+                    <div class="node-content glass-card foil-tilt trophy-card">
+                      <div class="lens-flare"></div>
+                      <h3>World Topper</h3>
+                      <p>English Cambridge Checkpoint global highest achievement.</p>
+                    </div>
+                  </div>
+
+                  <div class="timeline-node" data-year="2025">
+                    <div class="node-dot progress-ring active-pulse"></div>
+                    <div class="node-content glass-card foil-tilt active-card">
+                      <h3>House Captain of Beta</h3>
+                      <p>Leading the house division in sports and cultural events for the 2025 academic calendar.</p>
+                    </div>
+                  </div>
+
+                  <div class="timeline-node blueprint-filter" data-year="WIP">
+                    <div class="node-dot progress-ring"></div>
+                    <div class="node-content glass-card foil-tilt">
+                      <h3>Work in Progress...</h3>
+                      <p>Architecting the next big leap. Coding, Training, Building.</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </section>
+          </div>
+
+        </div> <!-- End Merits Page -->
+
+      </div>
+    </div> <!-- End Clean UI Universe -->
 
     <!-- Feature 19: Tooltip Element -->
     <div id="fileTooltip" class="file-tooltip"></div>
