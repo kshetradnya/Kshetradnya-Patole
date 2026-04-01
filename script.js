@@ -1,573 +1,386 @@
-const stage = document.getElementById("portraitStage");
-const mask = document.getElementById("portraitMask");
-const menuToggle = document.getElementById("menuToggle");
-const mainNav = document.getElementById("mainNav");
-const styleBtn = document.getElementById("styleBtn");
-const themeBubble = document.getElementById("themeBubble");
-const fluidCursor = document.getElementById("fluidCursor");
-const fluidCursorTrail = document.getElementById("fluidCursorTrail");
-const puzzleIntro = document.getElementById("puzzleIntro");
-const puzzleStage = document.getElementById("puzzleStage");
-const puzzleGiveUp = document.getElementById("puzzleGiveUp");
-const giveupTimer = document.getElementById("giveupTimer");
-const quoteOverlay = document.getElementById("quoteOverlay");
-const mercyBtn = document.getElementById("mercyBtn");
-const mercyAudio = document.getElementById("mercyAudio");
-const projectGrid = document.getElementById("projectGrid");
-const projectsPrev = document.getElementById("projectsPrev");
-const projectsNext = document.getElementById("projectsNext");
-const QUIT_LOCK_KEY = "kpPuzzleQuitLocked";
-let mercyInProgress = false;
-
-const lockWholeSite = () => {
-  document.body.classList.add("gave-up", "access-locked");
-  if (quoteOverlay) {
-    quoteOverlay.classList.add("show");
-    quoteOverlay.setAttribute("aria-hidden", "false");
-  }
-};
-
-if (window.localStorage.getItem(QUIT_LOCK_KEY) === "1") {
-  lockWholeSite();
-}
-
-if (mercyBtn) {
-  mercyBtn.addEventListener("click", () => {
-    if (!document.body.classList.contains("access-locked") || mercyInProgress) {
-      return;
-    }
-
-    mercyInProgress = true;
-    document.body.classList.add("mercy-active");
-
-    const finishMercy = () => {
-      if (!mercyInProgress) {
-        return;
-      }
-      mercyInProgress = false;
-      document.body.classList.remove("mercy-active");
-      window.localStorage.removeItem(QUIT_LOCK_KEY);
-      window.setTimeout(() => {
-        window.location.reload();
-      }, 120);
-    };
-
-    let fallbackTimer = window.setTimeout(finishMercy, 7200);
-
-    if (mercyAudio) {
-      mercyAudio.loop = false;
-      mercyAudio.currentTime = 0;
-      mercyAudio.onended = () => {
-        window.clearTimeout(fallbackTimer);
-        finishMercy();
-      };
-      const maybePlay = mercyAudio.play();
-      if (maybePlay && typeof maybePlay.catch === "function") {
-        maybePlay.catch(() => {
-          window.clearTimeout(fallbackTimer);
-          fallbackTimer = window.setTimeout(finishMercy, 2600);
-        });
-      }
-    }
-  });
-}
-
-if (puzzleIntro && puzzleStage && !document.body.classList.contains("access-locked")) {
-  const rows = 3;
-  const cols = 3;
-  const stageRect = puzzleStage.getBoundingClientRect();
-  const pieceW = stageRect.width / cols;
-  const pieceH = stageRect.height / rows;
-  const snapDistance = Math.min(pieceW, pieceH) * 0.18;
-  const pieces = [];
-  const pieceState = new WeakMap();
-  let solvedCount = 0;
-  let activePiece = null;
-  let grabOffsetX = 0;
-  let grabOffsetY = 0;
-  let targetDragX = 0;
-  let targetDragY = 0;
-  let dragFrame = 0;
-  let introFinished = false;
-  let dragZ = 120;
-
-  const refreshPieceStack = () => {
-    let unsolvedZ = 30;
-    pieces.forEach((piece) => {
-      if (piece.dataset.locked === "true") {
-        piece.style.zIndex = "8";
-      } else {
-        piece.style.zIndex = String(unsolvedZ);
-        unsolvedZ += 1;
+document.addEventListener('DOMContentLoaded', () => {
+  // Feature 1: Password Logic
+  const passwordInput = document.getElementById('passwordInput');
+  const loginFeedback = document.getElementById('loginFeedback');
+  const terminalLogin = document.getElementById('terminal-login');
+  
+  if (passwordInput && terminalLogin && document.body.classList.contains('access-locked')) {
+    passwordInput.focus();
+    passwordInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        const val = passwordInput.value.toLowerCase().trim();
+        if (val === 'vibecoding') {
+          loginFeedback.style.color = 'var(--accent, #3fb950)';
+          loginFeedback.textContent = "Access granted. Initiating IDE...";
+          setTimeout(() => {
+            document.body.classList.remove('access-locked');
+            terminalLogin.classList.add('hidden');
+            logToConsole('System login successful. IDE loaded.', 'info');
+            startTypingEffect();
+          }, 800);
+        } else {
+          loginFeedback.style.color = 'var(--error, #f85149)';
+          loginFeedback.textContent = `Sorry, try again. (${val} is incorrect)`;
+          passwordInput.value = '';
+          logToConsole('Failed login attempt detected.', 'error');
+        }
       }
     });
-  };
 
-  const endIntro = () => {
-    if (introFinished) {
-      return;
-    }
-    introFinished = true;
-    window.setTimeout(() => {
-      puzzleIntro.classList.add("done");
-    }, 980);
-  };
-
-  const shatterPieces = () => {
-    pieces.forEach((piece, index) => {
-      const shatterX = (Math.random() - 0.5) * 1300;
-      const shatterY = (Math.random() - 0.5) * 950;
-      const shatterR = (Math.random() - 0.5) * 280;
-      piece.style.setProperty("--sx", `${shatterX}px`);
-      piece.style.setProperty("--sy", `${shatterY}px`);
-      piece.style.setProperty("--sr", `${shatterR}deg`);
-      piece.style.animationDelay = `${index * 16}ms`;
-      piece.classList.add("shatter");
+    // Boot sequence animation
+    const bootLines = [
+      "Starting kernel...",
+      "Mounting root filesystem...",
+      "Loading user profile 'kshetra'...",
+      "Warning: Portfolio V2 encryption detected."
+    ];
+    const bootEl = document.getElementById('bootSequence');
+    let delay = 0;
+    bootLines.forEach((line, i) => {
+      setTimeout(() => {
+        const p = document.createElement('div');
+        p.textContent = line;
+        bootEl.appendChild(p);
+      }, delay);
+      delay += 400;
     });
-    endIntro();
-  };
-
-  let secretBuffer = "";
-  const correctPassword = "vibecoding";
-  window.addEventListener("keydown", (e) => {
-    if (introFinished) return;
-    secretBuffer += e.key.toLowerCase();
-    if (secretBuffer.length > correctPassword.length) {
-      secretBuffer = secretBuffer.slice(-correctPassword.length);
-    }
-    if (secretBuffer === correctPassword) {
-      shatterPieces();
-    }
-  });
-
-  for (let r = 0; r < rows; r += 1) {
-    for (let c = 0; c < cols; c += 1) {
-      const targetX = c * pieceW;
-      const targetY = r * pieceH;
-
-      const slot = document.createElement("div");
-      slot.className = "puzzle-slot";
-      slot.style.width = `${pieceW}px`;
-      slot.style.height = `${pieceH}px`;
-      slot.style.left = `${targetX}px`;
-      slot.style.top = `${targetY}px`;
-      puzzleStage.appendChild(slot);
-
-      const piece = document.createElement("div");
-      piece.className = "puzzle-piece";
-      const startX = Math.random() * (stageRect.width - pieceW);
-      const startY = Math.random() * (stageRect.height - pieceH);
-      piece.style.width = `${pieceW}px`;
-      piece.style.height = `${pieceH}px`;
-      piece.style.left = `${startX}px`;
-      piece.style.top = `${startY}px`;
-      piece.style.backgroundSize = `${stageRect.width}px ${stageRect.height}px`;
-      piece.style.backgroundPosition = `${-targetX}px ${-targetY}px`;
-      piece.dataset.targetX = String(targetX);
-      piece.dataset.targetY = String(targetY);
-      piece.dataset.locked = "false";
-      pieceState.set(piece, { x: startX, y: startY });
-      puzzleStage.appendChild(piece);
-      pieces.push(piece);
-    }
+  } else {
+    // If not locked, start typing immediately
+    startTypingEffect();
   }
 
-  // Make puzzle solvable: place each piece in a shuffled slot (derangement style).
-  const slotPositions = [];
-  for (let r = 0; r < rows; r += 1) {
-    for (let c = 0; c < cols; c += 1) {
-      slotPositions.push({ x: c * pieceW, y: r * pieceH });
-    }
+  // Feature 6: Live Console Subsystem
+  const consoleBody = document.getElementById('consoleBody');
+  function logToConsole(message, type = 'info') {
+    if (!consoleBody) return;
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    const time = new Date().toLocaleTimeString('en-US', {hour12:false});
+    line.innerHTML = `<span class="log-time">[${time}]</span> <span class="log-${type}">${message}</span>`;
+    consoleBody.appendChild(line);
+    consoleBody.scrollTop = consoleBody.scrollHeight;
   }
-  const permutation = slotPositions.map((_, idx) => idx);
-  for (let i = permutation.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [permutation[i], permutation[j]] = [permutation[j], permutation[i]];
-  }
-  for (let i = 0; i < permutation.length; i += 1) {
-    if (permutation[i] === i) {
-      const swapWith = i === permutation.length - 1 ? i - 1 : i + 1;
-      [permutation[i], permutation[swapWith]] = [permutation[swapWith], permutation[i]];
-    }
-  }
-  pieces.forEach((piece, idx) => {
-    const pick = slotPositions[permutation[idx]];
-    piece.style.left = `${pick.x}px`;
-    piece.style.top = `${pick.y}px`;
-    pieceState.set(piece, { x: pick.x, y: pick.y });
-  });
-  refreshPieceStack();
 
-  const pointerMove = (event) => {
-    if (!activePiece) {
-      return;
-    }
-    const bounds = puzzleStage.getBoundingClientRect();
-    const x = event.clientX - bounds.left - grabOffsetX;
-    const y = event.clientY - bounds.top - grabOffsetY;
-    targetDragX = Math.max(0, Math.min(bounds.width - pieceW, x));
-    targetDragY = Math.max(0, Math.min(bounds.height - pieceH, y));
-  };
+  // Setup IDE Tabs & Explorer Navigation (Feature 5 & 18)
+  const fileItems = document.querySelectorAll('.file-item');
+  const tabs = document.querySelectorAll('.tab');
+  const fileViews = document.querySelectorAll('.file-view');
+  const currentFileName = document.getElementById('currentFileName');
 
-  const pointerUp = () => {
-    if (!activePiece) {
-      return;
-    }
-    activePiece.classList.remove("dragging");
-    const targetX = Number(activePiece.dataset.targetX);
-    const targetY = Number(activePiece.dataset.targetY);
-    const state = pieceState.get(activePiece) || { x: 0, y: 0 };
-    const currentX = state.x;
-    const currentY = state.y;
-    const distance = Math.hypot(currentX - targetX, currentY - targetY);
+  function openFile(tabId) {
+    // Update active state
+    fileItems.forEach(i => i.classList.remove('active'));
+    tabs.forEach(t => t.classList.remove('active'));
+    fileViews.forEach(v => v.classList.remove('active'));
 
-    if (distance <= snapDistance) {
-      activePiece.style.left = `${targetX}px`;
-      activePiece.style.top = `${targetY}px`;
-      pieceState.set(activePiece, { x: targetX, y: targetY });
-      activePiece.dataset.locked = "true";
-      activePiece.classList.add("assembled");
-      solvedCount += 1;
-      refreshPieceStack();
+    const item = document.querySelector(`.file-item[data-tab="${tabId}"]`);
+    const tab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+    const view = document.getElementById(tabId);
+
+    if (item) item.classList.add('active');
+    if (tab) tab.classList.add('active');
+    if (view) {
+      view.classList.add('active');
+      logToConsole(`Opened ${tabId} in editor viewport.`, 'info');
+      // Update breadcrumb
+      if (currentFileName) {
+        currentFileName.textContent = tab ? tab.textContent.replace('×', '').trim() : tabId;
+      }
     } else {
-      refreshPieceStack();
+      // 404 Route
+      const panic = document.getElementById('kernel-panic');
+      if (panic) panic.classList.add('active');
+      logToConsole(`File descriptor for ${tabId} not found. Kernel Panic.`, 'error');
     }
+  }
 
-    activePiece = null;
-
-    if (solvedCount === pieces.length) {
-      shatterPieces();
-    }
-  };
-
-  puzzleStage.addEventListener("pointerdown", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement) || !target.classList.contains("puzzle-piece")) {
-      return;
-    }
-    if (target.dataset.locked === "true") {
-      return;
-    }
-    activePiece = target;
-    activePiece.classList.add("dragging");
-    const pieceRect = target.getBoundingClientRect();
-    grabOffsetX = event.clientX - pieceRect.left;
-    grabOffsetY = event.clientY - pieceRect.top;
-    targetDragX = parseFloat(target.style.left);
-    targetDragY = parseFloat(target.style.top);
-    target.style.zIndex = String(dragZ);
-    dragZ += 1;
+  fileItems.forEach(item => {
+    item.addEventListener('click', () => {
+      openFile(item.getAttribute('data-tab'));
+    });
   });
 
-  const animateDrag = () => {
-    if (activePiece) {
-      const state = pieceState.get(activePiece) || {
-        x: parseFloat(activePiece.style.left) || 0,
-        y: parseFloat(activePiece.style.top) || 0
-      };
-      state.x += (targetDragX - state.x) * 0.34;
-      state.y += (targetDragY - state.y) * 0.34;
-      activePiece.style.left = `${state.x}px`;
-      activePiece.style.top = `${state.y}px`;
-      pieceState.set(activePiece, state);
-    }
-    dragFrame = requestAnimationFrame(animateDrag);
-  };
-  dragFrame = requestAnimationFrame(animateDrag);
-
-  window.addEventListener("pointermove", pointerMove);
-  window.addEventListener("pointerup", pointerUp);
-
-  if (puzzleGiveUp) {
-    puzzleGiveUp.addEventListener("click", () => {
-      if (introFinished) {
+  tabs.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      if (e.target.classList.contains('close-tab')) {
+        // Mock close logic
+        logToConsole(`Closed ${tab.getAttribute('data-tab')}`, 'info');
+        tab.style.display = 'none';
         return;
       }
-      shatterPieces();
-      document.body.classList.add("gave-up");
-
-      if (giveupTimer) {
-        let remaining = 3;
-        giveupTimer.hidden = false;
-        giveupTimer.textContent = `Website self-destruct in ${remaining}`;
-        const tick = window.setInterval(() => {
-          remaining -= 1;
-          if (remaining > 0) {
-            giveupTimer.textContent = `Website self-destruct in ${remaining}`;
-          } else {
-            window.clearInterval(tick);
-            giveupTimer.hidden = true;
-            window.localStorage.setItem(QUIT_LOCK_KEY, "1");
-            document.body.classList.add("site-exploding");
-            window.setTimeout(() => {
-              lockWholeSite();
-            }, 780);
-          }
-        }, 1000);
-      }
-    });
-  }
-}
-
-if (stage && mask) {
-  const maxY = 4;
-  const maxX = 1.2;
-
-  const updateTilt = (clientX, clientY) => {
-    const rect = stage.getBoundingClientRect();
-    const px = (clientX - rect.left) / rect.width;
-    const py = (clientY - rect.top) / rect.height;
-
-    const rotateY = (px - 0.5) * maxY * 2;
-    const rotateX = (0.5 - py) * maxX * 2;
-
-    const clampedY = Math.max(-maxY, Math.min(maxY, rotateY));
-    const clampedX = Math.max(-maxX, Math.min(maxX, rotateX));
-
-    mask.style.transform = `rotateX(${clampedX.toFixed(2)}deg) rotateY(${clampedY.toFixed(2)}deg)`;
-    mask.style.setProperty("--mx", `${(px * 100).toFixed(2)}%`);
-    mask.style.setProperty("--my", `${(py * 100).toFixed(2)}%`);
-  };
-
-  const updateHeadReveal = (clientX, clientY) => {
-    const rect = mask.getBoundingClientRect();
-    const px = ((clientX - rect.left) / rect.width) * 100;
-    const py = ((clientY - rect.top) / rect.height) * 100;
-    const clampedX = Math.max(0, Math.min(100, px));
-    const clampedY = Math.max(0, Math.min(100, py));
-    const trailSize =
-      fluidCursorTrail && window.matchMedia("(hover: hover)").matches
-        ? fluidCursorTrail.getBoundingClientRect().width * 0.9
-        : 52;
-
-    mask.style.setProperty("--reveal-x", `${clampedX.toFixed(2)}%`);
-    mask.style.setProperty("--reveal-y", `${clampedY.toFixed(2)}%`);
-    mask.style.setProperty("--reveal-size", `${trailSize.toFixed(2)}px`);
-  };
-
-  mask.addEventListener("pointerenter", (event) => {
-    mask.classList.add("revealing");
-    updateHeadReveal(event.clientX, event.clientY);
-  });
-
-  stage.addEventListener("pointermove", (event) => {
-    updateTilt(event.clientX, event.clientY);
-  });
-
-  mask.addEventListener("pointermove", (event) => {
-    updateHeadReveal(event.clientX, event.clientY);
-  });
-
-  mask.addEventListener("pointerleave", () => {
-    mask.classList.remove("revealing");
-    mask.style.setProperty("--reveal-size", "0px");
-  });
-
-  stage.addEventListener("pointerleave", () => {
-    mask.style.transform = "rotateX(0deg) rotateY(0deg)";
-    mask.style.setProperty("--mx", "50%");
-    mask.style.setProperty("--my", "20%");
-  });
-
-  if (window.matchMedia("(hover: none)").matches) {
-    let t = 0;
-    const animate = () => {
-      t += 0.009;
-      const bounds = stage.getBoundingClientRect();
-      const x = (Math.sin(t) * 0.24 + 0.5) * stage.clientWidth;
-      const y = (Math.cos(t * 0.65) * 0.08 + 0.46) * stage.clientHeight;
-      updateTilt(bounds.left + x, bounds.top + y);
-      requestAnimationFrame(animate);
-    };
-    requestAnimationFrame(animate);
-  }
-}
-
-if (menuToggle && mainNav) {
-  menuToggle.addEventListener("click", () => {
-    const isOpen = mainNav.classList.toggle("open");
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-  });
-
-  mainNav.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      mainNav.classList.remove("open");
-      menuToggle.setAttribute("aria-expanded", "false");
+      openFile(tab.getAttribute('data-tab'));
     });
   });
-}
 
-const reveals = document.querySelectorAll(".reveal");
-const observer = new IntersectionObserver(
-  (entries) => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("in-view");
-        observer.unobserve(entry.target);
-      }
+  // Folder toggle
+  document.querySelectorAll('.folder-title').forEach(ft => {
+    ft.addEventListener('click', () => {
+      ft.parentElement.classList.toggle('open');
+      const chev = ft.querySelector('.chevron');
+      chev.textContent = ft.parentElement.classList.contains('open') ? '˅' : '>';
+    });
+  });
+
+  // Feature 4: Command Palette
+  const cmdPalette = document.getElementById('cmd-palette');
+  const cmdInput = document.getElementById('cmdInput');
+  const cmdOptions = document.getElementById('cmdOptions');
+  let selectedCmdIndex = 0;
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      cmdPalette.showModal();
+      cmdInput.focus();
+      logToConsole('Command palette opened.', 'info');
     }
-  },
-  {
-    threshold: 0.15,
-    rootMargin: "0px 0px -10% 0px"
-  }
-);
-
-reveals.forEach((item) => observer.observe(item));
-
-if (projectGrid && projectsPrev && projectsNext) {
-  const getStep = () => Math.max(280, Math.floor(projectGrid.clientWidth * 0.92));
-  projectsNext.addEventListener("click", () => {
-    projectGrid.scrollBy({ left: getStep(), behavior: "smooth" });
-  });
-  projectsPrev.addEventListener("click", () => {
-    projectGrid.scrollBy({ left: -getStep(), behavior: "smooth" });
-  });
-}
-
-const nameExplode = document.querySelectorAll(".name-explode");
-if (nameExplode.length > 0) {
-  nameExplode.forEach((node) => {
-    const label = node.textContent || "";
-    node.textContent = "";
-    for (const char of label) {
-      const span = document.createElement("span");
-      span.className = "killer-letter";
-      span.textContent = char === " " ? "\u00A0" : char;
-      node.appendChild(span);
+    if (e.key === 'Escape' && cmdPalette.open) {
+      cmdPalette.close();
     }
   });
 
-  if (window.gsap && window.ScrollTrigger) {
-    window.gsap.registerPlugin(window.ScrollTrigger);
-    const letters = document.querySelectorAll(".name-explode .killer-letter");
-    const heroHeading = document.querySelector(".hero h1");
-
-    window.gsap.set(letters, { x: 0, y: 0, rotation: 0, opacity: 1, scale: 1 });
-
-    if (heroHeading) {
-      const explosion = window.gsap.timeline({
-        scrollTrigger: {
-          trigger: heroHeading,
-          start: "top 46%",
-          end: "+=460",
-          scrub: 1
-        }
-      });
-
-      explosion.to(letters, {
-        x: () => window.gsap.utils.random(-190, 190),
-        y: () => window.gsap.utils.random(-130, 130),
-        rotation: () => window.gsap.utils.random(-150, 150),
-        opacity: 0.14,
-        scale: () => window.gsap.utils.random(0.72, 1.32),
-        ease: "power3.out",
-        stagger: {
-          each: 0.014,
-          from: "random"
-        }
+  if (cmdInput && cmdOptions) {
+    const items = Array.from(cmdOptions.querySelectorAll('li'));
+    
+    function updatePaletteSelection() {
+      items.forEach((item, i) => {
+        item.classList.toggle('selected', i === selectedCmdIndex);
       });
     }
 
-    const sideItems = window.gsap.utils.toArray(".side-scroll-item");
-    sideItems.forEach((item, idx) => {
-      window.gsap.fromTo(
-        item,
-        { x: idx % 2 === 0 ? -120 : 120, opacity: 0.2 },
-        {
-          x: 0,
-          opacity: 1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: item,
-            start: "top 84%",
-            end: "top 52%",
-            scrub: 1
-          }
+    cmdInput.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedCmdIndex = (selectedCmdIndex + 1) % items.length;
+        updatePaletteSelection();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedCmdIndex = (selectedCmdIndex - 1 + items.length) % items.length;
+        updatePaletteSelection();
+      } else if (e.key === 'Enter') {
+        items[selectedCmdIndex].click();
+      }
+    });
+
+    items.forEach((item, i) => {
+      item.addEventListener('mouseenter', () => {
+        selectedCmdIndex = i;
+        updatePaletteSelection();
+      });
+      item.addEventListener('click', () => {
+        const action = item.getAttribute('data-action');
+        if (action === 'nav') {
+          const target = item.getAttribute('data-target').replace('#', '');
+          openFile(target);
+        } else if (action === 'theme') {
+          const theme = item.getAttribute('data-theme');
+          setTheme(theme);
+        } else if (action === 'matrix') {
+          toggleMatrix();
+        } else if (action === 'sudo') {
+          toggleSudo();
         }
-      );
+        cmdPalette.close();
+        cmdInput.value = '';
+      });
+    });
+    
+    // Initial setup
+    updatePaletteSelection();
+  }
+
+  // Feature 2: Typing Animation
+  function startTypingEffect() {
+    const el = document.getElementById('typeWriterTarget');
+    if (!el) return;
+    const text = el.getAttribute('data-text');
+    el.textContent = '';
+    let i = 0;
+    function typeChar() {
+      if (i < text.length) {
+        el.textContent += text.charAt(i);
+        i++;
+        setTimeout(typeChar, 45 + Math.random() * 30);
+      } else {
+        // Done
+        logToConsole('Hero interface loaded and executed.', 'info');
+      }
+    }
+    setTimeout(typeChar, 500);
+  }
+
+  // Theme Toggler
+  const themeNames = {
+    'theme-terminal': '{} Terminal Theme',
+    'theme-cyberpunk': '<> Cyberpunk Override',
+    'theme-synthwave': '() Synthwave Sunset'
+  };
+  function setTheme(theme) {
+    document.body.classList.remove('theme-terminal', 'theme-cyberpunk', 'theme-synthwave');
+    document.body.classList.add(theme);
+    const indicator = document.getElementById('themeIndicator');
+    if (indicator) indicator.textContent = themeNames[theme];
+    logToConsole(`Theme switched to ${theme}`, 'info');
+  }
+
+  const styleBtn = document.getElementById('styleBtn');
+  if (styleBtn) {
+    styleBtn.addEventListener('click', () => {
+      // Cycle theme just for the button
+      const themes = Object.keys(themeNames);
+      const current = themes.find(t => document.body.classList.contains(t)) || themes[0];
+      const nextIdx = (themes.indexOf(current) + 1) % themes.length;
+      setTheme(themes[nextIdx]);
     });
   }
-}
 
-const themes = [
-  { key: "theme-terminal", label: "Terminal" },
-  { key: "theme-cyberpunk", label: "Cyberpunk" },
-  { key: "theme-synthwave", label: "Synthwave" }
-];
+  // Matrix Feature (21)
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas ? canvas.getContext('2d') : null;
+  let matrixInterval = null;
+  
+  function initMatrix() {
+    if (!canvas || !ctx) return;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%""\'#&_(),.;:?!\\|{}<>[]^~'.split('');
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    for(let x = 0; x < columns; x++) drops[x] = 1;
 
-let activeTheme = themes[0];
-let bubbleTimeout;
-
-const applyTheme = (theme) => {
-  document.body.classList.remove(...themes.map((t) => t.key));
-  document.body.classList.add(theme.key);
-  activeTheme = theme;
-};
-
-const showThemeBubble = (label) => {
-  if (!themeBubble) {
-    return;
+    matrixInterval = setInterval(() => {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0F0';
+      ctx.font = fontSize + 'px monospace';
+      
+      for(let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }, 33);
   }
 
-  themeBubble.textContent = `This is ${label} style. The current style is ${label}.`;
-  themeBubble.classList.add("show");
+  function toggleMatrix() {
+    document.body.classList.toggle('matrix-active');
+    if (document.body.classList.contains('matrix-active')) {
+      if (!matrixInterval) initMatrix();
+      logToConsole('Matrix background enabled.', 'info');
+    } else {
+      logToConsole('Matrix background disabled.', 'info');
+    }
+  }
 
-  window.clearTimeout(bubbleTimeout);
-  bubbleTimeout = window.setTimeout(() => {
-    themeBubble.classList.remove("show");
-  }, 2200);
-};
+  // Sudo Mode Feature (24)
+  function toggleSudo() {
+    const isSudo = document.body.classList.toggle('sudo-mode');
+    if (isSudo) {
+      logToConsole('SUDO MODE ENABLED. Privileges escalated.', 'warn');
+      const restricted = document.getElementById('restricted-project');
+      if (restricted) restricted.style.display = 'block';
+    } else {
+      logToConsole('SUDO MODE DISABLED. Privileges revoked.', 'info');
+    }
+  }
 
-if (styleBtn) {
-  styleBtn.addEventListener("click", () => {
-    const available = themes.filter((theme) => theme.key !== activeTheme.key);
-    const next = available[Math.floor(Math.random() * available.length)];
-    applyTheme(next);
-    showThemeBubble(next.label);
-  });
-}
+  // Feature 19: Tooltips
+  const tooltipTriggers = document.querySelectorAll('.tooltip-trigger');
+  const tooltipEl = document.getElementById('fileTooltip');
 
-showThemeBubble(activeTheme.label);
-
-if (fluidCursor && fluidCursorTrail && window.matchMedia("(hover: hover)").matches) {
-  let targetX = window.innerWidth / 2;
-  let targetY = window.innerHeight / 2;
-  let dotX = targetX;
-  let dotY = targetY;
-  let ringX = targetX;
-  let ringY = targetY;
-
-  document.addEventListener("pointermove", (event) => {
-    targetX = event.clientX;
-    targetY = event.clientY;
-    fluidCursor.style.opacity = "1";
-    fluidCursorTrail.style.opacity = "1";
-  });
-
-  document.addEventListener("pointerdown", () => {
-    fluidCursor.style.transform = "translate3d(-50%, -50%, 0) scale(0.84)";
-    fluidCursorTrail.style.transform = "translate3d(-50%, -50%, 0) scale(0.92)";
-  });
-
-  document.addEventListener("pointerup", () => {
-    fluidCursor.style.transform = "translate3d(-50%, -50%, 0) scale(1)";
-    fluidCursorTrail.style.transform = "translate3d(-50%, -50%, 0) scale(1)";
+  tooltipTriggers.forEach(t => {
+    t.addEventListener('mousemove', (e) => {
+      if (!tooltipEl) return;
+      tooltipEl.textContent = t.getAttribute('data-tooltip');
+      tooltipEl.style.opacity = '1';
+      tooltipEl.style.left = (e.clientX + 10) + 'px';
+      tooltipEl.style.top = (e.clientY + 10) + 'px';
+    });
+    t.addEventListener('mouseleave', () => {
+      if (!tooltipEl) return;
+      tooltipEl.style.opacity = '0';
+    });
   });
 
-  const animateCursor = () => {
-    dotX += (targetX - dotX) * 0.35;
-    dotY += (targetY - dotY) * 0.35;
-    ringX += (targetX - ringX) * 0.16;
-    ringY += (targetY - ringY) * 0.16;
+  // Feature 10 & 22 & 29: Status Bar Updaters
+  const pingCounter = document.getElementById('pingCounter');
+  const cpuUsage = document.getElementById('cpuUsage');
+  const ramUsage = document.getElementById('ramUsage');
+  const uptimeCounter = document.getElementById('uptimeCounter');
+  const cursorPos = document.getElementById('cursorPos');
 
-    fluidCursor.style.left = `${dotX}px`;
-    fluidCursor.style.top = `${dotY}px`;
-    fluidCursorTrail.style.left = `${ringX}px`;
-    fluidCursorTrail.style.top = `${ringY}px`;
+  setInterval(() => {
+    if (pingCounter) pingCounter.textContent = Math.floor(10 + Math.random() * 40);
+    if (cpuUsage) cpuUsage.textContent = Math.floor(5 + Math.random() * 20);
+    if (ramUsage) ramUsage.textContent = (3.5 + Math.random() * 1.5).toFixed(1);
+  }, 2000);
 
-    requestAnimationFrame(animateCursor);
-  };
+  let seconds = 0;
+  setInterval(() => {
+    seconds++;
+    if (uptimeCounter) {
+      const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+      const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+      const s = String(seconds % 60).padStart(2, '0');
+      uptimeCounter.textContent = `Uptime: ${h}:${m}:${s}`;
+    }
+  }, 1000);
 
-  requestAnimationFrame(animateCursor);
-}
+  // Mouse move updates line/col
+  const editorViewport = document.getElementById('editorViewport');
+  if (editorViewport && cursorPos) {
+    editorViewport.addEventListener('mousemove', (e) => {
+      const rect = editorViewport.getBoundingClientRect();
+      const y = Math.max(1, Math.floor((e.clientY - rect.top) / 22) + 1);
+      const x = Math.max(1, Math.floor((e.clientX - rect.left) / 8) + 1);
+      cursorPos.textContent = `Ln ${y}, Col ${x}`;
+    });
+  }
+
+  // Populate Line Numbers (purely visual)
+  document.querySelectorAll('.line-numbers').forEach(ln => {
+    let html = '';
+    for(let i=1; i<=50; i++) html += i + '<br>';
+    ln.innerHTML = html;
+  });
+
+  // Event listners for action buttons
+  const runProjectsBtn = document.getElementById('runProjectsBtn');
+  if (runProjectsBtn) {
+    runProjectsBtn.addEventListener('click', () => {
+      logToConsole('Mock Executing run_projects.sh...', 'info');
+      setTimeout(() => openFile('projects'), 300);
+    });
+  }
+  
+  const rebootBtn = document.getElementById('rebootBtn');
+  if (rebootBtn) {
+    rebootBtn.addEventListener('click', () => {
+      logToConsole('System Reboot requested.', 'warn');
+      openFile('readme');
+    });
+  }
+
+  // Mock Github graph
+  const squares = document.getElementById('contribSquares');
+  if (squares) {
+    for(let i=0; i<365; i++) {
+      const sq = document.createElement('div');
+      sq.className = 'square';
+      // Random activity level 0-4
+      let level = 0;
+      if (Math.random() > 0.5) {
+        level = Math.floor(Math.random() * 4) + 1;
+      }
+      if (level > 0) sq.setAttribute('data-level', level);
+      squares.appendChild(sq);
+    }
+  }
+  
+  // Set default theme setup
+  setTheme('theme-terminal');
+});

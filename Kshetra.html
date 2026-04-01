@@ -11,273 +11,376 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Syne:wght@700;800&family=Allura&family=Space+Mono:wght@400;700&family=Caveat:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="theme-terminal">
-    <div class="puzzle-intro" id="puzzleIntro" aria-hidden="true">
-      <p class="puzzle-hint">Complete the puzzle to enter</p>
-      <button class="puzzle-giveup" id="puzzleGiveUp" type="button">Give Up</button>
-      <div class="puzzle-stage" id="puzzleStage"></div>
-    </div>
-    <div class="giveup-timer" id="giveupTimer" hidden></div>
-    <div class="quote-overlay" id="quoteOverlay" aria-hidden="true">
-      <div class="quote-card">
-        <p>quitters never win and winners never quit</p>
-        <button class="mercy-btn" id="mercyBtn" type="button">Mercy</button>
-        <div class="mercy-scene" id="mercyScene" aria-hidden="true">
-          <div class="mercy-angel">
-            <span class="angel-halo"></span>
-            <span class="angel-wing angel-wing-left"></span>
-            <span class="angel-wing angel-wing-right"></span>
-            <span class="angel-head"></span>
-            <span class="angel-torso"></span>
-            <span class="angel-arm"></span>
-            <span class="angel-robe"></span>
-          </div>
-          <div class="mercy-grid3d">
-            <span class="cube c1"></span>
-            <span class="cube c2"></span>
-            <span class="cube c3"></span>
-            <span class="cube c4"></span>
-            <span class="cube c5"></span>
-            <span class="cube c6"></span>
-            <span class="cube c7"></span>
-            <span class="cube c8"></span>
-            <span class="cube c9"></span>
-          </div>
+  <body class="theme-terminal access-locked">
+    <!-- Feature 21: Matrix Rain Background Layer -->
+    <canvas id="matrixCanvas" class="hidden-layer"></canvas>
+    
+    <!-- Feature 1: Explicit Terminal Password Entry -->
+    <div id="terminal-login" class="terminal-overlay">
+      <div class="login-wrapper">
+        <div class="boot-sequence" id="bootSequence"></div>
+        <div class="login-prompt">
+          <span class="user-host">kshetra@local:~$</span>
+          <span>./unlock_portfolio.sh</span>
         </div>
+        <div class="password-prompt">
+          <label for="passwordInput">[sudo] password for kshetra: </label>
+          <input type="password" id="passwordInput" autocomplete="off" autofocus />
+          <span id="fakeCursor" class="blinking-cursor"></span>
+        </div>
+        <div id="loginFeedback" class="login-feedback"></div>
       </div>
     </div>
-    <div class="noise"></div>
 
-    <header class="site-header">
-      <a class="brand" href="#top">KP</a>
+    <!-- Feature 4 & 11: Command Palette (Ctrl+K) -->
+    <dialog id="cmd-palette" class="cmd-palette">
+      <div class="palette-header">
+        <input type="text" id="cmdInput" placeholder="> Type a command or search..." autocomplete="off"/>
+      </div>
+      <ul class="palette-options" id="cmdOptions">
+        <li data-action="nav" data-target="#readme">Navigation: View Home (README.md)</li>
+        <li data-action="nav" data-target="#projects">Navigation: View Projects (projects.json)</li>
+        <li data-action="nav" data-target="#resume">Navigation: View Resume (git log)</li>
+        <li data-action="nav" data-target="#about">Navigation: View About (man kshetradnya)</li>
+        <li data-action="nav" data-target="#contact">Navigation: View Contact (contact.txt)</li>
+        <li data-action="theme" data-theme="theme-terminal">Theme: Default Terminal</li>
+        <li data-action="theme" data-theme="theme-cyberpunk">Theme: Cyberpunk Override</li>
+        <li data-action="theme" data-theme="theme-synthwave">Theme: Synthwave Sunset</li>
+        <li data-action="matrix">Action: Toggle Matrix Rain Background</li>
+        <li data-action="sudo">Action: Enable Sudo Mode</li>
+      </ul>
+      <p class="palette-footer">Hold `Esc` to close • Use `↑/↓` to navigate</p>
+    </dialog>
 
-      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
-        Menu
-      </button>
+    <!-- IDE / Workstation Shell Layout -->
+    <div class="ide-container" id="ideContainer" aria-hidden="true">
+      
+      <!-- Feature 5: IDE Sidebar File Explorer -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <span>EXPLORER</span>
+        </div>
+        <div class="explorer-folder open">
+          <div class="folder-title">
+            <span class="chevron">˅</span>
+            <span>PORTFOLIO_V2</span>
+          </div>
+          <ul class="file-list">
+            <li class="file-item active" data-tab="readme"><span class="icon markdown">M</span> README.md</li>
+            <li class="file-item" data-tab="projects"><span class="icon json">{ }</span> projects.json</li>
+            <li class="file-item" data-tab="resume"><span class="icon git">#</span> resume.log</li>
+            <li class="file-item" data-tab="about"><span class="icon bash">$_</span> about.sh</li>
+            <li class="file-item" data-tab="contact"><span class="icon link">@</span> contact.txt</li>
+          </ul>
+        </div>
+        <!-- Feature 20: Dependencies instead of exact skills -->
+        <div class="explorer-folder open">
+          <div class="folder-title">
+            <span class="chevron">˅</span>
+            <span>DEPENDENCIES</span>
+          </div>
+          <ul class="dep-list">
+            <li><span>react</span> <span class="version">^18.2.0</span></li>
+            <li><span>node</span> <span class="version">^20.1.0</span></li>
+            <li><span>typescript</span> <span class="version">^5.1.3</span></li>
+            <li><span>python</span> <span class="version">^3.11.0</span></li>
+            <li><span>three.js</span> <span class="version">^0.158.0</span></li>
+            <li><span>coffee</span> <span class="version">critical</span></li>
+          </ul>
+        </div>
+      </aside>
 
-      <nav class="main-nav" id="mainNav">
-        <a href="#work">Work</a>
-        <a href="#tools">Tools</a>
-        <a href="#resume">Resume</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
-
-    <main id="top">
-      <section class="hero section reveal">
-        <div class="hero-copy">
-          <p class="eyebrow">Developer Portfolio</p>
-          <h1>
-            <span class="first-name name-explode">KSHETRADNYA</span>
-            <span class="last-name name-explode">Patole</span>
-          </h1>
-          <p class="hero-text">
-            I craft clever and performant digital experiences through scalable code, 
-            intuitive user interfaces, and complex algorithms.
-          </p>
-
-          <div class="hero-actions">
-            <a class="cta" href="#work">Explore Projects</a>
-            <button class="style-btn" id="styleBtn" type="button">Not Feeling this Vibe?</button>
+      <!-- Main Editor Area -->
+      <main class="editor-pane">
+        
+        <!-- Feature 18: Editor Tabs & Breadcrumbs -->
+        <div class="editor-tabs">
+          <div class="tab active" data-tab="readme">
+            <span class="icon markdown">M</span> README.md <span class="close-tab">×</span>
+          </div>
+          <div class="tab" data-tab="projects">
+            <span class="icon json">{ }</span> projects.json <span class="close-tab">×</span>
+          </div>
+          <div class="tab" data-tab="resume">
+            <span class="icon git">#</span> resume.log <span class="close-tab">×</span>
+          </div>
+          <div class="tab" data-tab="about">
+            <span class="icon bash">$_</span> about.sh <span class="close-tab">×</span>
+          </div>
+           <div class="tab" data-tab="contact">
+            <span class="icon link">@</span> contact.txt <span class="close-tab">×</span>
           </div>
         </div>
 
-        <div class="portrait-stage" id="portraitStage" aria-label="3D portrait showcase">
-          <div class="name-behind" aria-hidden="true">PATOLE</div>
-          <div class="portrait-mask" id="portraitMask">
-            <div class="layer layer-back"></div>
-            <img class="layer layer-depth-a" src="image.png" alt="" aria-hidden="true" />
-            <img class="layer layer-depth-b" src="image.png" alt="" aria-hidden="true" />
-            <img class="layer layer-main" src="image.png" alt="Portrait of Kshetradnya Patole" />
-            <img
-              class="layer layer-head-alt"
-              src="image-hover.png"
-              alt="Alternative portrait layer for hover effect"
-            />
-            <div class="layer layer-shade"></div>
-            <div class="layer layer-light"></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="work section reveal" id="work">
-        <div class="section-head">
-          <p class="eyebrow">Selected Work</p>
-          <h2>Software Projects</h2>
+        <div class="breadcrumbs"> <!-- Feature 17: Breadcrumbs -->
+          <span class="path">~/portfolio/src/<span id="currentFileName">README.md</span></span>
         </div>
 
-        <div class="project-slider">
-          <button class="slide-btn prev" id="projectsPrev" aria-label="Previous project slide">‹</button>
-          <div class="project-grid" id="projectGrid">
-          <a class="project-card" href="#" target="_blank" rel="noopener noreferrer">
-            <img src="projects/brandi.png" alt="Retro Arcade Games showcase preview" />
-            <div class="project-meta">
-              <h3>Retro Games Collection</h3>
-              <p>Rebuilt classic arcade logic with HTML5 Canvas.</p>
-            </div>
-          </a>
-
-          <a class="project-card" href="#" target="_blank" rel="noopener noreferrer">
-            <img src="projects/peposter.png" alt="Interactive Biology Simulator preview" />
-            <div class="project-meta">
-              <h3>Interactive Biology</h3>
-              <p>WebGL simulation of cellular processes and ecosystems.</p>
-            </div>
-          </a>
-
-          <a class="project-card" href="#" target="_blank" rel="noopener noreferrer">
-            <img src="projects/socialcampaign.png" alt="Japanese Learning tool preview" />
-            <div class="project-meta">
-              <h3>Japanese Learning Hub</h3>
-              <p>Full-stack app for writing practice and spacing algorithms.</p>
-            </div>
-          </a>
-
-          <a class="project-card" href="#" target="_blank" rel="noopener noreferrer">
-            <img src="projects/webdirections.png" alt="3D Rubix Cube game preview" />
-            <div class="project-meta">
-              <h3>Online Rubik's Cube</h3>
-              <p>Three.js interactive 3D puzzle with solving algorithms.</p>
-            </div>
-          </a>
-          </div>
-          <button class="slide-btn next" id="projectsNext" aria-label="Next project slide">›</button>
-        </div>
-      </section>
-
-      <section class="tools section reveal" id="tools">
-        <div class="section-head">
-          <p class="eyebrow">Tech Stack</p>
-          <h2>VS Code, GitHub, React</h2>
-        </div>
-
-        <div class="tool-grid side-scroll-item">
-          <a class="tool-card" href="https://github.com/" target="_blank" rel="noopener noreferrer">
-            <img class="tool-project" src="projects/canva-project.jpg" alt="VS Code IDE preview" />
-            <img class="tool-logo" src="logos/Clogo.png" alt="VS Code logo" style="filter: hue-rotate(180deg);" />
-            <div class="tool-meta">
-              <h3>VS Code Ecosystem</h3>
-              <p>Custom snippets, linters, and advanced debugging setups.</p>
-            </div>
-          </a>
-
-          <a class="tool-card" href="https://github.com/" target="_blank" rel="noopener noreferrer">
-            <img class="tool-project" src="projects/figma-project.jpg" alt="GitHub graph preview" />
-            <img class="tool-logo" src="logos/Flogo.png" alt="GitHub logo" style="filter: grayscale(1) invert(1);" />
-            <div class="tool-meta">
-              <h3>GitHub & CI/CD</h3>
-              <p>Version control, PR reviews, and automated test pipelines.</p>
-            </div>
-          </a>
-
-          <a class="tool-card" href="https://github.com/" target="_blank" rel="noopener noreferrer">
-            <img class="tool-project" src="projects/photoshop-project.jpg" alt="React framework preview" />
-            <img class="tool-logo" src="logos/Plogo.png" alt="React logo" style="filter: hue-rotate(90deg);" />
-            <div class="tool-meta">
-              <h3>React Framework</h3>
-              <p>Component architecture, state management, and modern hooks.</p>
-            </div>
-          </a>
-        </div>
-      </section>
-
-      <section class="resume section reveal" id="resume">
-        <div class="section-head">
-          <p class="eyebrow">Career Snapshot</p>
-          <h2>Resume Showcase</h2>
-        </div>
-
-        <div class="resume-layout side-scroll-item">
-          <article class="resume-main-card">
-            <div class="resume-topline">
-              <p class="resume-kicker">Developer Snapshot</p>
-              <h3>Kshetradnya Patole</h3>
-            </div>
-            <div class="resume-stats-grid">
-              <div class="stat-tile">
-                <strong>3+</strong>
-                <span>Years</span>
+        <!-- 
+          Editor Viewport: 
+          Holds the different sections as if they were files being opened. 
+        -->
+        <div class="editor-viewport" id="editorViewport">
+          
+          <!-- FILE: README.md (Hero) -->
+          <section class="file-view active" id="readme">
+            <div class="line-numbers"></div>
+            <div class="code-content">
+              <h1><span class="syntax-keyword">const</span> <span class="syntax-variable">dev</span> = <span class="syntax-string">"Kshetradnya Patole"</span>;</h1>
+              <!-- Feature 2: Typing effect, Feature 3: Glitch text -->
+              <h2 class="hero-role glitch-text" data-text="Software Engineer & CS Major" id="typeWriterTarget"></h2>
+              
+              <div class="live-repl">
+                <span class="user-prompt">➜  ~</span> <span class="syntax-command">cat</span> description.txt
+                <p class="repl-output">
+                  I craft clever and performant digital experiences through scalable code, 
+                  intuitive user interfaces, and complex algorithms. 
+                  <br><br>
+                  Always eager to debug and optimize.
+                </p>
+                <span class="user-prompt">➜  ~</span> <span class="blinking-cursor"></span>
               </div>
-              <div class="stat-tile">
-                <strong>50+</strong>
-                <span>Commits/Wk</span>
-              </div>
-              <div class="stat-tile">
-                <strong>12</strong>
-                <span>Repos</span>
-              </div>
-              <div class="stat-tile">
-                <strong>6</strong>
-                <span>Core Skills</span>
+
+              <!-- Feature 30: Code Runner Buttons -->
+              <div class="hero-actions">
+                <button class="run-btn" id="runProjectsBtn"><span class="run-icon">▶</span> ./run_projects.sh</button>
+                <button class="style-btn" id="styleBtn" title="Ctrl+K to toggle theme menu">Switch IDE Theme</button>
               </div>
             </div>
+          </section>
 
-            <div class="strength-grid">
-              <span class="strength-pill">💻 Full-Stack Dev</span>
-              <span class="strength-pill">🧠 Algorithms</span>
-              <span class="strength-pill">🤖 AI/Robotics</span>
-              <span class="strength-pill">🧩 System Arch</span>
+          <!-- FILE: projects.json (Work) -->
+          <section class="file-view" id="projects">
+            <div class="line-numbers"></div>
+            <div class="code-content">
+              <!-- Feature 8: JSON Block Formatting -->
+              <div class="json-viewer">
+                <span class="syntax-bracket">{</span>
+                <div class="json-indent">
+                  <span class="syntax-key">"projects"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span>
+                  
+                  <div class="json-block json-project">
+                    <span class="syntax-bracket">{</span>
+                    <div class="json-indent">
+                      <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Interactive Biology"</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"WebGL simulation of cellular processes and ecosystems."</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"stack"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span><span class="syntax-string">"Three.js"</span>, <span class="syntax-string">"React"</span>, <span class="syntax-string">"GLSL"</span><span class="syntax-bracket">]</span><span class="syntax-comma">,</span>
+                      <!-- Feature 19: Hover File tooltips -->
+                      <br><span class="syntax-key">"preview"</span><span class="syntax-colon">:</span> <span class="syntax-string tooltip-trigger" data-tooltip="size: 2.1MB | type: image/png">"img/bio-sim.png"</span>
+                    </div>
+                    <span class="syntax-bracket">}</span><span class="syntax-comma">,</span>
+                  </div>
+
+                  <div class="json-block json-project">
+                    <span class="syntax-bracket">{</span>
+                    <div class="json-indent">
+                      <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Retro Games Collection"</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Rebuilt classic arcade logic with HTML5 Canvas."</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"stack"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span><span class="syntax-string">"Canvas API"</span>, <span class="syntax-string">"Vanilla JS"</span><span class="syntax-bracket">]</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"preview"</span><span class="syntax-colon">:</span> <span class="syntax-string tooltip-trigger" data-tooltip="size: 850KB | type: image/png">"img/arcade.png"</span>
+                    </div>
+                    <span class="syntax-bracket">}</span><span class="syntax-comma">,</span>
+                  </div>
+
+                  <div class="json-block json-project">
+                    <span class="syntax-bracket">{</span>
+                    <div class="json-indent">
+                      <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Japanese Learning Hub"</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Full-stack app for writing practice and spacing algorithms."</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"stack"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span><span class="syntax-string">"Node.js"</span>, <span class="syntax-string">"Express"</span>, <span class="syntax-string">"MongoDB"</span><span class="syntax-bracket">]</span>
+                    </div>
+                    <!-- Feature 24: Sudo unlocked content visually represented -->
+                    <span class="syntax-bracket">}</span><span class="syntax-comma sudo-hidden">,</span>
+                  </div>
+                  
+                  <div class="json-block json-project sudo-hidden id=restricted-project" style="display: none;">
+                    <span class="syntax-bracket">{</span>
+                    <div class="json-indent">
+                      <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Sudo Kernel Bypass"</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"[REDACTED] Elevated privileges algorithm."</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"status"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Top Secret"</span>
+                    </div>
+                    <span class="syntax-bracket">}</span>
+                  </div>
+
+                  <span class="syntax-bracket">]</span>
+                </div>
+                <span class="syntax-bracket">}</span>
+              </div>
             </div>
+          </section>
 
-            <div class="skill-bars">
-              <div class="skill-row"><span>Frontend React</span><b style="--w: 92%"></b></div>
-              <div class="skill-row"><span>Backend Node.js</span><b style="--w: 82%"></b></div>
-              <div class="skill-row"><span>Database Mgmt</span><b style="--w: 90%"></b></div>
-              <div class="skill-row"><span>Cloud DevOps</span><b style="--w: 84%"></b></div>
+          <!-- FILE: resume.log (Resume) -->
+          <section class="file-view" id="resume">
+            <div class="line-numbers"></div>
+            <div class="code-content">
+              <!-- Feature 7: Git Commit History Timeline -->
+              <div class="git-log">
+                <div class="commit">
+                  <div class="commit-hash">commit <span class="hash-text">a1b2c3d</span></div>
+                  <div class="commit-author">Author: Kshetra &lt;xetraskool@gmail.com&gt;</div>
+                  <div class="commit-date">Date:   Tue Oct 24 10:00:00 2023 -0500</div>
+                  <div class="commit-msg">
+                    feat(career): Won Hackathon!<br>
+                    - Deployed an AI Chatbot successfully<br>
+                    - Optimized latency by 45%
+                  </div>
+                </div>
+
+                <div class="commit">
+                  <div class="commit-hash">commit <span class="hash-text">f9e8d7c</span></div>
+                  <div class="commit-author">Author: Kshetra &lt;xetraskool@gmail.com&gt;</div>
+                  <div class="commit-date">Date:   Mon Jan 15 09:30:00 2023 -0500</div>
+                  <div class="commit-msg">
+                    refactor(skills): Mastered Frontend Architectures<br>
+                    - Added React, Vue, and Next.js proficiencies<br>
+                    - Successfully contributed to open-source robotics projects
+                  </div>
+                </div>
+
+                <div class="commit">
+                  <div class="commit-hash">commit <span class="hash-text">5a4b3c2</span></div>
+                  <div class="commit-author">Author: Kshetra &lt;xetraskool@gmail.com&gt;</div>
+                  <div class="commit-date">Date:   Fri Sep 01 08:00:00 2021 -0500</div>
+                  <div class="commit-msg">
+                    init(education): Began CS Journey<br>
+                    - Initialized data structures and algorithms modules
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Feature 14: GitHub Contribution Graph Mock -->
+              <div class="contrib-graph">
+                <p><strong>Activity Graph</strong></p>
+                <div class="squares" id="contribSquares"></div>
+              </div>
             </div>
+          </section>
 
-            <div class="resume-mini-timeline">
-              <span class="resume-chip">Hackathon Winner</span>
-              <span class="resume-chip">Open Source Contributor</span>
-              <span class="resume-chip">AI Chatbot Deployed</span>
+          <!-- FILE: about.sh -->
+          <section class="file-view" id="about">
+            <div class="line-numbers"></div>
+            <div class="code-content">
+              <!-- Feature 13: Man Page style -->
+              <div class="man-page">
+                <h3 class="man-header">KSHETRADNYA(1)          User Commands         KSHETRADNYA(1)</h3>
+                
+                <h4>NAME</h4>
+                <p class="man-indent">kshetradnya - Full-stack developer, AI enthusiast, problem solver</p>
+                
+                <h4>SYNOPSIS</h4>
+                <p class="man-indent"><strong>kshetradnya</strong> [<strong>--code</strong>] [<strong>--debug</strong>] [<strong>--optimize</strong>]</p>
+                
+                <h4>DESCRIPTION</h4>
+                <p class="man-indent">
+                  Computer Science student with experience building full-stack web applications, AI models, and optimizing algorithms. Developed internal tools for student organizations and contributed to open-source robotics projects.
+                </p>
+                
+                <h4>OPTIONS</h4>
+                <div class="man-indent">
+                  <p><strong>--code</strong><br>
+                     Writes clean, scalable, and maintainable software architectures.</p>
+                  
+                  <p><strong>--debug</strong><br>
+                     Locates and crushes bugs efficiently without caffeine crash.</p>
+                  
+                  <p><strong>--learn</strong><br>
+                     Continuously assimilates bleeding-edge technologies and frameworks.</p>
+                </div>
+
+                <h3 class="man-footer">Portfolio V2            2026-04-01             KSHETRADNYA(1)</h3>
+              </div>
             </div>
-          </article>
+          </section>
 
-          <aside class="resume-dive-card">
-            <p>Portfolio-backed profile with open-source and hackathon project work.</p>
-            <a class="dive-btn" href="assets/KP-Resume.pdf" target="_blank" rel="noopener noreferrer">A deeper dive</a>
-          </aside>
+          <!-- FILE: contact.txt -->
+          <section class="file-view" id="contact">
+            <div class="line-numbers"></div>
+            <div class="code-content">
+              <div class="contact-terminal">
+                <p><span class="syntax-comment"># Ready to build something bold?</span></p>
+                <p><span class="syntax-keyword">echo</span> <span class="syntax-string">"Let's collaborate on your next tech stack architecture."</span></p>
+                
+                <div class="clone-box">
+                  <span class="syntax-keyword">git clone</span> <a class="clone-url tooltip-trigger" href="mailto:xetraskool@gmail.com" data-tooltip="Click to copy or email">git@xetraskool.com:collaboration.git</a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Feature 23: 404 Kernel Panic Error State -->
+          <section class="file-view error-state" id="kernel-panic">
+            <div class="code-content">
+              <h2 class="panic-text">KERNEL PANIC - NOT SYNCING</h2>
+              <p>Fatal exception: VFS: Unable to mount root fs on unknown-block(0,0)</p>
+              <p>The requested file descriptor or sector could not be located.</p>
+              <button class="run-btn panic-reboot" id="rebootBtn">&gt; REBOOT SYSTEM (Nav to README.md)</button>
+            </div>
+          </section>
+
         </div>
-      </section>
+      </main>
 
-      <section class="about section reveal" id="about">
-        <div class="section-head">
-          <p class="eyebrow">About</p>
-          <h2>About Me</h2>
+    </div><!-- End IDE Container -->
+
+    <!-- Feature 6 & 26: Bottom Panel / Live Console Log -->
+    <footer class="terminal-console" id="terminalConsole" aria-hidden="true">
+      <div class="console-header">
+        <div class="console-tabs">
+          <span class="active">TERMINAL</span>
+          <span id="outputTab">OUTPUT</span>
+          <span>PROBLEMS <span class="badge">0</span></span>
         </div>
-        <p class="side-scroll-item">
-          Computer Science student with experience building full-stack web applications, AI models, and 
-          optimizing algorithms. Developed internal tools for student organizations and contributed to 
-          open-source robotics projects. Passionate about problem-solving, clean code architecture, 
-          and learning bleeding-edge technologies. Always eager to debug and optimize.
-        </p>
-      </section>
-
-      <section class="collab section reveal side-scroll-item" id="collab">
-        <p class="eyebrow">Next Project</p>
-        <h2>Ready To Build Something Bold?</h2>
-        <a class="collab-btn" href="mailto:xetraskool@gmail.com">Let’s Collaborate</a>
-      </section>
-    </main>
-
-    <footer class="site-footer section" id="contact">
-      <p>Let’s collaborate on your next tech stack architecture.</p>
-      <a href="mailto:xetraskool@gmail.com">xetraskool@gmail.com</a>
+      </div>
+      <div class="console-body" id="consoleBody">
+        <div class="log-line"><span class="log-time">[sys]</span> Boot sequence initiated...</div>
+      </div>
     </footer>
 
-    <div class="theme-bubble" id="themeBubble" aria-live="polite"></div>
-    <div class="fluid-cursor" id="fluidCursor" aria-hidden="true"></div>
-    <div class="fluid-cursor-trail" id="fluidCursorTrail" aria-hidden="true"></div>
-    <script src="https://gist.github.com/zandersupafast/582e73d3f009b4f2429af77f05ffbefd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-    <audio id="mercyAudio" preload="auto" src="assets/mercy.mp3"></audio>
+    <!-- Feature 10 & 22 & 28 & 29: Status Bar (Uptime, Ping, Version, CPU) -->
+    <div class="status-bar" id="statusBar" aria-hidden="true">
+      <div class="status-left">
+        <span class="status-item branch">
+          <span class="icon git">ᚠ</span> main*
+        </span>
+        <span class="status-item error">
+          <span class="icon">⊗</span> 0
+        </span>
+        <span class="status-item warning">
+          <span class="icon">⚠</span> 0
+        </span>
+        <!-- Feature 28 -->
+        <span class="status-item info">
+          v1.0.4 - latest build
+        </span>
+      </div>
+      <div class="status-right">
+        <!-- Feature 22 -->
+        <span class="status-item uptime" id="uptimeCounter">Uptime: 00:00:00</span>
+        <!-- Feature 10 -->
+        <span class="status-item cpu">CPU: <span id="cpuUsage">12</span>% | RAM: <span id="ramUsage">4.2</span>GB</span>
+        <!-- Feature 29 -->
+        <span class="status-item ping">Ping: <span id="pingCounter">24</span>ms</span>
+        <span class="status-item language">
+          UTF-8
+        </span>
+        <span class="status-item cursor-pos" id="cursorPos">
+          Ln 1, Col 1
+        </span>
+        <span class="status-item theme-indicator" id="themeIndicator">
+          {} Terminal Theme
+        </span>
+      </div>
+    </div>
+
+    <!-- Feature 19: Tooltip Element -->
+    <div id="fileTooltip" class="file-tooltip"></div>
+
     <script src="script.js"></script>
   </body>
 </html>
