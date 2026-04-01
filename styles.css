@@ -429,7 +429,7 @@ body.sudo-mode .sudo-hidden::before { content: '[UNLOCKED] '; color: var(--error
 @keyframes progress { 0% { stroke-dasharray: 0, 100; } }
 
 /* Foil Glare Effect */
-.foil-tilt { position: relative; overflow: hidden; }
+.foil-tilt { position: relative; overflow: hidden; cursor: pointer; }
 .lens-flare {
   position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
   background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
@@ -443,3 +443,69 @@ body.sudo-mode .sudo-hidden::before { content: '[UNLOCKED] '; color: var(--error
 
 /* Confetti hidden canvas */
 .canvas-confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
+
+/* ================================== */
+/* AUTHOR PAGE BENTO BOX              */
+/* ================================== */
+.author-grid {
+  width: 100%; max-width: 1200px; margin: 0 auto;
+}
+.bento-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  grid-auto-flow: dense;
+}
+.bento-item {
+  background: var(--bg-panel);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  display: flex; flex-direction: column; justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.bento-item:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  border-color: rgba(0,0,0,0.1);
+}
+.bento-item h3 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.bento-item p { font-size: 1.2rem; color: #1d1d1f; font-weight: 800; line-height: 1.3; }
+
+.bento-item.wide { grid-column: span 2; }
+.bento-item.tall { grid-row: span 2; }
+
+@media (max-width: 768px) {
+  .bento-item.wide { grid-column: span 1; }
+  .bento-item.tall { grid-row: span 1; }
+}
+
+/* ================================== */
+/* MERIT DETAIL OVERLAY               */
+/* ================================== */
+.merit-detail-overlay {
+  position: absolute; inset: 0; background: rgba(247, 249, 250, 0.95);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  z-index: 500; display: flex; flex-direction: column; padding: 4rem;
+  opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.merit-detail-overlay.active { opacity: 1; visibility: visible; }
+.close-merit-btn {
+  align-self: flex-end; background: #1d1d1f; color: #fff; border: none;
+  padding: 0.8rem 1.5rem; border-radius: 999px; font-weight: 600; cursor: pointer;
+  margin-bottom: 2rem; font-family: var(--font-clean);
+}
+.merit-detail-content {
+  max-width: 800px; margin: auto; text-align: left;
+  transform: translateY(30px); opacity: 0; transition: transform 0.6s ease 0.2s, opacity 0.6s ease 0.2s;
+}
+.merit-detail-overlay.active .merit-detail-content {
+  transform: translateY(0); opacity: 1;
+}
+.merit-detail-year {
+  display: inline-block; font-size: 1.2rem; font-weight: 800; color: var(--accent);
+  margin-bottom: 1rem; border: 2px solid var(--accent); padding: 0.5rem 1rem; border-radius: 999px;
+}
+.merit-detail-title { font-size: 4rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 2rem; line-height: 1.1; color: #1d1d1f; }
+.merit-detail-body { font-size: 1.5rem; color: #666; line-height: 1.6; font-weight: 400; }

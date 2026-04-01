@@ -98,7 +98,7 @@
             <li><span>typescript</span> <span class="version">^5.1.3</span></li>
             <li><span>python</span> <span class="version">^3.11.0</span></li>
             <li><span>three.js</span> <span class="version">^0.158.0</span></li>
-            <li><span>coffee</span> <span class="version">critical</span></li>
+            <li><span>diet_coke</span> <span class="version">critical</span></li>
           </ul>
         </div>
       </aside>
@@ -377,6 +377,7 @@
       <nav class="capsule-nav">
         <button class="nav-pill active magnetic-btn" data-target="hobbies-page">Hobbies</button>
         <button class="nav-pill magnetic-btn" data-target="merits-page">Merits</button>
+        <button class="nav-pill magnetic-btn" data-target="author-page">Author</button>
         <button class="nav-pill magnetic-btn" id="portalBtnClean">❮ CLI</button>
       </nav>
 
@@ -515,7 +516,63 @@
 
         </div> <!-- End Merits Page -->
 
+        <!-- ================= PAGE: AUTHOR (30 Things) ================= -->
+        <div class="clean-page" id="author-page">
+          <header class="clean-hero scroll-reveal">
+            <h1 class="soft-fade">The Author</h1>
+            <p class="soft-fade">30 things about my journey, quirks, and preferences.</p>
+          </header>
+
+          <section class="author-grid scroll-reveal">
+            <div class="bento-box">
+              <div class="bento-item"><h3>1. Fuel of Choice</h3><p>Diet Coke (Always)</p></div>
+              <div class="bento-item wide"><h3>2. Machine</h3><p>macOS natively</p></div>
+              <div class="bento-item tall"><h3>3. Current Status</h3><p>Learning, breaking things, and building them back up.</p></div>
+              <div class="bento-item"><h3>4. Theme</h3><p>Strictly Dark Mode</p></div>
+              <div class="bento-item"><h3>5. Editor</h3><p>VS Code</p></div>
+              <div class="bento-item"><h3>6. Font</h3><p>JetBrains Mono</p></div>
+              <div class="bento-item wide"><h3>7. Music</h3><p>Lofi Beats to code to</p></div>
+              <div class="bento-item"><h3>8. Browser</h3><p>50+ Tabs open constantly</p></div>
+              <div class="bento-item"><h3>9. Nemesis</h3><p>Missing semicolons & unaligned divs</p></div>
+              <div class="bento-item"><h3>10. Hobby 1</h3><p>Running on Strava</p></div>
+              <div class="bento-item wide"><h3>11. Best Feeling</h3><p>When the code runs on the first try (rarely)</p></div>
+              <div class="bento-item"><h3>12. Spaces v Tabs</h3><p>Spaces! Mostly...</p></div>
+              <div class="bento-item"><h3>13. Hobby 2</h3><p>Photography</p></div>
+              <div class="bento-item"><h3>14. Version Control</h3><p>Git. Mostly just commit & push.</p></div>
+              <div class="bento-item tall"><h3>15. Learning Next</h3><p>Deep diving into complex frontend frameworks and AI logic.</p></div>
+              <div class="bento-item"><h3>16. Snack</h3><p>Late night Ramen</p></div>
+              <div class="bento-item"><h3>17. Design Style</h3><p>Clean, Minimal, Glassmorphism</p></div>
+              <div class="bento-item"><h3>18. Inspiration</h3><p>Sleek, living web experiences</p></div>
+              <div class="bento-item wide"><h3>19. Favorite Colors</h3><p>High contrast Neons on deep dark backgrounds</p></div>
+              <div class="bento-item"><h3>20. Shortcut</h3><p>Cmd+C / Cmd+V</p></div>
+              <div class="bento-item"><h3>21. Side Projects</h3><p>A graveyard of good ideas</p></div>
+              <div class="bento-item"><h3>22. Goal</h3><p>Build things people love</p></div>
+              <div class="bento-item tall"><h3>23. Philosophy</h3><p>Keep iterating. Nothing is perfect on version 1.0.</p></div>
+              <div class="bento-item"><h3>24. Debugging</h3><p>console.log("here")</p></div>
+              <div class="bento-item"><h3>25. Resource</h3><p>StackOverflow & official Docs</p></div>
+              <div class="bento-item wide"><h3>26. Favorite Language</h3><p>Python and JavaScript (for now)</p></div>
+              <div class="bento-item"><h3>27. Focus Mode</h3><p>Headphones on, Do Not Disturb</p></div>
+              <div class="bento-item"><h3>28. Motivation</h3><p>The magic of creating something from nothing</p></div>
+              <div class="bento-item"><h3>29. Fun Fact</h3><p>I love designing UI/UX mockups before writing logic</p></div>
+              <div class="bento-item wide"><h3>30. Final Word</h3><p>I'm just getting started.</p></div>
+            </div>
+          </section>
+        </div> <!-- End Author Page -->
+
       </div>
+
+      <!-- Merit Detail Overlay -->
+      <div id="meritDetailOverlay" class="merit-detail-overlay hidden">
+        <button id="closeMeritBtn" class="close-merit-btn magnetic-btn">✖ Close</button>
+        <div class="merit-detail-content">
+          <div class="merit-detail-header">
+            <span id="meritDetailYear" class="merit-detail-year"></span>
+            <h2 id="meritDetailTitle" class="merit-detail-title"></h2>
+          </div>
+          <p id="meritDetailBody" class="merit-detail-body"></p>
+        </div>
+      </div>
+
     </div> <!-- End Clean UI Universe -->
 
     <!-- Feature 19: Tooltip Element -->

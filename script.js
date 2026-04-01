@@ -386,10 +386,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (spotCursor) spotCursor.style.opacity = '0';
   });
 
-  // Merit Background Hover
+  // Merit Background Hover & Detail Overlay
   const timelineNodes = document.querySelectorAll('.timeline-node');
   const defaultLifestyleBg = '#f7f9fa';
   const meritColors = ['#e0f2fe', '#dcfce7', '#fef3c7', '#f3e8ff', '#f1f5f9'];
+  
+  const meritDetailOverlay = document.getElementById('meritDetailOverlay');
+  const closeMeritBtn = document.getElementById('closeMeritBtn');
+  const meritDetailYear = document.getElementById('meritDetailYear');
+  const meritDetailTitle = document.getElementById('meritDetailTitle');
+  const meritDetailBody = document.getElementById('meritDetailBody');
   
   timelineNodes.forEach((node, index) => {
     node.addEventListener('mouseenter', () => {
@@ -405,7 +411,32 @@ document.addEventListener('DOMContentLoaded', () => {
         node.style.transform = 'translateY(0)';
       }
     });
+
+    node.addEventListener('click', () => {
+      if (meritDetailOverlay) {
+        const year = node.getAttribute('data-year');
+        const h3 = node.querySelector('h3') ? node.querySelector('h3').innerText : 'Milestone';
+        const p = node.querySelector('p') ? node.querySelector('p').innerText : '';
+        
+        meritDetailYear.textContent = year;
+        meritDetailTitle.textContent = h3;
+        meritDetailBody.textContent = p;
+        
+        meritDetailOverlay.classList.remove('hidden');
+        void meritDetailOverlay.offsetWidth; // Reflow
+        meritDetailOverlay.classList.add('active');
+      }
+    });
   });
+
+  if (closeMeritBtn) {
+    closeMeritBtn.addEventListener('click', () => {
+      meritDetailOverlay.classList.remove('active');
+      setTimeout(() => {
+        meritDetailOverlay.classList.add('hidden');
+      }, 400);
+    });
+  }
 
   // Default theme initialized in CSS, but just to ensure log fires
   logToConsole('Portfolio Systems Initialized.', 'info');
