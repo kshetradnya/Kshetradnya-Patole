@@ -221,6 +221,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (runProjectsBtn) runProjectsBtn.addEventListener('click', () => { setTimeout(() => openFile('projects'), 300); });
   if (document.getElementById('rebootBtn')) document.getElementById('rebootBtn').addEventListener('click', () => openFile('readme'));
 
+  const styleBtn = document.getElementById('styleBtn');
+  if (styleBtn) {
+    const themes = ['theme-terminal', 'theme-cyberpunk', 'theme-synthwave'];
+    let currentThemeIndex = 0;
+    styleBtn.addEventListener('click', () => {
+      currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+      setTheme(themes[currentThemeIndex]);
+    });
+  }
 
   // ==========================================
   // UNIVERSE 2: LIFESTYLE / CLEAN UI LOGIC
@@ -375,6 +384,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('mouseleave', () => {
     if (spotCursor) spotCursor.style.opacity = '0';
+  });
+
+  // Merit Background Hover
+  const timelineNodes = document.querySelectorAll('.timeline-node');
+  const defaultLifestyleBg = '#f7f9fa';
+  const meritColors = ['#e0f2fe', '#dcfce7', '#fef3c7', '#f3e8ff', '#f1f5f9'];
+  
+  timelineNodes.forEach((node, index) => {
+    node.addEventListener('mouseenter', () => {
+      if (document.body.classList.contains('mode-lifestyle')) {
+        document.body.style.backgroundColor = meritColors[index % meritColors.length];
+        node.style.transform = 'translateY(-5px)';
+        node.style.transition = 'transform 0.3s ease';
+      }
+    });
+    node.addEventListener('mouseleave', () => {
+      if (document.body.classList.contains('mode-lifestyle')) {
+        document.body.style.backgroundColor = defaultLifestyleBg;
+        node.style.transform = 'translateY(0)';
+      }
+    });
   });
 
   // Default theme initialized in CSS, but just to ensure log fires
