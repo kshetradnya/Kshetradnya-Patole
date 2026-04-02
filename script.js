@@ -232,6 +232,95 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
+  // INTERACTIVE REPL LOGIC
+  // ==========================================
+  const replInput = document.getElementById('replInput');
+  const replHistory = document.getElementById('replHistory');
+  
+  if (replInput && replHistory) {
+    replInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const cmd = replInput.value.trim().toLowerCase();
+        if (!cmd) return;
+        
+        // Echo command
+        const line = document.createElement('div');
+        line.className = 'repl-line';
+        line.innerHTML = `<span class="user-prompt">➜  ~</span> <span class="syntax-command">${cmd}</span>`;
+        replHistory.appendChild(line);
+        
+        // Output response
+        const out = document.createElement('p');
+        out.className = 'repl-output';
+        
+        if (cmd === 'help') {
+          out.innerHTML = 'Available commands:<br>- <span class="syntax-keyword">help</span>: Show this message<br>- <span class="syntax-keyword">clear</span>: Clear terminal<br>- <span class="syntax-keyword">whoami</span>: Print effective user ID<br>- <span class="syntax-keyword">projects</span>: Open projects view<br>- <span class="syntax-keyword">frontpage</span> / <span class="syntax-keyword">startx</span>: Launch professional web UI';
+        } else if (cmd === 'clear') {
+          replHistory.innerHTML = '';
+          out.innerHTML = '';
+        } else if (cmd === 'whoami') {
+          out.innerHTML = 'kshetradnya<br>developer, student, creator';
+        } else if (cmd === 'contact') {
+          out.innerHTML = 'Loading contact interface...';
+          setTimeout(() => openFile('contact'), 300);
+        } else if (cmd === 'projects') {
+          out.innerHTML = 'Executing ./run_projects.sh...';
+          setTimeout(() => openFile('projects'), 400);
+        } else if (cmd === 'frontpage' || cmd === 'startx') {
+          out.innerHTML = 'Initializing Frontpage Window Manager...';
+          setTimeout(toggleFrontpageMode, 600);
+        } else {
+          out.innerHTML = `zsh: command not found: ${cmd}`;
+        }
+        
+        if (out.innerHTML) replHistory.appendChild(out);
+        replInput.value = '';
+        replInput.scrollIntoView();
+      }
+    });
+  }
+
+  // ==========================================
+  // FRONTPAGE MODE LOGIC & SECRET BUTTON
+  // ==========================================
+  const versionBtn = document.getElementById('versionSecretBtn');
+  const fpContainer = document.getElementById('frontpageContainer');
+  const fpExitBtn = document.getElementById('fpExitBtn');
+  let clickCount = 0;
+  let clickTimer = null;
+  
+  function toggleFrontpageMode() {
+    const isFp = document.body.classList.toggle('mode-frontpage');
+    if (isFp) {
+      logToConsole('Loading Frontpage Display Server...', 'warn');
+      fpContainer.classList.remove('hidden');
+    } else {
+      fpContainer.classList.add('hidden');
+      logToConsole('Returned to IDE terminal.', 'info');
+    }
+  }
+
+  if (versionBtn) {
+    versionBtn.addEventListener('click', () => {
+      clickCount++;
+      if (clickCount >= 3) {
+        clickCount = 0;
+        toggleFrontpageMode();
+      }
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => { clickCount = 0; }, 1000);
+    });
+  }
+
+  if (fpExitBtn) {
+    fpExitBtn.addEventListener('click', () => {
+      document.body.classList.remove('mode-frontpage');
+      fpContainer.classList.add('hidden');
+      logToConsole('Exited Frontpage Display.', 'info');
+    });
+  }
+
+  // ==========================================
   // UNIVERSE 2: LIFESTYLE / CLEAN UI LOGIC
   // ==========================================
 

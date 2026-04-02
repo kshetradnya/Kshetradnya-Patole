@@ -82,6 +82,7 @@
             <li class="file-item active" data-tab="readme"><span class="icon markdown">M</span> README.md</li>
             <li class="file-item" data-tab="projects"><span class="icon json">{ }</span> projects.json</li>
             <li class="file-item" data-tab="resume"><span class="icon git">#</span> resume.log</li>
+            <li class="file-item" data-tab="skills"><span class="icon bash">$_</span> skills.sh</li>
             <li class="file-item" data-tab="about"><span class="icon bash">$_</span> about.sh</li>
             <li class="file-item" data-tab="contact"><span class="icon link">@</span> contact.txt</li>
           </ul>
@@ -117,6 +118,9 @@
           <div class="tab" data-tab="resume">
             <span class="icon git">#</span> resume.log <span class="close-tab">×</span>
           </div>
+          <div class="tab" data-tab="skills">
+            <span class="icon bash">$_</span> skills.sh <span class="close-tab">×</span>
+          </div>
           <div class="tab" data-tab="about">
             <span class="icon bash">$_</span> about.sh <span class="close-tab">×</span>
           </div>
@@ -139,15 +143,21 @@
               <h1><span class="syntax-keyword">const</span> <span class="syntax-variable">dev</span> = <span class="syntax-string">"Kshetradnya Patole"</span>;</h1>
               <h2 class="hero-role glitch-text" data-text="Software Engineer & CS Major" id="typeWriterTarget"></h2>
               
-              <div class="live-repl">
-                <span class="user-prompt">➜  ~</span> <span class="syntax-command">cat</span> description.txt
+              <div class="live-repl" id="liveRepl">
+                <div class="repl-line">
+                  <span class="user-prompt">➜  ~</span> <span class="syntax-command">cat</span> description.txt
+                </div>
                 <p class="repl-output">
                   I craft clever and performant digital experiences through scalable code, 
                   intuitive user interfaces, and complex algorithms. 
                   <br><br>
                   Always eager to debug and optimize.
                 </p>
-                <span class="user-prompt">➜  ~</span> <span class="blinking-cursor"></span>
+                <div class="repl-history" id="replHistory"></div>
+                <div class="repl-input-line">
+                  <span class="user-prompt">➜  ~</span>
+                  <input type="text" id="replInput" class="repl-input" autocomplete="off" spellcheck="false" placeholder="Type a command (e.g. help, clear, startx)">
+                </div>
               </div>
 
               <div class="hero-actions">
@@ -261,6 +271,44 @@
             </div>
           </section>
 
+          <!-- FILE: skills.sh -->
+          <section class="file-view" id="skills">
+            <div class="line-numbers"></div>
+            <div class="code-content">
+              <div class="terminal-skills">
+                <h3 style="margin-bottom: 2rem;"><span class="syntax-command">./load_skills.sh</span> --verbose</h3>
+                <div class="skill-chart">
+                  <div class="skill-row tooltip-trigger" data-tooltip="React, Next.js, HTML/CSS, Vanilla JS">
+                    <div class="skill-label">FRONTEND</div>
+                    <div class="skill-bar-container"><div class="skill-bar" style="width: 90%;"></div></div>
+                    <div class="skill-percent">90%</div>
+                  </div>
+                  <div class="skill-row tooltip-trigger" data-tooltip="Node.js, Express, Python, MongoDB">
+                    <div class="skill-label">BACKEND</div>
+                    <div class="skill-bar-container"><div class="skill-bar" style="width: 80%;"></div></div>
+                    <div class="skill-percent">80%</div>
+                  </div>
+                  <div class="skill-row tooltip-trigger" data-tooltip="Core ML, Tensor Flow, Algorithms">
+                    <div class="skill-label">AI & ML</div>
+                    <div class="skill-bar-container"><div class="skill-bar" style="width: 65%;"></div></div>
+                    <div class="skill-percent">65%</div>
+                  </div>
+                  <div class="skill-row tooltip-trigger" data-tooltip="Figma, UI/UX, Glassmorphism, Animations">
+                    <div class="skill-label">DESIGN</div>
+                    <div class="skill-bar-container"><div class="skill-bar" style="width: 85%;"></div></div>
+                    <div class="skill-percent">85%</div>
+                  </div>
+                  <div class="skill-row tooltip-trigger" data-tooltip="Git, Linux, AWS, Docker">
+                    <div class="skill-label">SYSADMIN</div>
+                    <div class="skill-bar-container"><div class="skill-bar" style="width: 70%;"></div></div>
+                    <div class="skill-percent">70%</div>
+                  </div>
+                </div>
+                <p class="syntax-comment" style="margin-top: 2rem;"># Continuous integration of new skills running in background...</p>
+              </div>
+            </div>
+          </section>
+
           <!-- FILE: about.sh -->
           <section class="file-view" id="about">
             <div class="line-numbers"></div>
@@ -333,7 +381,7 @@
         <span class="status-item branch"><span class="icon git">ᚠ</span> main*</span>
         <span class="status-item error"><span class="icon">⊗</span> 0</span>
         <span class="status-item warning"><span class="icon">⚠</span> 0</span>
-        <span class="status-item info">v2.0.0 - latest build</span>
+        <span class="status-item info" id="versionSecretBtn" style="cursor: help;" title="Click 3 times to exit matrix">v2.0.0 - latest build</span>
       </div>
       <div class="status-right">
         <span class="status-item uptime" id="uptimeCounter">Uptime: 00:00:00</span>
@@ -574,6 +622,118 @@
       </div>
 
     </div> <!-- End Clean UI Universe -->
+
+    <!-- ========================================== -->
+    <!-- UNIVERSE 3: FRONTPAGE MODE (Professional)  -->
+    <!-- ========================================== -->
+    <div class="frontpage-ui-container hidden" id="frontpageContainer" aria-hidden="true">
+      <div class="fp-bg-gradient"></div>
+      
+      <nav class="fp-nav glass-panel">
+        <div class="fp-logo">KP.</div>
+        <div class="fp-links">
+          <a href="#fp-hero">Home</a>
+          <a href="#fp-projects">Work</a>
+          <a href="#fp-skills">Skills</a>
+          <button class="fp-btn" id="fpExitBtn">Return to IDE</button>
+        </div>
+      </nav>
+
+      <div class="fp-viewport scroll-reveal">
+        
+        <!-- FP Hero -->
+        <section class="fp-hero" id="fp-hero">
+          <div class="fp-hero-content">
+            <h2 class="fp-tagline">Software Engineer & CS Major</h2>
+            <h1 class="fp-title"><span class="gradient-text">Kshetradnya</span><br>Patole</h1>
+            <p class="fp-desc">
+              I craft clever and performant digital experiences through scalable code, 
+              intuitive user interfaces, and complex algorithms. Always eager to debug and optimize.
+            </p>
+            <div class="fp-actions">
+              <a href="#fp-projects" class="fp-btn-primary">View Projects</a>
+              <a href="#fp-skills" class="fp-btn-secondary">Explore Skills</a>
+            </div>
+          </div>
+          <div class="fp-hero-visual">
+            <div class="fp-cube-container">
+              <div class="fp-cube">
+                <div class="fp-face front">{'{}'}</div>
+                <div class="fp-face back">&lt;/&gt;</div>
+                <div class="fp-face right">JS</div>
+                <div class="fp-face left">PY</div>
+                <div class="fp-face top">UI</div>
+                <div class="fp-face bottom">UX</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FP Projects Structure -->
+        <section class="fp-projects" id="fp-projects">
+          <h2 class="fp-section-title">Selected Work</h2>
+          <div class="fp-bento-grid">
+            <div class="fp-bento-card large">
+              <div class="card-bg" style="background-image: url('projects/brandi.png');"></div>
+              <div class="card-content glass-panel">
+                <h3>Interactive Biology</h3>
+                <p>WebGL simulation of cellular processes & ecosystems.</p>
+                <div class="card-tags"><span>Three.js</span><span>React</span><span>GLSL</span></div>
+              </div>
+            </div>
+            <div class="fp-bento-card">
+              <div class="card-bg" style="background-image: url('projects/peposter.png');"></div>
+              <div class="card-content glass-panel">
+                <h3>Retro Games</h3>
+                <p>Rebuilt arcade logic with HTML5 Canvas.</p>
+                <div class="card-tags"><span>Canvas API</span><span>Vanilla JS</span></div>
+              </div>
+            </div>
+            <div class="fp-bento-card">
+              <div class="card-bg" style="background-image: url('projects/socialcampaign.png');"></div>
+              <div class="card-content glass-panel">
+                <h3>Japanese Learning Hub</h3>
+                <p>Full-stack app for writing practice.</p>
+                <div class="card-tags"><span>Node.js</span><span>MongoDB</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FP Skills -->
+        <section class="fp-skills" id="fp-skills">
+          <h2 class="fp-section-title">Core Competencies</h2>
+          <div class="fp-skills-wrapper">
+            
+            <div class="fp-skill-category">
+              <h3>Frontend Architecture</h3>
+              <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 90%;"><span class="fp-progress-glow"></span></div></div>
+            </div>
+            <div class="fp-skill-category">
+              <h3>Backend Systems</h3>
+              <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 80%;"><span class="fp-progress-glow"></span></div></div>
+            </div>
+            <div class="fp-skill-category">
+              <h3>AI & Machine Learning</h3>
+              <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 65%;"><span class="fp-progress-glow"></span></div></div>
+            </div>
+            <div class="fp-skill-category">
+              <h3>UI/UX Design</h3>
+              <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 85%;"><span class="fp-progress-glow"></span></div></div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- FP Footer -->
+        <footer class="fp-footer">
+          <h2>Let's build something bold.</h2>
+          <a href="mailto:xetraskool@gmail.com" class="fp-btn-primary">Contact Me</a>
+          <p>© 2026 Kshetradnya Patole. Crafted with precision.</p>
+        </footer>
+
+      </div>
+    </div> <!-- End Frontpage Universe -->
 
     <!-- Feature 19: Tooltip Element -->
     <div id="fileTooltip" class="file-tooltip"></div>
