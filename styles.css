@@ -607,23 +607,26 @@ body.mode-frontpage .ide-container, body.mode-frontpage .terminal-console, body.
 .fp-projects { max-width: 1200px; margin: 8rem auto 4rem; }
 .fp-section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 3rem; }
 
-/* Hover-Expand Grid: all cards sit side by side and expand on hover */
+/* Hover-Expand Grid: 2-col wrap, hovered card takes full row */
 .fp-bento-grid.hover-expand {
-  display: flex; gap: 1.5rem; align-items: stretch;
+  display: flex; flex-wrap: wrap; gap: 1.5rem;
 }
 .fp-bento-grid.hover-expand .fp-bento-card {
-  flex: 1 1 0; /* equal share */
-  min-height: 420px;
-  transition: flex 0.6s cubic-bezier(0.2,0.8,0.2,1), transform 0.4s cubic-bezier(0.2,0.8,0.2,1), box-shadow 0.4s;
-}
-.fp-bento-grid.hover-expand:hover .fp-bento-card {
-  flex: 0.6 1 0; /* shrink siblings when container is hovered */
+  flex: 0 0 calc(50% - 0.75rem); /* 2 per row */
+  min-height: 380px;
+  transition: flex-basis 0.5s cubic-bezier(0.2,0.8,0.2,1), transform 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease;
 }
 .fp-bento-grid.hover-expand .fp-bento-card:hover {
-  flex: 3 1 0 !important; /* the hovered card takes ~3x the space */
-  transform: translateY(-5px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  flex-basis: 100% !important; /* take full row */
+  min-height: 440px;
+  transform: none;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
   z-index: 2;
+}
+/* Siblings shrink when one is hovered */
+.fp-bento-grid.hover-expand:hover .fp-bento-card:not(:hover) {
+  opacity: 0.7;
+  transform: scale(0.97);
 }
 
 .fp-bento-card { position: relative; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
