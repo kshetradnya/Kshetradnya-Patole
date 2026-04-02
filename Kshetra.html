@@ -635,6 +635,7 @@
           <a href="#fp-hero">Home</a>
           <a href="#fp-projects">Work</a>
           <a href="#fp-skills">Skills</a>
+          <a href="#fp-about">About</a>
           <button class="fp-btn" id="fpExitBtn">Return to IDE</button>
         </div>
       </nav>
@@ -673,14 +674,14 @@
         <section class="fp-projects" id="fp-projects">
           <h2 class="fp-section-title">Selected Work</h2>
           <div class="fp-bento-grid">
-            <div class="fp-bento-card large">
-              <div class="card-bg" style="background-image: url('projects/brandi.png');"></div>
+            <a href="interactive-biology.html" class="fp-bento-card large" style="text-decoration: none; color: inherit;">
+              <div class="card-bg" style="background-image: url('projects/biology_preview.png');"></div>
               <div class="card-content glass-panel">
-                <h3>Interactive Biology</h3>
-                <p>WebGL simulation of cellular processes & ecosystems.</p>
-                <div class="card-tags"><span>Three.js</span><span>React</span><span>GLSL</span></div>
+                <h3>Interactive 3D Biology</h3>
+                <p>An immersive WebGL exploration of cellular structures featuring procedurally generated dynamic 3D diagrams and modular educational overlays.</p>
+                <div class="card-tags"><span>Three.js</span><span>React</span><span>GLSL</span><span>Procedural Biology</span></div>
               </div>
-            </div>
+            </a>
             <div class="fp-bento-card">
               <div class="card-bg" style="background-image: url('projects/peposter.png');"></div>
               <div class="card-content glass-panel">
@@ -722,6 +723,25 @@
               <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 85%;"><span class="fp-progress-glow"></span></div></div>
             </div>
 
+          </div>
+        </section>
+
+        <!-- FP About & Lifestyle Navigation -->
+        <section class="fp-about" id="fp-about">
+          <h2 class="fp-section-title">Beyond the Code</h2>
+          <div class="fp-about-grid">
+            <div class="fp-about-card nav-to-univ2" data-target="merits-page">
+              <h3>🏆 Merits & Milestones</h3>
+              <p>Explore my academic and athletic achievements, including my football journey.</p>
+            </div>
+            <div class="fp-about-card nav-to-univ2" data-target="hobbies-page">
+              <h3>🏃 Hobbies</h3>
+              <p>Check out my Strava running stats and photography portfolio.</p>
+            </div>
+            <div class="fp-about-card nav-to-univ2" data-target="author-page">
+              <h3>👤 The Author</h3>
+              <p>30 rapid-fire facts about my quirks, setup, computing environments, and lifestyle preferences.</p>
+            </div>
           </div>
         </section>
 

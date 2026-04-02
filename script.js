@@ -527,6 +527,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ==========================================
+  // FRONTPAGE TO LIFESTYLE NAVIGATION
+  // ==========================================
+  const jumpToLifestyleLinks = document.querySelectorAll('.nav-to-univ2');
+  jumpToLifestyleLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetPageId = link.getAttribute('data-target');
+      
+      // Exit Frontpage Mode
+      document.body.classList.remove('mode-frontpage');
+      if (fpContainer) fpContainer.classList.add('hidden');
+      
+      // Enter Lifestyle Mode
+      document.body.classList.add('mode-lifestyle');
+      document.body.style.backgroundColor = '#f7f9fa';
+      if (cleanUIContainer) cleanUIContainer.classList.remove('hidden');
+      
+      // Programmatically click the right pill in lifestyle mode
+      const pillToClick = document.querySelector(`.nav-pill[data-target="${targetPageId}"]`);
+      if (pillToClick) pillToClick.click();
+      
+      logToConsole(`Jumped from Professional to Lifestyle Profile: ${targetPageId}`, 'info');
+    });
+  });
+
   // Default theme initialized in CSS, but just to ensure log fires
   logToConsole('Portfolio Systems Initialized.', 'info');
 });
