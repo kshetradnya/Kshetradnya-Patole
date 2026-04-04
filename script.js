@@ -2,45 +2,88 @@
 // UNIVERSE 1: DEVELOPER IDE ENGINE
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Feature 1: Password Logic
-  const passwordInput = document.getElementById('passwordInput');
-  const loginFeedback = document.getElementById('loginFeedback');
-  const terminalLogin = document.getElementById('terminal-login');
-  
-  if (passwordInput && terminalLogin && document.body.classList.contains('access-locked')) {
-    passwordInput.focus();
-    passwordInput.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') {
-        const val = passwordInput.value.toLowerCase().trim();
-        if (val === 'vibecoding') {
-          loginFeedback.style.color = 'var(--accent, #3fb950)';
-          loginFeedback.textContent = "Access granted. Initiating IDE...";
-          setTimeout(() => {
-            document.body.classList.remove('access-locked');
-            terminalLogin.classList.add('hidden');
-            logToConsole('System login successful. IDE loaded.', 'info');
-            startTypingEffect();
-          }, 800);
+  // ==========================================
+  // MATRIX LOADING SCREEN (No Password)
+  // ==========================================
+  const matrixLoader = document.getElementById('matrix-loader');
+  const loaderCanvas = document.getElementById('loaderMatrixCanvas');
+  const loaderBody = document.getElementById('loaderBody');
+  const loaderGranted = document.getElementById('loaderGranted');
+
+  if (matrixLoader && loaderCanvas) {
+    // -- Full-screen Matrix rain on loader canvas --
+    const lctx = loaderCanvas.getContext('2d');
+    loaderCanvas.width = window.innerWidth;
+    loaderCanvas.height = window.innerHeight;
+
+    const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:<>?ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝ01'.split('');
+    const fontSize = 15;
+    const columns = Math.floor(loaderCanvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function drawMatrix() {
+      lctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      lctx.fillRect(0, 0, loaderCanvas.width, loaderCanvas.height);
+      lctx.font = `${fontSize}px 'JetBrains Mono', 'Fira Code', monospace`;
+      for (let i = 0; i < drops.length; i++) {
+        const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+        // Brighter leading character
+        if (Math.random() > 0.9) {
+          lctx.fillStyle = '#ffffff';
         } else {
-          loginFeedback.style.color = 'var(--error, #f85149)';
-          loginFeedback.textContent = `Sorry, try again. (${val} is incorrect)`;
-          passwordInput.value = '';
-          logToConsole('Failed login attempt detected.', 'error');
+          const green = Math.floor(150 + Math.random() * 105);
+          lctx.fillStyle = `rgb(0, ${green}, 0)`;
         }
+        lctx.fillText(char, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > loaderCanvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
       }
+    }
+    const matrixRafId = { id: null };
+    function runMatrix() { matrixRafId.id = requestAnimationFrame(runMatrix); drawMatrix(); }
+    runMatrix();
+
+    // -- Boot sequence lines typed into the terminal box --
+    const bootLines = [
+      { text: '$ ./portfolio --init',            delay: 0,    color: '#7ee787' },
+      { text: 'Booting kernel v2.0.0...',         delay: 350,  color: '#58a6ff' },
+      { text: 'Loading filesystem modules...',    delay: 750,  color: '#58a6ff' },
+      { text: 'Mounting /dev/portfolio...',       delay: 1100, color: '#58a6ff' },
+      { text: 'Decrypting portfolio assets...',   delay: 1500, color: '#f0883e' },
+      { text: 'Verifying identity...',            delay: 1950, color: '#f0883e' },
+      { text: 'Resolving dependencies...',        delay: 2350, color: '#58a6ff' },
+      { text: 'Initializing UI subsystems...',    delay: 2750, color: '#58a6ff' },
+      { text: 'Loading user profile: kshetra',   delay: 3100, color: '#7ee787' },
+      { text: 'All systems nominal.',             delay: 3500, color: '#7ee787' },
+    ];
+
+    bootLines.forEach(({ text, delay, color }) => {
+      setTimeout(() => {
+        const line = document.createElement('div');
+        line.className = 'loader-line';
+        line.style.color = color;
+        line.textContent = text;
+        loaderBody.appendChild(line);
+        loaderBody.scrollTop = loaderBody.scrollHeight;
+      }, delay);
     });
 
-    const bootLines = ["Starting kernel...", "Mounting root filesystem...", "Loading user profile 'kshetra'...", "Warning: Portfolio V2 encryption detected."];
-    const bootEl = document.getElementById('bootSequence');
-    let delay = 0;
-    bootLines.forEach((line) => {
+    // -- "ACCESS GRANTED" flash after boot lines --
+    setTimeout(() => {
+      loaderGranted.classList.remove('hidden');
+      loaderGranted.classList.add('show');
+    }, 4000);
+
+    // -- Fade out loader and enter the IDE --
+    setTimeout(() => {
+      matrixLoader.classList.add('fade-out');
+      cancelAnimationFrame(matrixRafId.id);
       setTimeout(() => {
-        const p = document.createElement('div');
-        p.textContent = line;
-        bootEl.appendChild(p);
-      }, delay);
-      delay += 400;
-    });
+        matrixLoader.style.display = 'none';
+        startTypingEffect();
+        logToConsole('System boot complete. Portfolio loaded.', 'info');
+      }, 700);
+    }, 5200);
   } else {
     startTypingEffect();
   }

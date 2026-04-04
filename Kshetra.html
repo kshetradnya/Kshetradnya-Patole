@@ -16,7 +16,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="theme-terminal access-locked">
+  <body class="theme-terminal">
     
     <!-- ========================================== -->
     <!-- UNIVERSE 1: DEVELOPER IDE (Existing)       -->
@@ -25,21 +25,22 @@
     <!-- Feature 21: Matrix Rain Background Layer -->
     <canvas id="matrixCanvas" class="hidden-layer"></canvas>
     
-    <!-- Feature 1: Explicit Terminal Password Entry -->
-    <div id="terminal-login" class="terminal-overlay">
-      <div class="login-wrapper">
-        <div class="boot-sequence" id="bootSequence"></div>
-        <div class="login-prompt">
-          <span class="user-host">kshetra@local:~$</span>
-          <span>./unlock_portfolio.sh</span>
+    <!-- Matrix Loading Screen (No Password) -->
+    <div id="matrix-loader" class="matrix-loader-overlay">
+      <!-- Full-screen matrix canvas behind everything -->
+      <canvas id="loaderMatrixCanvas" class="loader-matrix-canvas"></canvas>
+      <!-- Terminal boot box -->
+      <div class="loader-terminal-box" id="loaderTerminalBox">
+        <div class="loader-topbar">
+          <span class="loader-dot red"></span>
+          <span class="loader-dot yellow"></span>
+          <span class="loader-dot green"></span>
+          <span class="loader-title">kshetra@local — bash</span>
         </div>
-        <div class="password-prompt">
-          <label for="passwordInput">[sudo] password for kshetra: </label>
-          <!-- Fixed opacity/typing so user can see they are typing -->
-          <input type="password" id="passwordInput" autocomplete="off" autofocus />
-          <span id="fakeCursor" class="blinking-cursor"></span>
+        <div class="loader-body" id="loaderBody"></div>
+        <div class="loader-granted hidden" id="loaderGranted">
+          <span class="granted-text">ACCESS GRANTED</span>
         </div>
-        <div id="loginFeedback" class="login-feedback"></div>
       </div>
     </div>
 

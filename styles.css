@@ -662,3 +662,132 @@ body.mode-frontpage .ide-container, body.mode-frontpage .terminal-console, body.
 .fp-footer { max-width: 1200px; margin: 10rem auto 4rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 4rem; }
 .fp-footer h2 { font-size: 3.5rem; margin-bottom: 2.5rem; font-weight: 800; letter-spacing:-1px;}
 .fp-footer p { margin-top: 5rem; color: var(--text-muted); font-size: 0.9rem; }
+
+/* ==========================================
+   MATRIX LOADING SCREEN
+   ========================================== */
+
+.matrix-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.7s ease;
+}
+
+.matrix-loader-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-matrix-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.loader-terminal-box {
+  position: relative;
+  z-index: 10;
+  width: min(680px, 92vw);
+  background: rgba(10, 10, 10, 0.88);
+  border: 1px solid rgba(0, 255, 65, 0.4);
+  border-radius: 10px;
+  box-shadow:
+    0 0 30px rgba(0, 255, 65, 0.15),
+    0 0 80px rgba(0, 255, 65, 0.07),
+    0 20px 60px rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Space Mono', monospace;
+}
+
+.loader-topbar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  background: rgba(0, 255, 65, 0.05);
+  border-bottom: 1px solid rgba(0, 255, 65, 0.15);
+}
+.loader-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.loader-dot.red    { background: #ff5f57; box-shadow: 0 0 6px #ff5f5780; }
+.loader-dot.yellow { background: #ffbd2e; box-shadow: 0 0 6px #ffbd2e80; }
+.loader-dot.green  { background: #28ca41; box-shadow: 0 0 6px #28ca4180; }
+.loader-title {
+  flex: 1;
+  text-align: center;
+  font-size: 0.78rem;
+  color: rgba(0, 255, 65, 0.5);
+  letter-spacing: 0.05em;
+  margin-left: -46px;
+}
+
+.loader-body {
+  padding: 1.4rem 1.6rem;
+  min-height: 220px;
+  max-height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.loader-body::-webkit-scrollbar { width: 4px; }
+.loader-body::-webkit-scrollbar-track { background: transparent; }
+.loader-body::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.3); border-radius: 99px; }
+
+.loader-line {
+  font-size: clamp(0.78rem, 1.5vw, 0.92rem);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateX(-8px);
+  animation: lineSlideIn 0.35s ease forwards;
+}
+@keyframes lineSlideIn {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.loader-granted {
+  padding: 1.6rem;
+  text-align: center;
+  border-top: 1px solid rgba(0, 255, 65, 0.2);
+  background: rgba(0, 255, 65, 0.04);
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.loader-granted.hidden { display: none; }
+.loader-granted.show {
+  display: block;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.granted-text {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Space Mono', monospace;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #00ff41;
+  text-shadow:
+    0 0 20px #00ff4199,
+    0 0 50px #00ff4155,
+    0 0 100px #00ff4133;
+  animation: grantedPulse 0.8s ease-in-out infinite alternate;
+}
+@keyframes grantedPulse {
+  from { text-shadow: 0 0 20px #00ff4199, 0 0 50px #00ff4155; }
+  to   { text-shadow: 0 0 35px #00ff41cc, 0 0 80px #00ff4188, 0 0 120px #00ff4144; }
+}
+
