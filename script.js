@@ -105,8 +105,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     el.addEventListener('mouseleave', () => {
-      if (followerImage) followerImage.classList.remove('visible');
+      if (followerImage) {
+        followerImage.classList.remove('visible');
+        followerImage.classList.remove('ball-mode');
+      }
     });
+
+    const viewLink = el.querySelector('.view-link');
+    if (viewLink) {
+      viewLink.addEventListener('mouseenter', () => {
+        if(followerImage) followerImage.classList.add('ball-mode');
+      });
+      viewLink.addEventListener('mouseleave', () => {
+        if(followerImage) followerImage.classList.remove('ball-mode');
+      });
+    }
   });
 
 
