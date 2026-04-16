@@ -1,828 +1,374 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kshetradnya Patole | Developer & Lifestyle</title>
-    <meta
-      name="description"
-      content="Portfolio of Kshetradnya Patole, a computer science student building scalable web applications, AI models, and robotics projects."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600;800&family=Caveat:wght@600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body class="theme-terminal">
-    
-    <!-- ========================================== -->
-    <!-- UNIVERSE 1: DEVELOPER IDE (Existing)       -->
-    <!-- ========================================== -->
-    
-    <!-- Feature 21: Matrix Rain Background Layer -->
-    <canvas id="matrixCanvas" class="hidden-layer"></canvas>
-    
-    <!-- Matrix Loading Screen (No Password) -->
-    <div id="matrix-loader" class="matrix-loader-overlay">
-      <!-- Full-screen matrix canvas behind everything -->
-      <canvas id="loaderMatrixCanvas" class="loader-matrix-canvas"></canvas>
-      <!-- Terminal boot box -->
-      <div class="loader-terminal-box" id="loaderTerminalBox">
-        <div class="loader-topbar">
-          <span class="loader-dot red"></span>
-          <span class="loader-dot yellow"></span>
-          <span class="loader-dot green"></span>
-          <span class="loader-title">kshetra@local — bash</span>
-        </div>
-        <div class="loader-body" id="loaderBody"></div>
-        <div class="loader-granted hidden" id="loaderGranted">
-          <span class="granted-text">ACCESS GRANTED</span>
-        </div>
-      </div>
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kshetradnya Patole | AI & ML Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- GSAP for Professional Mode Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
 
-    <!-- Feature 4 & 11: Command Palette (Ctrl+K) -->
-    <dialog id="cmd-palette" class="cmd-palette">
-      <div class="palette-header">
-        <input type="text" id="cmdInput" placeholder="> Type a command or search..." autocomplete="off"/>
-      </div>
-      <ul class="palette-options" id="cmdOptions">
-        <li data-action="nav" data-target="#readme">Navigation: View Home (README.md)</li>
-        <li data-action="nav" data-target="#projects">Navigation: View Projects (projects.json)</li>
-        <li data-action="nav" data-target="#resume">Navigation: View Resume (git log)</li>
-        <li data-action="nav" data-target="#about">Navigation: View About (man kshetradnya)</li>
-        <li data-action="nav" data-target="#contact">Navigation: View Contact (contact.txt)</li>
-        <li data-action="theme" data-theme="theme-terminal">Theme: Default Terminal</li>
-        <li data-action="theme" data-theme="theme-cyberpunk">Theme: Cyberpunk Override</li>
-        <li data-action="theme" data-theme="theme-synthwave">Theme: Synthwave Sunset</li>
-        <li data-action="matrix">Action: Toggle Matrix Rain Background</li>
-        <li data-action="sudo">Action: Enable Sudo Mode</li>
-        <!-- New Portal Command -->
-        <li data-action="portal" class="portal-link">>> Portal: Enter Clean Lifestyle Profile</li>
-      </ul>
-      <p class="palette-footer">Hold `Esc` to close • Use `↑/↓` to navigate</p>
-    </dialog>
+  <!-- ===================================== -->
+  <!-- UNIVERSE 1: THE PRO MODE (NOW DEFAULT)-->
+  <!-- ===================================== -->
+  <div id="pro-universe" class="universe active">
+    <!-- Fluid background gradients -->
+    <div class="fluid-bg"></div>
 
-    <!-- IDE / Workstation Shell Layout -->
-    <div class="ide-container" id="ideContainer" aria-hidden="true">
+    <div class="pro-scroll-container">
       
-      <!-- Feature 5: IDE Sidebar File Explorer -->
-      <aside class="sidebar">
-        <div class="sidebar-header">
-          <span>EXPLORER</span>
+      <!-- Nav -->
+      <nav class="pro-nav">
+        <div class="nav-logo">KP.</div>
+        <button id="launchIdeBtn" class="launch-ide-btn magnet-btn"><span>{'<'} Launch Virtual IDE {'/>'}</span></button>
+      </nav>
+
+      <!-- Sticky Socials -->
+      <div class="pro-socials">
+        <a href="https://www.linkedin.com/in/kshetradnya-patole-80535825b/" target="_blank" class="magnet-btn">LI</a>
+        <a href="https://github.com/Kshetradnya" target="_blank" class="magnet-btn">GH</a>
+        <a href="mailto:xetraskool@gmail.com" class="magnet-btn">EM</a>
+      </div>
+
+      <!-- Hero Section -->
+      <section class="pro-hero">
+        <div class="hero-content">
+          <p class="hero-subtitle gsap-fade-up">Software Engineer / Future ML Architect</p>
+          <h1 class="hero-title gsap-fade-up">Kshetradnya<br>Patole</h1>
+          <p class="hero-desc gsap-fade-up">A beginner deeply fascinated by Artificial Intelligence. Bridging the gap between beautiful frontend architectures and complex machine learning algorithms.</p>
         </div>
-        <div class="explorer-folder open">
-          <div class="folder-title">
-            <span class="chevron">˅</span>
-            <span>PORTFOLIO_V2</span>
+      </section>
+
+      <!-- Projects Section -->
+      <section class="pro-projects">
+        <div class="pro-container">
+          <h2 class="section-title gsap-fade-up">Selected Works</h2>
+          <div class="projects-list">
+            
+            <div class="project-row gsap-fade-up project-trigger" data-img="projects/family_preview.png">
+              <div class="project-info">
+                <h3>Patole.in Portfolio</h3>
+                <p>Cinematic Layered GSAP Experience</p>
+              </div>
+              <div class="project-tags">React / Tailwind</div>
+              <a href="#" class="view-link">View Project</a>
+            </div>
+
+            <div class="project-row gsap-fade-up project-trigger" data-img="projects/biology_preview.png">
+              <div class="project-info">
+                <h3>Interactive ML Biology</h3>
+                <p>WebGL Sandbox Simulation</p>
+              </div>
+              <div class="project-tags">Three.js / Python</div>
+              <a href="https://kshetradnya.github.io/InteractiveBiology/" target="_blank" class="view-link">Visit Site</a>
+            </div>
+
+            <div class="project-row gsap-fade-up project-trigger" data-img="projects/transform_preview.png">
+              <div class="project-info">
+                <h3>Transform Editor</h3>
+                <p>AI-Powered Photo Grading</p>
+              </div>
+              <div class="project-tags">Canvas API / AI</div>
+              <a href="#" class="view-link">View Project</a>
+            </div>
+
           </div>
+        </div>
+      </section>
+
+      <!-- Floating Image Follower -->
+      <div id="project-image-follower" class="image-follower"></div>
+
+      <!-- Skills Bento -->
+      <section class="pro-skills">
+        <div class="pro-container">
+          <h2 class="section-title gsap-fade-up">Technical Foundation</h2>
+          <div class="bento-grid">
+            
+            <div class="bento-card ml-card gsap-fade-up">
+              <div class="pulse-dot"></div>
+              <h3>AI & Machine Learning</h3>
+              <p>Actively learning Python, TensorFlow, PyTorch, and Data Structures to build intelligent models.</p>
+            </div>
+            
+            <div class="bento-card gsap-fade-up">
+              <h3>Frontend</h3>
+              <p>React, Next.js, Framer Motion, Vanilla JS</p>
+            </div>
+            
+            <div class="bento-card gsap-fade-up">
+              <h3>Backend</h3>
+              <p>Node.js, Express, MongoDB, REST APIs</p>
+            </div>
+
+            <div class="bento-card wide gsap-fade-up">
+              <h3>Currently Focused On...</h3>
+              <p>Transitioning from pure web development into core AI mechanics, focusing on neural network architectures and data pipelines.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="pro-footer">
+        <div class="pro-container">
+          <h2 class="gsap-fade-up">Let's build intelligent systems.</h2>
+          <a href="mailto:xetraskool@gmail.com" class="big-contact-link gsap-fade-up magnet-btn">xetraskool@gmail.com</a>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+
+  <!-- ===================================== -->
+  <!-- UNIVERSE 2: THE IDE (Secondary Mode)-->
+  <!-- ===================================== -->
+  <div id="ide-universe" class="universe">
+    
+    <!-- Top Menu Bar -->
+    <header class="ide-topmenu">
+      <div class="topmenu-left">
+        <div class="window-controls">
+          <span class="control close" id="exitIdeBtn"></span>
+          <span class="control minimize"></span>
+          <span class="control maximize"></span>
+        </div>
+        <div class="menu-items">
+          <span class="menu-item">File</span>
+          <span class="menu-item">Edit</span>
+          <span class="menu-item">Selection</span>
+          <span class="menu-item">View</span>
+          <span class="menu-item">Go</span>
+          <span class="menu-item">Run</span>
+          <span class="menu-item">Terminal</span>
+          <span class="menu-item">Help</span>
+        </div>
+      </div>
+      <div class="ide-title">kshetra_portfolio — Visual Studio Code</div>
+      <div class="topmenu-right">
+        <!-- Exit Button -->
+        <button id="exitIdeTopBtn" class="exit-ide-btn pulse-glow">Return to Portfolio</button>
+      </div>
+    </header>
+
+    <div class="ide-body">
+      
+      <!-- Activity Bar (Far Left) -->
+      <div class="activity-bar">
+        <div class="activity-top">
+          <span class="activity-icon active tooltip-wrap" data-tooltip="Explorer (⇧⌘E)">🗂</span>
+          <span class="activity-icon tooltip-wrap" data-tooltip="Search (⇧⌘F)">🔍</span>
+          <span class="activity-icon tooltip-wrap" data-tooltip="Source Control (⇧⌃G)">ᚠ<span class="badge">1</span></span>
+          <span class="activity-icon tooltip-wrap" data-tooltip="Run and Debug (⇧⌘D)">▶</span>
+          <span class="activity-icon tooltip-wrap" data-tooltip="Extensions (⇧⌘X)">📦</span>
+        </div>
+        <div class="activity-bottom">
+          <span class="activity-icon tooltip-wrap" data-tooltip="Accounts">👤</span>
+          <span class="activity-icon tooltip-wrap" data-tooltip="Manage">⚙️</span>
+        </div>
+      </div>
+
+      <!-- Sidebar Explorer -->
+      <aside class="ide-sidebar">
+        <div class="sidebar-header">EXPLORER</div>
+        <div class="folder open">
+          <div class="folder-name"><span class="chevron">▼</span> ML_PORTFOLIO_V2</div>
           <ul class="file-list">
-            <li class="file-item active" data-tab="readme"><span class="icon markdown">M</span> README.md</li>
-            <li class="file-item" data-tab="projects"><span class="icon json">{ }</span> projects.json</li>
-            <li class="file-item" data-tab="resume"><span class="icon git">#</span> resume.log</li>
-            <li class="file-item" data-tab="skills"><span class="icon bash">$_</span> skills.sh</li>
-            <li class="file-item" data-tab="about"><span class="icon bash">$_</span> about.sh</li>
-            <li class="file-item" data-tab="contact"><span class="icon link">@</span> contact.txt</li>
+            <li class="file-item active" data-file="readme">
+              <span class="file-item-left"><span class="icon markdown">M↓</span> README.md</span>
+              <span class="git-status modified">M</span>
+            </li>
+            <li class="file-item" data-file="train">
+              <span class="file-item-left"><span class="icon python">Py</span> src/train_model.py</span>
+              <span class="git-status untracked">U</span>
+            </li>
+            <li class="file-item" data-file="socials">
+              <span class="file-item-left"><span class="icon json">{}</span> config/socials.json</span>
+            </li>
+            <li class="file-item" data-file="image">
+              <span class="file-item-left"><span class="icon img">🖼</span> assets/architecture.png</span>
+            </li>
           </ul>
         </div>
-        <!-- Feature 20: Dependencies instead of exact skills -->
-        <div class="explorer-folder open">
-          <div class="folder-title">
-            <span class="chevron">˅</span>
-            <span>DEPENDENCIES</span>
-          </div>
-          <ul class="dep-list">
-            <li><span>react</span> <span class="version">^18.2.0</span></li>
-            <li><span>node</span> <span class="version">^20.1.0</span></li>
-            <li><span>typescript</span> <span class="version">^5.1.3</span></li>
-            <li><span>python</span> <span class="version">^3.11.0</span></li>
-            <li><span>three.js</span> <span class="version">^0.158.0</span></li>
-            <li><span>diet_coke</span> <span class="version">critical</span></li>
-          </ul>
+        
+        <div class="folder open" style="margin-top: 1rem;">
+          <div class="folder-name" style="color: #666;"><span class="chevron">▶</span> DEPENDENCIES</div>
         </div>
       </aside>
 
-      <!-- Main Editor Area -->
-      <main class="editor-pane">
+      <!-- Main Editor -->
+      <main class="ide-editor">
         
-        <!-- Feature 18: Editor Tabs & Breadcrumbs -->
+        <!-- Tabs -->
         <div class="editor-tabs">
-          <div class="tab active" data-tab="readme">
-            <span class="icon markdown">M</span> README.md <span class="close-tab">×</span>
-          </div>
-          <div class="tab" data-tab="projects">
-            <span class="icon json">{ }</span> projects.json <span class="close-tab">×</span>
-          </div>
-          <div class="tab" data-tab="resume">
-            <span class="icon git">#</span> resume.log <span class="close-tab">×</span>
-          </div>
-          <div class="tab" data-tab="skills">
-            <span class="icon bash">$_</span> skills.sh <span class="close-tab">×</span>
-          </div>
-          <div class="tab" data-tab="about">
-            <span class="icon bash">$_</span> about.sh <span class="close-tab">×</span>
-          </div>
-           <div class="tab" data-tab="contact">
-            <span class="icon link">@</span> contact.txt <span class="close-tab">×</span>
-          </div>
+          <div class="tab active" data-file="readme">README.md <span class="git-m">M</span> <span class="close-tab">×</span></div>
+          <div class="tab" data-file="train">train_model.py <span class="git-u">U</span> <span class="close-tab">×</span></div>
+          <div class="tab" data-file="socials">socials.json <span class="close-tab">×</span></div>
+          <div class="tab" data-file="image">architecture.png <span class="close-tab">×</span></div>
         </div>
 
         <div class="breadcrumbs">
-          <span class="path">~/portfolio/src/<span id="currentFileName">README.md</span></span>
+          <span id="breadcrumbPath">ML_PORTFOLIO_V2 > README.md</span>
         </div>
 
-        <!-- Editor Viewport -->
-        <div class="editor-viewport" id="editorViewport">
+        <!-- File Viewport -->
+        <div class="editor-viewport">
           
-          <!-- FILE: README.md -->
-          <section class="file-view active" id="readme">
+          <!-- Code Minimap (purely visual) -->
+          <div class="minimap"></div>
+
+          <!-- README.md -->
+          <div class="file-content active" id="file-readme">
             <div class="line-numbers"></div>
-            <div class="code-content">
-              <h1><span class="syntax-keyword">const</span> <span class="syntax-variable">dev</span> = <span class="syntax-string">"Kshetradnya Patole"</span>;</h1>
-              <h2 class="hero-role glitch-text" data-text="Software Engineer & CS Enthusiast" id="typeWriterTarget"></h2>
-              
-              <div class="live-repl" id="liveRepl">
-                <div class="repl-line">
-                  <span class="user-prompt">➜  ~</span> <span class="syntax-command">cat</span> description.txt
-                </div>
-                <p class="repl-output">
-                  I craft clever and performant digital experiences through scalable code, 
-                  intuitive user interfaces, and complex algorithms. 
-                  <br><br>
-                  Always eager to debug and optimize.
-                </p>
-                <div class="repl-history" id="replHistory"></div>
-                <div class="repl-input-line">
-                  <span class="user-prompt">➜  ~</span>
-                  <input type="text" id="replInput" class="repl-input" autocomplete="off" spellcheck="false" placeholder="Type a command (e.g. help, clear, startx)">
-                </div>
-              </div>
-
-              <div class="hero-actions">
-                <button class="run-btn" id="runProjectsBtn"><span class="run-icon">▶</span> ./run_projects.sh</button>
-                <button class="style-btn" id="styleBtn" title="Ctrl+K to toggle theme menu">Switch IDE Theme</button>
-                <!-- BIG NEW FEATURE: Toggle Button to Lifestyle Mode -->
-                <button class="portal-btn magnetic-btn" id="portalBtnIDE">Load Personal/Hobbies ➞</button>
-              </div>
+            <div class="code-area markdown-styles">
+              <h1><span class="syntax-keyword">#</span> The Architect of Tomorrow</h1>
+              <p>Hi, I'm <strong>Kshetradnya Patole</strong>.</p>
+              <br>
+              <blockquote>
+                 "Bridging the gap between beautiful frontend architectures and complex machine learning algorithms."
+              </blockquote>
+              <br>
+              <h3><span class="syntax-keyword">##</span> Current Focus</h3>
+              <ul>
+                 <li>Data Structures & Algorithms</li>
+                 <li>Building Intelligent Systems (TensorFlow, PyTorch)</li>
+                 <li>Performant Web Ecosystems (React, Canvas)</li>
+              </ul>
+              <br>
+              <p><span class="syntax-comment">> Status: Open to internships & junior ML roles.</span></p>
+              <br>
+              <p>Click <strong>"Return to Portfolio"</strong> in the top right header to step out of the matrix.</p>
             </div>
-          </section>
+          </div>
 
-          <!-- FILE: projects.json -->
-          <section class="file-view" id="projects">
+          <!-- train_model.py -->
+          <div class="file-content" id="file-train">
             <div class="line-numbers"></div>
-            <div class="code-content">
-              <div class="json-viewer">
-                <span class="syntax-bracket">{</span>
-                <div class="json-indent">
-                  <span class="syntax-key">"projects"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span>
-                  
-                  <div class="json-block json-project">
-                    <span class="syntax-bracket">{</span>
-                    <div class="json-indent">
-                      <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Interactive Biology"</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"WebGL simulation of cellular processes and ecosystems."</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"stack"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span><span class="syntax-string">"Three.js"</span>, <span class="syntax-string">"React"</span>, <span class="syntax-string">"GLSL"</span><span class="syntax-bracket">]</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"preview"</span><span class="syntax-colon">:</span> <span class="syntax-string tooltip-trigger" data-tooltip="size: 2.1MB | type: image/png">"img/bio-sim.png"</span>
-                    </div>
-                    <span class="syntax-bracket">}</span><span class="syntax-comma">,</span>
-                  </div>
-
-                  <div class="json-block json-project">
-                    <span class="syntax-bracket">{</span>
-                    <div class="json-indent">
-                      <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Retro Games Collection"</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Rebuilt classic arcade logic with HTML5 Canvas."</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"stack"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span><span class="syntax-string">"Canvas API"</span>, <span class="syntax-string">"Vanilla JS"</span><span class="syntax-bracket">]</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"preview"</span><span class="syntax-colon">:</span> <span class="syntax-string tooltip-trigger" data-tooltip="size: 850KB | type: image/png">"img/arcade.png"</span>
-                    </div>
-                    <span class="syntax-bracket">}</span><span class="syntax-comma">,</span>
-                  </div>
-
-                  <div class="json-block json-project">
-                    <span class="syntax-bracket">{</span>
-                    <div class="json-indent">
-                      <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Patole.in Portfolio"</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Cinematic multi-person digital legacy platform."</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"stack"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span><span class="syntax-string">"React"</span>, <span class="syntax-string">"Tailwind CSS"</span>, <span class="syntax-string">"Framer Motion"</span><span class="syntax-bracket">]</span>
-                    </div>
-                    <span class="syntax-bracket">}</span><span class="syntax-comma sudo-hidden">,</span>
-                  </div>
-                  
-                  <div class="json-block json-project sudo-hidden id=restricted-project" style="display: none;">
-                    <span class="syntax-bracket">{</span>
-                    <div class="json-indent">
-                      <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Sudo Kernel Bypass"</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"[REDACTED] Elevated privileges algorithm."</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"status"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Top Secret"</span>
-                    </div>
-                    <span class="syntax-bracket">}</span>
-                  </div>
-
-                  <span class="syntax-bracket">]</span>
-                </div>
-                <span class="syntax-bracket">}</span>
-              </div>
+            <div class="code-area code-python">
+              <span class="syntax-keyword">import</span> torch<br>
+              <span class="syntax-keyword">import</span> torch.nn <span class="syntax-keyword">as</span> nn<br>
+              <span class="syntax-keyword">import</span> torch.optim <span class="syntax-keyword">as</span> optim<br>
+              <br>
+              <span class="syntax-comment"># Define a robust Neural Network architecture</span><br>
+              <span class="syntax-keyword">class</span> <span class="syntax-function">PortfolioNet</span>(nn.Module):<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">def</span> <span class="syntax-function">__init__</span>(<span class="syntax-variable">self</span>, input_size=<span class="syntax-number">128</span>):<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">super</span>(PortfolioNet, <span class="syntax-variable">self</span>).__init__()<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-variable">self</span>.fc1 = nn.Linear(input_size, <span class="syntax-number">256</span>)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-variable">self</span>.dropout = nn.Dropout(p=<span class="syntax-number">0.3</span>)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-variable">self</span>.relu = nn.ReLU()<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-variable">self</span>.fc2 = nn.Linear(<span class="syntax-number">256</span>, <span class="syntax-number">64</span>)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-variable">self</span>.fc3 = nn.Linear(<span class="syntax-number">64</span>, <span class="syntax-number">10</span>)<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">def</span> <span class="syntax-function">forward</span>(<span class="syntax-variable">self</span>, x):<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = <span class="syntax-variable">self</span>.relu(<span class="syntax-variable">self</span>.fc1(x))<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = <span class="syntax-variable">self</span>.dropout(x)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = <span class="syntax-variable">self</span>.relu(<span class="syntax-variable">self</span>.fc2(x))<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">return</span> <span class="syntax-variable">self</span>.fc3(x)<br>
+              <br>
+              <span class="syntax-comment"># >>> Click "Run Code" in terminal below to initiate training! <<<</span><br>
             </div>
-          </section>
+          </div>
 
-          <!-- FILE: resume.log -->
-          <section class="file-view" id="resume">
+          <!-- socials.json -->
+          <div class="file-content" id="file-socials">
             <div class="line-numbers"></div>
-            <div class="code-content">
-              <div class="git-log">
-                <div class="commit">
-                  <div class="commit-hash">commit <span class="hash-text">a1b2c3d</span></div>
-                  <div class="commit-author">Author: Kshetra &lt;xetraskool@gmail.com&gt;</div>
-                  <div class="commit-date">Date:   Tue Oct 24 10:00:00 2023 -0500</div>
-                  <div class="commit-msg">
-                    feat(career): Won Hackathon!<br>
-                    - Deployed an AI Chatbot successfully<br>
-                    - Optimized latency by 45%
-                  </div>
-                </div>
-
-                <div class="commit">
-                  <div class="commit-hash">commit <span class="hash-text">f9e8d7c</span></div>
-                  <div class="commit-author">Author: Kshetra &lt;xetraskool@gmail.com&gt;</div>
-                  <div class="commit-date">Date:   Mon Jan 15 09:30:00 2023 -0500</div>
-                  <div class="commit-msg">
-                    refactor(skills): Mastered Frontend Architectures<br>
-                    - Added React, Vue, and Next.js proficiencies<br>
-                    - Successfully contributed to open-source robotics projects
-                  </div>
-                </div>
-
-                <div class="commit">
-                  <div class="commit-hash">commit <span class="hash-text">5a4b3c2</span></div>
-                  <div class="commit-author">Author: Kshetra &lt;xetraskool@gmail.com&gt;</div>
-                  <div class="commit-date">Date:   Fri Sep 01 08:00:00 2021 -0500</div>
-                  <div class="commit-msg">
-                    init(education): Began CS Journey<br>
-                    - Initialized data structures and algorithms modules
-                  </div>
-                </div>
-              </div>
-              <div class="contrib-graph">
-                <p><strong>Activity Graph</strong></p>
-                <div class="squares" id="contribSquares"></div>
-              </div>
+            <div class="code-area">
+              <span class="syntax-bracket">{</span><br>
+              &nbsp;&nbsp;<span class="syntax-string">"name"</span><span class="syntax-comment">:</span> <span class="syntax-string">"Kshetradnya Patole"</span>,<br>
+              &nbsp;&nbsp;<span class="syntax-string">"role"</span><span class="syntax-comment">:</span> <span class="syntax-string">"Software & AI Engineer"</span>,<br>
+              &nbsp;&nbsp;<span class="syntax-string">"links"</span><span class="syntax-comment">:</span> <span class="syntax-bracket">{</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-string">"LinkedIn"</span><span class="syntax-comment">:</span> <span class="syntax-string">"<a href='https://www.linkedin.com/in/kshetradnya-patole-80535825b/' target='_blank' class='code-link'>https://linkedin.com/in/kshetradnya-patole-80535825b/</a>"</span>,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-string">"GitHub"</span><span class="syntax-comment">:</span> <span class="syntax-string">"<a href='https://github.com/Kshetradnya' target='_blank' class='code-link'>https://github.com/Kshetradnya</a>"</span>,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-string">"Email"</span><span class="syntax-comment">:</span> <span class="syntax-string">"<a href='mailto:xetraskool@gmail.com' class='code-link'>xetraskool@gmail.com</a>"</span><br>
+              &nbsp;&nbsp;<span class="syntax-bracket">}</span><br>
+              <span class="syntax-bracket">}</span>
             </div>
-          </section>
+          </div>
 
-          <!-- FILE: skills.sh -->
-          <section class="file-view" id="skills">
-            <div class="line-numbers"></div>
-            <div class="code-content">
-              <div class="terminal-skills">
-                <h3 style="margin-bottom: 2rem;"><span class="syntax-command">./load_skills.sh</span> --verbose</h3>
-                <div class="skill-chart">
-                  <div class="skill-row tooltip-trigger" data-tooltip="React, Next.js, HTML/CSS, Vanilla JS">
-                    <div class="skill-label">FRONTEND</div>
-                    <div class="skill-bar-container"><div class="skill-bar" style="width: 90%;"></div></div>
-                    <div class="skill-percent">90%</div>
+          <!-- architecture.png -->
+          <div class="file-content" id="file-image">
+             <div class="image-viewer">
+               <div class="mock-neural-net">
+                  <div class="node-layer">
+                     <span style="color:#aaa; font-size:10px; position:absolute; top:-20px;">Input (128)</span>
+                     <div class="node"></div><div class="node"></div><div class="node"></div>
                   </div>
-                  <div class="skill-row tooltip-trigger" data-tooltip="Node.js, Express, Python, MongoDB">
-                    <div class="skill-label">BACKEND</div>
-                    <div class="skill-bar-container"><div class="skill-bar" style="width: 80%;"></div></div>
-                    <div class="skill-percent">80%</div>
+                  <div class="net-line"></div>
+                  <div class="node-layer">
+                     <span style="color:#aaa; font-size:10px; position:absolute; top:-20px;">Hidden (256)</span>
+                     <div class="node active"></div><div class="node active"></div><div class="node active"></div><div class="node active"></div>
                   </div>
-                  <div class="skill-row tooltip-trigger" data-tooltip="Core ML, Tensor Flow, Algorithms">
-                    <div class="skill-label">AI & ML</div>
-                    <div class="skill-bar-container"><div class="skill-bar" style="width: 65%;"></div></div>
-                    <div class="skill-percent">65%</div>
+                  <div class="net-line"></div>
+                  <div class="node-layer">
+                     <span style="color:#aaa; font-size:10px; position:absolute; top:-20px;">Hidden (64)</span>
+                     <div class="node"></div><div class="node"></div>
                   </div>
-                  <div class="skill-row tooltip-trigger" data-tooltip="Figma, UI/UX, Glassmorphism, Animations">
-                    <div class="skill-label">DESIGN</div>
-                    <div class="skill-bar-container"><div class="skill-bar" style="width: 85%;"></div></div>
-                    <div class="skill-percent">85%</div>
+                  <div class="net-line"></div>
+                  <div class="node-layer">
+                     <span style="color:#aaa; font-size:10px; position:absolute; top:-20px;">Output (10)</span>
+                     <div class="node print" style="border-radius: 5px;">Softmax</div>
                   </div>
-                  <div class="skill-row tooltip-trigger" data-tooltip="Git, Linux, AWS, Docker">
-                    <div class="skill-label">SYSADMIN</div>
-                    <div class="skill-bar-container"><div class="skill-bar" style="width: 70%;"></div></div>
-                    <div class="skill-percent">70%</div>
-                  </div>
-                </div>
-                <p class="syntax-comment" style="margin-top: 2rem;"># Continuous integration of new skills running in background...</p>
-              </div>
-            </div>
-          </section>
-
-          <!-- FILE: about.sh -->
-          <section class="file-view" id="about">
-            <div class="line-numbers"></div>
-            <div class="code-content">
-              <div class="man-page">
-                <h3 class="man-header">KSHETRADNYA(1)          User Commands         KSHETRADNYA(1)</h3>
-                <h4>NAME</h4>
-                <p class="man-indent">kshetradnya - Full-stack developer, AI enthusiast, problem solver</p>
-                <h4>SYNOPSIS</h4>
-                <p class="man-indent"><strong>kshetradnya</strong> [<strong>--code</strong>] [<strong>--debug</strong>] [<strong>--optimize</strong>]</p>
-                <h4>DESCRIPTION</h4>
-                <p class="man-indent">
-                  Computer Science student with experience building full-stack web applications, AI models, and optimizing algorithms. Developed internal tools for student organizations and contributed to open-source robotics projects.
-                </p>
-                <h4>OPTIONS</h4>
-                <div class="man-indent">
-                  <p><strong>--code</strong><br> Writes clean, scalable, and maintainable software architectures.</p>
-                  <p><strong>--debug</strong><br> Locates and crushes bugs efficiently without caffeine crash.</p>
-                  <p><strong>--learn</strong><br> Continuously assimilates bleeding-edge technologies and frameworks.</p>
-                </div>
-                <h3 class="man-footer">Portfolio V2            2026-04-01             KSHETRADNYA(1)</h3>
-              </div>
-            </div>
-          </section>
-
-          <!-- FILE: contact.txt -->
-          <section class="file-view" id="contact">
-            <div class="line-numbers"></div>
-            <div class="code-content">
-              <div class="contact-terminal">
-                <p><span class="syntax-comment"># Ready to build something bold?</span></p>
-                <p><span class="syntax-keyword">echo</span> <span class="syntax-string">"Let's collaborate on your next tech stack architecture."</span></p>
-                <div class="clone-box">
-                  <span class="syntax-keyword">git clone</span> <a class="clone-url tooltip-trigger" href="mailto:xetraskool@gmail.com" data-tooltip="Click to copy or email">git@xetraskool.com:collaboration.git</a>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Feature 23: 404 Kernel Panic -->
-          <section class="file-view error-state" id="kernel-panic">
-            <div class="code-content">
-              <h2 class="panic-text">KERNEL PANIC - NOT SYNCING</h2>
-              <p>Fatal exception: VFS: Unable to mount root fs on unknown-block(0,0)</p>
-              <button class="run-btn panic-reboot" id="rebootBtn">&gt; REBOOT SYSTEM</button>
-            </div>
-          </section>
+               </div>
+               <p style="color: #666; margin-top: 2rem; font-family: sans-serif;">architecture_diagram_v2.png (824 KB)</p>
+             </div>
+          </div>
 
         </div>
+
+        <!-- Terminal -->
+        <div class="ide-terminal">
+          <div class="terminal-header">
+            <div class="term-tabs">
+               <span class="term-tab">PROBLEMS <span class="badge" style="background:#555; border-radius:10px; padding:0 5px; margin-left:4px;">0</span></span>
+               <span class="term-tab">OUTPUT</span>
+               <span class="term-tab active">TERMINAL</span>
+            </div>
+            <div class="term-actions">
+               <button id="runCodeBtn" class="run-code-btn">▶ Run Code</button>
+               <span class="term-icon">🗑</span>
+               <span class="term-icon">✕</span>
+            </div>
+          </div>
+          <div class="terminal-body" id="terminalOutput">
+            <div style="color: #aaa; margin-bottom: 8px;">Windows PowerShell / zsh / bash<br>Copyright (C) Microsoft Corporation. All rights reserved.<br><br></div>
+            <span class="prompt">kshetra@macbook:~/ML_PORTFOLIO_V2$</span> 
+          </div>
+        </div>
+
       </main>
     </div>
 
-    <!-- Feature 6 & 26: Bottom Panel / Live Console Log -->
-    <footer class="terminal-console" id="terminalConsole" aria-hidden="true">
-      <div class="console-header">
-        <div class="console-tabs">
-          <span class="active">TERMINAL</span>
-          <span id="outputTab">OUTPUT</span>
-          <span>PROBLEMS <span class="badge">0</span></span>
-        </div>
-      </div>
-      <div class="console-body" id="consoleBody">
-        <div class="log-line"><span class="log-time">[sys]</span> Boot sequence initiated...</div>
-      </div>
-    </footer>
-
-    <!-- Feature 10 & 22 & 28 & 29: Status Bar -->
-    <div class="status-bar" id="statusBar" aria-hidden="true">
+    <!-- Status Bar -->
+    <footer class="ide-statusbar">
       <div class="status-left">
-        <span class="status-item branch"><span class="icon git">ᚠ</span> main*</span>
-        <span class="status-item error"><span class="icon">⊗</span> 0</span>
-        <span class="status-item warning"><span class="icon">⚠</span> 0</span>
-        <span class="status-item info" id="versionSecretBtn" style="cursor: help;" title="Click 3 times to exit matrix">v2.0.0 - latest build</span>
+        <span class="status-item remote-window" style="background:#005f9e; padding: 0 10px; margin-left:-10px;">><</span>
+        <span class="status-item branch">ᚠ main*</span>
+        <span class="status-item warning">⚠ 0</span>
+        <span class="status-item error">⊗ 0</span>
       </div>
       <div class="status-right">
-        <span class="status-item uptime" id="uptimeCounter">Uptime: 00:00:00</span>
-        <span class="status-item cpu">CPU: <span id="cpuUsage">12</span>% | RAM: <span id="ramUsage">4.2</span>GB</span>
-        <span class="status-item ping">Ping: <span id="pingCounter">24</span>ms</span>
-        <span class="status-item cursorPos" id="cursorPos">Ln 1, Col 1</span>
-        <span class="status-item theme-indicator" id="themeIndicator">{} Terminal Theme</span>
+        <span class="status-item">Ln 42, Col 1</span>
+        <span class="status-item">Spaces: 4</span>
+        <span class="status-item">UTF-8</span>
+        <span class="status-item">LF</span>
+        <span class="status-item">Python 3.11.4 64-bit</span>
+        <span class="status-item">Prettier</span>
+        <span class="status-item" id="ideTime">00:00:00</span>
       </div>
-    </div>
+    </footer>
+  </div>
 
-    <!-- ========================================== -->
-    <!-- SIGNATURE TRANSITION LAYER (Strava-style)  -->
-    <!-- ========================================== -->
-    
-    <div id="signature-transition" class="signature-layer hidden">
-      <div class="signature-container">
-        <!-- SVG signature that accurately spells the name using Caveat cursive font -->
-        <svg viewBox="0 0 800 200" class="signature-svg">
-          <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="'Caveat', cursive" font-size="90" fill="none" stroke="var(--strava-orange, #fc4c02)" stroke-width="2.5" class="draw-line">Kshetradnya Patole</text>
-        </svg>
-        <h2 class="signature-text" style="display:none;">Kshetradnya Patole</h2>
-      </div>
-    </div>
+  <!-- Custom Cursor for Pro Mode -->
+  <div id="custom-cursor" class="custom-cursor"></div>
 
-    <!-- ========================================== -->
-    <!-- UNIVERSE 2: CLEAN UI (Hobbies & Merits)    -->
-    <!-- ========================================== -->
-    
-    <div class="clean-ui-container hidden" id="cleanUIContainer" aria-hidden="true">
-      <div class="fluid-liquid-bg"></div> <!-- Lava lamp morphing blobs -->
-
-      <!-- Dynamic Island Notification -->
-      <div class="dynamic-island" id="dynamicIsland">
-        <div class="island-content">
-          <span class="island-icon heartbeat">❤️</span>
-          <span class="island-text">Profile Switched: Personal Mode</span>
-        </div>
-      </div>
-
-      <!-- Floating Capsule Nav & StartX Prompt -->
-      <nav class="capsule-nav">
-        <button class="nav-pill active magnetic-btn" data-target="hobbies-page">Hobbies</button>
-        <button class="nav-pill magnetic-btn" data-target="merits-page">Merits</button>
-        <button class="nav-pill magnetic-btn" data-target="author-page">Author</button>
-        <button class="nav-pill magnetic-btn" id="portalBtnClean">❮ CLI</button>
-      </nav>
-
-      <!-- Creative StartX Prompt for Hiring Managers -->
-      <div class="startx-creative-prompt" id="startxPromptBox">
-        <div class="startx-label">Scouters / Hiring Managers:</div>
-        <div class="startx-input-wrapper">
-          <span class="startx-arrow">➜</span>
-          <input type="text" id="cleanStartxInput" autocomplete="off" spellcheck="false" placeholder="type 'startx' for pro mode">
-        </div>
-      </div>
-
-      <!-- Custom Spotlight Cursor -->
-      <div class="spotlight-cursor" id="spotlightCursor"></div>
-
-      <!-- Viewport morphing container -->
-      <div class="clean-viewport">
-
-        <!-- ================= PAGE: HOBBIES ================= -->
-        <div class="clean-page active" id="hobbies-page">
-          <header class="clean-hero scroll-reveal">
-            <h1 class="soft-fade">Beyond the Code</h1>
-            <p class="soft-fade">Living a balanced life through movement and perspective.</p>
-          </header>
-
-          <section class="hobbies-section scroll-reveal">
-            <h2 class="marquee-bg">RUNNING RUNNING RUNNING</h2>
-            <div class="strava-card glass-card foil-tilt">
-              <div class="card-header">
-                <h3><span class="heartbeat">🔴</span> Running Activity</h3>
-                <span class="stat-ticker" data-target="500">0</span> km YTD
-              </div>
-              
-              <!-- Weekly Performance Graph Placeholder -->
-              <div class="weekly-performance">
-                <p style="font-size: 0.85rem; color: #666; font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase;">Weekly Performance Graph (Ready for Data)</p>
-                <div class="bar-chart" id="weeklyPerformanceGraph">
-                  <!-- Monday to Sunday placeholders -->
-                  <div class="bar-col"><div class="bar" style="height: 40%;"></div><span class="day-label">M</span></div>
-                  <div class="bar-col"><div class="bar" style="height: 60%;"></div><span class="day-label">T</span></div>
-                  <div class="bar-col"><div class="bar" style="height: 30%;"></div><span class="day-label">W</span></div>
-                  <div class="bar-col"><div class="bar" style="height: 80%;"></div><span class="day-label">T</span></div>
-                  <div class="bar-col"><div class="bar" style="height: 50%;"></div><span class="day-label">F</span></div>
-                  <div class="bar-col"><div class="bar" style="height: 90%;"></div><span class="day-label">S</span></div>
-                  <div class="bar-col"><div class="bar" style="height: 100%;"></div><span class="day-label">S</span></div>
-                </div>
-              </div>
-
-              <div class="heatmap-grid" id="runningHeatmap">
-                <!-- Javascript will populate heatmap squares -->
-              </div>
-            </div>
-          </section>
-
-          <section class="hobbies-section scroll-reveal">
-            <h2 class="marquee-bg">PHOTOGRAPHY PHOTOGRAPHY</h2>
-            <div class="parallax-photography">
-              <!-- Polaroid tilt hover cards -->
-              <div class="polaroid magnetic-btn photo-1">
-                <img src="projects/brandi.png" alt="Photography Specimen 1">
-                <p class="caption">Nature Walk - 24mm</p>
-              </div>
-              <div class="polaroid magnetic-btn photo-2">
-                <img src="projects/peposter.png" alt="Photography Specimen 2">
-                <p class="caption">Urban Decay</p>
-              </div>
-              <div class="polaroid magnetic-btn photo-3">
-                <img src="projects/socialcampaign.png" alt="Photography Specimen 3">
-                <p class="caption">Macrolife</p>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <!-- ================= PAGE: MERITS (Goal Replay Trigger) ================= -->
-        <div class="clean-page" id="merits-page">
-          
-          <header class="clean-hero scroll-reveal">
-            <h1 class="soft-fade">Milestones & Merits</h1>
-            <p class="soft-fade">Tracking the journey on the field and in academia.</p>
-          </header>
-
-          <!-- The specific Goal Replay Wrapper -->
-          <div class="goal-replay-wrapper" id="goalReplayContainer">
-            
-            <section class="football-timeline-section scroll-reveal">
-              <!-- Interactive Soccer Pitch Context -->
-              <div class="soccer-pitch">
-                <div class="pitch-lines"></div>
-                <div class="center-circle"></div>
-              </div>
-
-              <!-- Draggable horizontal timeline -->
-              <div class="timeline-container scroll-storytelling">
-                <div class="timeline-track">
-                  
-                  <div class="timeline-node" data-year="2019 - 2024">
-                    <div class="node-dot progress-ring"></div>
-                    <div class="node-content glass-card foil-tilt">
-                      <h3>Football Journey</h3>
-                      <p>Through dense training and competitive leagues, building stamina, teamwork, and leadership on the pitch.</p>
-                      <div class="stat-rings">
-                        <svg class="ring" viewBox="0 0 36 36"><path class="circle" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /></svg>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="timeline-node" data-year="Grade 9">
-                    <div class="node-dot progress-ring"></div>
-                    <div class="node-content glass-card foil-tilt">
-                      <h3>Winner: EOE</h3>
-                      <p>Secured the championship at the school-hosted multi-disciplinary fair tournament (Element of Enterprise / Science Fair).</p>
-                    </div>
-                  </div>
-
-                  <div class="timeline-node" data-year="Academic">
-                    <div class="node-dot progress-ring"></div>
-                    <div class="node-content glass-card foil-tilt trophy-card">
-                      <div class="lens-flare"></div>
-                      <h3>World Topper</h3>
-                      <p>English Cambridge Checkpoint global highest achievement.</p>
-                    </div>
-                  </div>
-
-                  <div class="timeline-node" data-year="2025">
-                    <div class="node-dot progress-ring active-pulse"></div>
-                    <div class="node-content glass-card foil-tilt active-card">
-                      <h3>House Captain of Beta</h3>
-                      <p>Leading the house division in sports and cultural events for the 2025 academic calendar.</p>
-                    </div>
-                  </div>
-
-                  <div class="timeline-node blueprint-filter" data-year="WIP">
-                    <div class="node-dot progress-ring"></div>
-                    <div class="node-content glass-card foil-tilt">
-                      <h3>Work in Progress...</h3>
-                      <p>Architecting the next big leap. Coding, Training, Building.</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </section>
-          </div>
-
-        </div> <!-- End Merits Page -->
-
-        <!-- ================= PAGE: AUTHOR (30 Things) ================= -->
-        <div class="clean-page" id="author-page">
-          <header class="clean-hero scroll-reveal">
-            <h1 class="soft-fade">The Author</h1>
-            <p class="soft-fade">30 things about my journey, quirks, and preferences.</p>
-          </header>
-
-          <section class="author-grid scroll-reveal">
-            <div class="bento-box">
-              <div class="bento-item"><h3>1. Fuel of Choice</h3><p>Diet Coke (Always)</p></div>
-              <div class="bento-item wide"><h3>2. Machine</h3><p>macOS natively</p></div>
-              <div class="bento-item tall"><h3>3. Current Status</h3><p>Learning, breaking things, and building them back up.</p></div>
-              <div class="bento-item"><h3>4. Theme</h3><p>Strictly Dark Mode</p></div>
-              <div class="bento-item"><h3>5. Editor</h3><p>VS Code</p></div>
-              <div class="bento-item"><h3>6. Font</h3><p>JetBrains Mono</p></div>
-              <div class="bento-item wide"><h3>7. Music</h3><p>Lofi Beats to code to</p></div>
-              <div class="bento-item"><h3>8. Browser</h3><p>50+ Tabs open constantly</p></div>
-              <div class="bento-item"><h3>9. Nemesis</h3><p>Missing semicolons & unaligned divs</p></div>
-              <div class="bento-item"><h3>10. Hobby 1</h3><p>Running on Strava</p></div>
-              <div class="bento-item wide"><h3>11. Best Feeling</h3><p>When the code runs on the first try (rarely)</p></div>
-              <div class="bento-item"><h3>12. Spaces v Tabs</h3><p>Spaces! Mostly...</p></div>
-              <div class="bento-item"><h3>13. Hobby 2</h3><p>Photography</p></div>
-              <div class="bento-item"><h3>14. Version Control</h3><p>Git. Mostly just commit & push.</p></div>
-              <div class="bento-item tall"><h3>15. Learning Next</h3><p>Deep diving into complex frontend frameworks and AI logic.</p></div>
-              <div class="bento-item"><h3>16. Snack</h3><p>Late night Ramen</p></div>
-              <div class="bento-item"><h3>17. Design Style</h3><p>Clean, Minimal, Glassmorphism</p></div>
-              <div class="bento-item"><h3>18. Inspiration</h3><p>Sleek, living web experiences</p></div>
-              <div class="bento-item wide"><h3>19. Favorite Colors</h3><p>High contrast Neons on deep dark backgrounds</p></div>
-              <div class="bento-item"><h3>20. Shortcut</h3><p>Cmd+C / Cmd+V</p></div>
-              <div class="bento-item"><h3>21. Side Projects</h3><p>A graveyard of good ideas</p></div>
-              <div class="bento-item"><h3>22. Goal</h3><p>Build things people love</p></div>
-              <div class="bento-item tall"><h3>23. Philosophy</h3><p>Keep iterating. Nothing is perfect on version 1.0.</p></div>
-              <div class="bento-item"><h3>24. Debugging</h3><p>console.log("here")</p></div>
-              <div class="bento-item"><h3>25. Resource</h3><p>StackOverflow & official Docs</p></div>
-              <div class="bento-item wide"><h3>26. Favorite Language</h3><p>Python and JavaScript (for now)</p></div>
-              <div class="bento-item"><h3>27. Focus Mode</h3><p>Headphones on, Do Not Disturb</p></div>
-              <div class="bento-item"><h3>28. Motivation</h3><p>The magic of creating something from nothing</p></div>
-              <div class="bento-item"><h3>29. Fun Fact</h3><p>I love designing UI/UX mockups before writing logic</p></div>
-              <div class="bento-item wide"><h3>30. Final Word</h3><p>I'm just getting started.</p></div>
-            </div>
-          </section>
-        </div> <!-- End Author Page -->
-
-      </div>
-
-      <!-- Merit Detail Overlay -->
-      <div id="meritDetailOverlay" class="merit-detail-overlay hidden">
-        <button id="closeMeritBtn" class="close-merit-btn magnetic-btn">✖ Close</button>
-        <div class="merit-detail-content">
-          <div class="merit-detail-header">
-            <span id="meritDetailYear" class="merit-detail-year"></span>
-            <h2 id="meritDetailTitle" class="merit-detail-title"></h2>
-          </div>
-          <p id="meritDetailBody" class="merit-detail-body"></p>
-        </div>
-      </div>
-
-    </div> <!-- End Clean UI Universe -->
-
-    <!-- ========================================== -->
-    <!-- UNIVERSE 3: FRONTPAGE MODE (Professional)  -->
-    <!-- ========================================== -->
-    <div class="frontpage-ui-container hidden" id="frontpageContainer" aria-hidden="true">
-      <div class="fp-bg-gradient"></div>
-      
-      <nav class="fp-nav glass-panel">
-        <div class="fp-logo">KP.</div>
-        <div class="fp-links">
-          <a href="#fp-hero">Home</a>
-          <a href="#fp-projects">Work</a>
-          <a href="#fp-skills">Skills</a>
-          <a href="#fp-about">About</a>
-          <button class="fp-btn" id="fpExitBtn">Return to IDE</button>
-        </div>
-      </nav>
-
-      <div class="fp-viewport scroll-reveal">
-        
-        <!-- FP Hero -->
-        <section class="fp-hero" id="fp-hero">
-          <div class="fp-hero-content">
-            <h2 class="fp-tagline">Software Engineer & CS Enthusiast</h2>
-            <h1 class="fp-title"><span class="gradient-text">Kshetradnya</span><br>Patole</h1>
-            <p class="fp-desc">
-              I craft clever and performant digital experiences through scalable code, 
-              intuitive user interfaces, and complex algorithms. Always eager to debug and optimize.
-            </p>
-            <div class="fp-actions">
-              <a href="#fp-projects" class="fp-btn-primary">View Projects</a>
-              <a href="#fp-skills" class="fp-btn-secondary">Explore Skills</a>
-            </div>
-          </div>
-          <div class="fp-hero-visual">
-            <div class="fp-cube-container">
-              <div class="fp-cube">
-                <div class="fp-face front">{'{}'}</div>
-                <div class="fp-face back">&lt;/&gt;</div>
-                <div class="fp-face right">JS</div>
-                <div class="fp-face left">PY</div>
-                <div class="fp-face top">UI</div>
-                <div class="fp-face bottom">UX</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Huge Marquee Divider -->
-        <div class="fp-marquee-container">
-          <div class="fp-marquee-content">
-            <span>FRONTEND ARCHITECT</span> • <span>CREATIVE DEVELOPER</span> • <span>AI ENTHUSIAST</span> • <span>PROBLEM SOLVER</span> • 
-            <span>FRONTEND ARCHITECT</span> • <span>CREATIVE DEVELOPER</span> • <span>AI ENTHUSIAST</span> • <span>PROBLEM SOLVER</span> • 
-          </div>
-        </div>
-
-        <!-- FP Projects Structure -->
-        <section class="fp-projects scroll-reveal" id="fp-projects">
-          <h2 class="fp-section-title">Selected Work</h2>
-          <div class="fp-bento-grid hover-expand">
-            <a href="https://kshetradnya.github.io/InteractiveBiology/" target="_blank" rel="noopener noreferrer" class="fp-bento-card" style="text-decoration: none; color: inherit;">
-              <div class="card-bg" style="background-image: url('projects/biology_preview.png');"></div>
-              <div class="card-content glass-panel">
-                <h3>Interactive 3D Biology</h3>
-                <p>An immersive WebGL exploration of cellular structures featuring procedurally generated dynamic 3D diagrams and modular educational overlays.</p>
-                <div class="card-tags"><span>Three.js</span><span>React</span><span>GLSL</span><span>Procedural Biology</span></div>
-              </div>
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="fp-bento-card" style="text-decoration: none; color: inherit;" id="transformCard">
-              <div class="card-bg" style="background-image: url('projects/transform_preview.png');"></div>
-              <div class="card-content glass-panel">
-                <h3>Transform Photo Editor</h3>
-                <p>A cinematic photo editing web app with 100+ templates, AI-powered adjustments, and real-time color grading.</p>
-                <div class="card-tags"><span>Canvas API</span><span>Color Science</span><span>AI Filters</span><span>REST APIs</span></div>
-              </div>
-            </a>
-            <div class="fp-bento-card" id="patoleCard">
-              <div class="card-bg" style="background-image: url('projects/family_preview.png'); background-color: #111;"></div>
-              <div class="card-content glass-panel">
-                <h3>Patole.in Portfolio</h3>
-                <p>A high-end cinematic digital legacy platform with multi-person profiles, scroll-based storytelling, and layered animations.</p>
-                <div class="card-tags"><span>React</span><span>Tailwind CSS</span><span>GSAP</span></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- FP LinkedIn Achievements -->
-        <section class="fp-achievements scroll-reveal" id="fp-achievements">
-          <h2 class="fp-section-title">LinkedIn Verified Achievements</h2>
-          <div class="linkedin-container">
-            <div class="linkedin-header">
-              <div class="li-profile">
-                <div class="li-avatar">KP</div>
-                <div class="li-info">
-                  <h3>Kshetradnya Patole</h3>
-                  <p>Software Engineer | Frontend Architet</p>
-                  <a href="https://www.linkedin.com/in/kshetradnya-patole-80535825b/" target="_blank" class="li-link">Connect on LinkedIn</a>
-                </div>
-              </div>
-              <div class="li-logo">in</div>
-            </div>
-            <div class="li-achievements-list">
-              <div class="li-badge">
-                <div class="li-badge-icon">🏆</div>
-                <div class="li-badge-text">
-                  <h4>World Topper</h4>
-                  <p>English Cambridge Checkpoint global highest achievement.</p>
-                </div>
-              </div>
-              <div class="li-badge">
-                <div class="li-badge-icon">🥇</div>
-                <div class="li-badge-text">
-                  <h4>Hackathon Winner</h4>
-                  <p>Deployed AI Chatbot & Optimized latency by 45%</p>
-                </div>
-              </div>
-              <div class="li-badge">
-                <div class="li-badge-icon">🌟</div>
-                <div class="li-badge-text">
-                  <h4>Founder & Captain</h4>
-                  <p>House Captain of Beta & First Place EOE Science Fair</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- FP Skills -->
-        <section class="fp-skills scroll-reveal" id="fp-skills">
-          <h2 class="fp-section-title">Core Competencies</h2>
-          <div class="fp-skills-wrapper">
-            
-            <div class="fp-skill-category">
-              <h3>Frontend Architecture<span>90%</span></h3>
-              <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 90%;"><span class="fp-progress-glow"></span></div></div>
-            </div>
-            <div class="fp-skill-category">
-              <h3>Backend Systems<span>80%</span></h3>
-              <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 80%;"><span class="fp-progress-glow"></span></div></div>
-            </div>
-            <div class="fp-skill-category">
-              <h3>AI & Machine Learning<span>65%</span></h3>
-              <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 65%;"><span class="fp-progress-glow"></span></div></div>
-            </div>
-            <div class="fp-skill-category">
-              <h3>UI/UX Design<span>85%</span></h3>
-              <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 85%;"><span class="fp-progress-glow"></span></div></div>
-            </div>
-
-          </div>
-        </section>
-
-        <!-- FP About & Lifestyle Navigation -->
-        <section class="fp-about scroll-reveal" id="fp-about">
-          <h2 class="fp-section-title">Beyond the Code</h2>
-          <div class="fp-about-grid">
-            <div class="fp-about-card nav-to-univ2" data-target="merits-page">
-              <div class="card-icon">🏆</div>
-              <h3>Merits & Milestones</h3>
-              <p>Explore my academic and athletic achievements, including my football journey.</p>
-              <span class="hover-arrow">→</span>
-            </div>
-            <div class="fp-about-card nav-to-univ2" data-target="hobbies-page">
-              <div class="card-icon">🏃</div>
-              <h3>Hobbies</h3>
-              <p>Check out my Strava running stats and photography portfolio.</p>
-              <span class="hover-arrow">→</span>
-            </div>
-            <div class="fp-about-card nav-to-univ2" data-target="author-page">
-              <div class="card-icon">👤</div>
-              <h3>The Author</h3>
-              <p>30 rapid-fire facts about my quirks, setup, computing environments, and lifestyle preferences.</p>
-              <span class="hover-arrow">→</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- FP Footer -->
-        <footer class="fp-footer">
-          <h2>Let's build something bold.</h2>
-          <a href="mailto:xetraskool@gmail.com" class="fp-btn-primary">Contact Me</a>
-          <p>© 2026 Kshetradnya Patole. Crafted with precision.</p>
-        </footer>
-
-      </div>
-    </div> <!-- End Frontpage Universe -->
-
-    <!-- Feature 19: Tooltip Element -->
-    <div id="fileTooltip" class="file-tooltip"></div>
-
-    <script src="script.js"></script>
-  </body>
+  <script src="script.js"></script>
+</body>
 </html>
