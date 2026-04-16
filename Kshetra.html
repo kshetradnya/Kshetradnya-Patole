@@ -204,9 +204,9 @@
                   <div class="json-block json-project">
                     <span class="syntax-bracket">{</span>
                     <div class="json-indent">
-                      <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Japanese Learning Hub"</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Full-stack app for writing practice and spacing algorithms."</span><span class="syntax-comma">,</span>
-                      <br><span class="syntax-key">"stack"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span><span class="syntax-string">"Node.js"</span>, <span class="syntax-string">"Express"</span>, <span class="syntax-string">"MongoDB"</span><span class="syntax-bracket">]</span>
+                      <span class="syntax-key">"title"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Patole.in Portfolio"</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"description"</span><span class="syntax-colon">:</span> <span class="syntax-string">"Cinematic multi-person digital legacy platform."</span><span class="syntax-comma">,</span>
+                      <br><span class="syntax-key">"stack"</span><span class="syntax-colon">:</span> <span class="syntax-bracket">[</span><span class="syntax-string">"React"</span>, <span class="syntax-string">"Tailwind CSS"</span>, <span class="syntax-string">"Framer Motion"</span><span class="syntax-bracket">]</span>
                     </div>
                     <span class="syntax-bracket">}</span><span class="syntax-comma sudo-hidden">,</span>
                   </div>
@@ -422,13 +422,22 @@
         </div>
       </div>
 
-      <!-- Floating Capsule Nav -->
+      <!-- Floating Capsule Nav & StartX Prompt -->
       <nav class="capsule-nav">
         <button class="nav-pill active magnetic-btn" data-target="hobbies-page">Hobbies</button>
         <button class="nav-pill magnetic-btn" data-target="merits-page">Merits</button>
         <button class="nav-pill magnetic-btn" data-target="author-page">Author</button>
         <button class="nav-pill magnetic-btn" id="portalBtnClean">❮ CLI</button>
       </nav>
+
+      <!-- Creative StartX Prompt for Hiring Managers -->
+      <div class="startx-creative-prompt" id="startxPromptBox">
+        <div class="startx-label">Scouters / Hiring Managers:</div>
+        <div class="startx-input-wrapper">
+          <span class="startx-arrow">➜</span>
+          <input type="text" id="cleanStartxInput" autocomplete="off" spellcheck="false" placeholder="type 'startx' for pro mode">
+        </div>
+      </div>
 
       <!-- Custom Spotlight Cursor -->
       <div class="spotlight-cursor" id="spotlightCursor"></div>
@@ -671,8 +680,16 @@
           </div>
         </section>
 
+        <!-- Huge Marquee Divider -->
+        <div class="fp-marquee-container">
+          <div class="fp-marquee-content">
+            <span>FRONTEND ARCHITECT</span> • <span>CREATIVE DEVELOPER</span> • <span>AI ENTHUSIAST</span> • <span>PROBLEM SOLVER</span> • 
+            <span>FRONTEND ARCHITECT</span> • <span>CREATIVE DEVELOPER</span> • <span>AI ENTHUSIAST</span> • <span>PROBLEM SOLVER</span> • 
+          </div>
+        </div>
+
         <!-- FP Projects Structure -->
-        <section class="fp-projects" id="fp-projects">
+        <section class="fp-projects scroll-reveal" id="fp-projects">
           <h2 class="fp-section-title">Selected Work</h2>
           <div class="fp-bento-grid hover-expand">
             <a href="https://kshetradnya.github.io/InteractiveBiology/" target="_blank" rel="noopener noreferrer" class="fp-bento-card" style="text-decoration: none; color: inherit;">
@@ -691,36 +708,77 @@
                 <div class="card-tags"><span>Canvas API</span><span>Color Science</span><span>AI Filters</span><span>REST APIs</span></div>
               </div>
             </a>
-            <div class="fp-bento-card">
-              <div class="card-bg" style="background-image: url('projects/socialcampaign.png');"></div>
+            <div class="fp-bento-card" id="patoleCard">
+              <div class="card-bg" style="background-image: url('projects/family_preview.png'); background-color: #111;"></div>
               <div class="card-content glass-panel">
-                <h3>Japanese Learning Hub</h3>
-                <p>Full-stack app for writing practice and spaced repetition algorithms.</p>
-                <div class="card-tags"><span>Node.js</span><span>Express</span><span>MongoDB</span></div>
+                <h3>Patole.in Portfolio</h3>
+                <p>A high-end cinematic digital legacy platform with multi-person profiles, scroll-based storytelling, and layered animations.</p>
+                <div class="card-tags"><span>React</span><span>Tailwind CSS</span><span>GSAP</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FP LinkedIn Achievements -->
+        <section class="fp-achievements scroll-reveal" id="fp-achievements">
+          <h2 class="fp-section-title">LinkedIn Verified Achievements</h2>
+          <div class="linkedin-container">
+            <div class="linkedin-header">
+              <div class="li-profile">
+                <div class="li-avatar">KP</div>
+                <div class="li-info">
+                  <h3>Kshetradnya Patole</h3>
+                  <p>Software Engineer | Frontend Architet</p>
+                  <a href="https://www.linkedin.com/in/kshetradnya-patole-80535825b/" target="_blank" class="li-link">Connect on LinkedIn</a>
+                </div>
+              </div>
+              <div class="li-logo">in</div>
+            </div>
+            <div class="li-achievements-list">
+              <div class="li-badge">
+                <div class="li-badge-icon">🏆</div>
+                <div class="li-badge-text">
+                  <h4>World Topper</h4>
+                  <p>English Cambridge Checkpoint global highest achievement.</p>
+                </div>
+              </div>
+              <div class="li-badge">
+                <div class="li-badge-icon">🥇</div>
+                <div class="li-badge-text">
+                  <h4>Hackathon Winner</h4>
+                  <p>Deployed AI Chatbot & Optimized latency by 45%</p>
+                </div>
+              </div>
+              <div class="li-badge">
+                <div class="li-badge-icon">🌟</div>
+                <div class="li-badge-text">
+                  <h4>Founder & Captain</h4>
+                  <p>House Captain of Beta & First Place EOE Science Fair</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         <!-- FP Skills -->
-        <section class="fp-skills" id="fp-skills">
+        <section class="fp-skills scroll-reveal" id="fp-skills">
           <h2 class="fp-section-title">Core Competencies</h2>
           <div class="fp-skills-wrapper">
             
             <div class="fp-skill-category">
-              <h3>Frontend Architecture</h3>
+              <h3>Frontend Architecture<span>90%</span></h3>
               <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 90%;"><span class="fp-progress-glow"></span></div></div>
             </div>
             <div class="fp-skill-category">
-              <h3>Backend Systems</h3>
+              <h3>Backend Systems<span>80%</span></h3>
               <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 80%;"><span class="fp-progress-glow"></span></div></div>
             </div>
             <div class="fp-skill-category">
-              <h3>AI & Machine Learning</h3>
+              <h3>AI & Machine Learning<span>65%</span></h3>
               <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 65%;"><span class="fp-progress-glow"></span></div></div>
             </div>
             <div class="fp-skill-category">
-              <h3>UI/UX Design</h3>
+              <h3>UI/UX Design<span>85%</span></h3>
               <div class="fp-progress-container"><div class="fp-progress-bar" style="width: 85%;"><span class="fp-progress-glow"></span></div></div>
             </div>
 
@@ -728,20 +786,26 @@
         </section>
 
         <!-- FP About & Lifestyle Navigation -->
-        <section class="fp-about" id="fp-about">
+        <section class="fp-about scroll-reveal" id="fp-about">
           <h2 class="fp-section-title">Beyond the Code</h2>
           <div class="fp-about-grid">
             <div class="fp-about-card nav-to-univ2" data-target="merits-page">
-              <h3>🏆 Merits & Milestones</h3>
+              <div class="card-icon">🏆</div>
+              <h3>Merits & Milestones</h3>
               <p>Explore my academic and athletic achievements, including my football journey.</p>
+              <span class="hover-arrow">→</span>
             </div>
             <div class="fp-about-card nav-to-univ2" data-target="hobbies-page">
-              <h3>🏃 Hobbies</h3>
+              <div class="card-icon">🏃</div>
+              <h3>Hobbies</h3>
               <p>Check out my Strava running stats and photography portfolio.</p>
+              <span class="hover-arrow">→</span>
             </div>
             <div class="fp-about-card nav-to-univ2" data-target="author-page">
-              <h3>👤 The Author</h3>
+              <div class="card-icon">👤</div>
+              <h3>The Author</h3>
               <p>30 rapid-fire facts about my quirks, setup, computing environments, and lifestyle preferences.</p>
+              <span class="hover-arrow">→</span>
             </div>
           </div>
         </section>

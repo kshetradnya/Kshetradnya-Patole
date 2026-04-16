@@ -422,6 +422,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const cleanPages = document.querySelectorAll('.clean-page');
   const replayWrapper = document.getElementById('goalReplayContainer');
 
+  // StartX Creative Trigger in Lifestyle mode
+  const cleanStartxInput = document.getElementById('cleanStartxInput');
+  const startxPromptBox = document.getElementById('startxPromptBox');
+  if (cleanStartxInput) {
+    cleanStartxInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim().toLowerCase();
+      if (val === 'startx') {
+        cleanStartxInput.value = '';
+        cleanStartxInput.blur();
+        startxPromptBox.style.transform = 'scale(1.1) translateY(-10px)';
+        startxPromptBox.style.opacity = '0';
+        logToConsole('Scouter authorized. Launching Frontpage Window Manager...', 'warn');
+        setTimeout(() => {
+          document.body.classList.remove('mode-lifestyle');
+          cleanUIContainer.classList.add('hidden');
+          toggleFrontpageMode();
+          startxPromptBox.style.transform = '';
+          startxPromptBox.style.opacity = '1';
+        }, 600);
+      }
+    });
+  }
+
   cleanNavPills.forEach(pill => {
     pill.addEventListener('click', (e) => {
       cleanNavPills.forEach(p => p.classList.remove('active'));
@@ -482,11 +505,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ticker Logic
         if (entry.target.classList.contains('stat-ticker') || entry.target.querySelector('.stat-ticker')) {
           const tickObj = entry.target.classList.contains('stat-ticker') ? entry.target : entry.target.querySelector('.stat-ticker');
-          if (!tickObj.classList.contains('counted')) {
+          if (tickObj && !tickObj.classList.contains('counted')) {
             tickObj.classList.add('counted');
             const target = parseInt(tickObj.getAttribute('data-target') || '0', 10);
             let c = 0;
-            const step = Math.ceil(target / 40);
+            const step = Math.ceil(target / 40) || 1;
             const interval = setInterval(() => {
               c += step;
               if (c >= target) { c = target; clearInterval(interval); }
@@ -500,6 +523,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   reveals.forEach(el => cleanObserver.observe(el));
   statTickers.forEach(el => cleanObserver.observe(el));
+
+  // Frontpage Observer for unique Scroll Animations
+  const fpObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('fp-visible');
+        if (entry.target.classList.contains('fp-skills')) {
+          // Trigger skill bars
+          entry.target.querySelectorAll('.fp-progress-bar').forEach(bar => {
+            bar.style.animation = 'none';
+            bar.offsetHeight; /* trigger reflow */
+            bar.style.animation = null; 
+          });
+        }
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fp-projects, .fp-achievements, .fp-skills, .fp-about').forEach(el => fpObserver.observe(el));
 
   // Custom Cursor for Clean UI
   const spotCursor = document.getElementById('spotlightCursor');
