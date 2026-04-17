@@ -471,19 +471,26 @@ body.ide-active .custom-cursor { display: none; }
   display: none; flex-direction: column; color: #ece8e1; font-family: 'JetBrains Mono', monospace;
   background-image: radial-gradient(circle at center, rgba(15,25,35,0.2) 0%, rgba(15,25,35,0.9) 100%);
 }
-.val-global-header { height: 60px; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.val-nav-icons { display: flex; gap: 30px; }
-.nav-icon { color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; }
-.nav-icon.active { color: #fff; position: relative; }
-.nav-icon.active::after { content: ''; position: absolute; bottom: -20px; left: 0; width: 100%; height: 2px; background: #fff; }
-.val-lobby-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-.val-center-banner { margin-bottom: 40px; text-align: center; border: 1px solid rgba(255,255,255,0.2); padding: 10px 40px; background: rgba(255,255,255,0.05); }
-.val-party-container { display: flex; gap: 15px; align-items: flex-end; justify-content: center; width: 100%; max-width: 1200px; }
-.val-banner-slot { width: 180px; height: 400px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); position: relative; }
-.player-banner { width: 220px; height: 500px; border-color: rgba(255,255,255,0.2); }
-.player-banner.leader { border-color: #ffbc00; }
-.player-card-img { width: 100%; height: 380px; background-size: cover; background-position: center; position: relative; }
-.player-meta { background: #ece8e1; color: #0f1923; padding: 15px; height: 85px; position: relative; z-index: 5; }
+/* Valorant Global Header Refinement */
+.vh-right .currency-block { display: flex; gap: 20px; font-weight: 800; font-size: 13px; align-items: center; }
+.cur { display: flex; align-items: center; gap: 5px; color: #fff; }
+.cur::before { content: '◈'; color: #00ffff; font-size: 14px; }
+.cur.level::before { content: '★'; color: #ffbc00; }
+
+/* Sidebars (Missing from last restoration) */
+.val-left-interface { position: absolute; left: 60px; top: 45%; transform: translateY(-50%); text-align: left; z-index: 10; }
+.queue-info label { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 800; letter-spacing: 1px; }
+.party-status { margin-top: 50px; display: flex; flex-direction: column; gap: 15px; font-size: 12px; font-weight: 800; color: rgba(255,255,255,0.6); }
+
+.val-right-interface { position: absolute; right: 20px; top: 100px; bottom: 100px; width: 60px; background: rgba(0,0,0,0.3); border-left: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding: 20px 0; z-index: 10; }
+.friend-item { width: 35px; height: 35px; border-radius: 50%; background: #444; margin-bottom: 20px; border: 2px solid #555; position: relative; }
+.friend-item.online::after { content: ''; position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; background: #73e5ac; border-radius: 50%; border: 2px solid #000; }
+.friend-item.offline::after { content: ''; position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; background: #555; border-radius: 50%; border: 2px solid #000; }
+
+/* Player Card Polish */
+.rank-tracker { position: absolute; bottom: -45px; width: 100%; text-align: center; font-size: 10px; opacity: 0.5; font-weight: 800; letter-spacing: 1px; color: #fff; }
+
+.player-meta { background: #ece8e1; color: #0f1923; padding: 15px; height: 85px; position: relative; z-index: 5; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .p-name { font-weight: 900; font-size: 14px; margin-bottom: 2px; }
 .p-title { font-size: 10px; font-weight: 800; opacity: 0.7; letter-spacing: 1px; }
 

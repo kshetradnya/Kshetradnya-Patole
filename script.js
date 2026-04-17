@@ -50,14 +50,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // CUSTOM MAGNETIC CURSOR
+  // CUSTOM MAGNETIC CURSOR & PROJECT HOVER
   const customCursor = document.getElementById('custom-cursor');
+  const imageFollower = document.getElementById('image-follower');
+  const projectRows = document.querySelectorAll('.project-row');
+
   document.addEventListener('mousemove', (e) => {
     if(document.body.classList.contains('ide-active')) return;
-    if(customCursor) {
-      customCursor.style.left = e.clientX + 'px';
-      customCursor.style.top = e.clientY + 'px';
+    
+    // Smooth cursor movement
+    gsap.to(customCursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
+
+    if (imageFollower && imageFollower.classList.contains('visible')) {
+      gsap.to(imageFollower, { x: e.clientX, y: e.clientY, duration: 0.6, ease: "power2.out" });
     }
+  });
+
+  projectRows.forEach(row => {
+    row.addEventListener('mouseenter', () => {
+      const img = row.getAttribute('data-img');
+      if (imageFollower && img) {
+        imageFollower.style.backgroundImage = `url(${img})`;
+        imageFollower.classList.add('visible');
+      }
+      customCursor?.classList.add('hover');
+    });
+    row.addEventListener('mouseleave', () => {
+      imageFollower?.classList.remove('visible');
+      customCursor?.classList.remove('hover');
+    });
   });
 
   // ==========================================
@@ -73,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentHobbyIdx = 0;
   let camZoom = 1;
 
-  const camLauncher = document.getElementById('cameraLauncher');
+  const camLauncher = document.getElementById('cameraLauncherMini');
   const powerOverlay = document.getElementById('powerSwitchOverlay');
   const powerToggle = document.getElementById('mainPowerSwitch');
   const hobbyUniverse = document.getElementById('hobbyCameraUniverse');
