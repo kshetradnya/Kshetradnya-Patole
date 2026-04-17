@@ -283,12 +283,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let camZoom = 1;
 
   function initCamera() {
-    gsap.from('.camera-body', { scale: 0.8, opacity: 0, duration: 0.8, ease: "back.out(1.2)" });
+    const camBody = document.querySelector('.camera-body');
+    const boot = document.getElementById('lcdBootLoader');
+    const content = document.getElementById('lcdContent');
+
+    // Reset styles for re-entry
+    gsap.set(camBody, { scale: 1, opacity: 1, x: 0, y: 0 });
+    if (boot) boot.style.display = 'flex';
+    if (content) content.style.display = 'none';
+
+    gsap.from(camBody, { scale: 0.8, opacity: 0, duration: 0.8, ease: "back.out(1.2)" });
     
     // Boot sequence
     setTimeout(() => {
-      const boot = document.getElementById('lcdBootLoader');
-      const content = document.getElementById('lcdContent');
       if (boot) boot.style.display = 'none';
       if (content) content.style.display = 'flex';
       updateHobbyDisplay();
