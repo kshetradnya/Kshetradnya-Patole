@@ -774,3 +774,146 @@ body.ide-active .custom-cursor { display: none; }
 
 .menu-pill { background: #252525; border: 3px solid #333; color: #aaa; padding: 5px 15px; border-radius: 999px; font-size: 10px; font-weight: bold; cursor: pointer; }
 
+
+/* =========================================
+   VALORANT UI SYSTEM (THE GAMER HUB)
+   ========================================= */
+
+:root {
+  --val-red: #ff4655;
+  --val-dark: #0f1923;
+  --val-light: #ece8e1;
+  --val-blue: #00ffff;
+  --val-teal: #73e5ac;
+  --val-font: 'JetBrains Mono', monospace;
+}
+
+/* Valorant Launcher */
+.gaming-launcher-mini {
+  position: fixed; bottom: 40px; right: 180px; z-index: 1000;
+  cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.gaming-launcher-mini:hover { transform: scale(1.1) translateY(-10px); }
+.controller-icon {
+  width: 100px; height: 100px; background: var(--val-red);
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  display: flex; items-center; justify-content: center; color: white;
+  box-shadow: 10px 10px 0 var(--val-dark);
+}
+.controller-icon svg { width: 40px; height: 40px; }
+
+/* Camera Launcher Style Update */
+.camera-launcher-mini {
+  position: fixed; bottom: 40px; right: 40px; z-index: 1000;
+  cursor: pointer; transition: all 0.3s;
+}
+.mini-cam-design {
+  width: 100px; height: 70px; background: #1a1a1a;
+  border: 4px solid #333; border-radius: 10px;
+  position: relative; display: flex; items-center; justify-content: center;
+}
+.lens-glass { width: 40px; height: 40px; border-radius: 50%; border: 3px solid #555; background: radial-gradient(circle, #222, #000); }
+
+/* Switch Overlay */
+.power-switch-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000;
+  display: flex; items-center; justify-content: center; backdrop-filter: blur(5px);
+}
+.switch-box {
+  background: #ece8e1; border: 8px solid #0f1923; padding: 40px; 
+  text-align: center; box-shadow: 20px 20px 0 #ff4655;
+}
+.power-toggle {
+  width: 120px; height: 60px; background: #333; border-radius: 30px;
+  margin: 20px auto; cursor: pointer; position: relative; border: 4px solid #000;
+}
+.toggle-track { width: 100%; height: 100%; position: relative; }
+.toggle-knob {
+  width: 50px; height: 50px; background: #fff; border-radius: 50%;
+  position: absolute; left: 5px; top: 5px; transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+.power-toggle.on .toggle-knob { left: 65px; background: #73e5ac; }
+.switch-labels { display: flex; justify-content: space-around; font-weight: bold; color: #0f1923; }
+
+/* Flash Animation */
+.val-flash-container { position: fixed; inset: 0; z-index: 10001; pointer-events: none; display: none; }
+.val-flash-sprite { position: absolute; width: 120px; height: 120px; transform: scale(0); }
+.val-flash-whiteout { position: absolute; inset: 0; background: #fff; opacity: 0; }
+
+/* Valorant Universe */
+.val-hobby-universe {
+  position: fixed; inset: 0; z-index: 9999; background: var(--val-dark);
+  display: none; align-items: stretch; color: var(--val-light); font-family: var(--val-font);
+  overflow: hidden;
+}
+
+.val-ui-frame { flex: 1; display: flex; flex-direction: column; padding: 0 40px; border: 1px solid rgba(255,255,255,0.1); }
+
+/* Top Nav */
+.val-top-nav { height: 80px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.val-logo { color: var(--val-red); font-weight: 900; letter-spacing: 2px; }
+.val-nav-links { display: flex; gap: 40px; }
+.val-nav-links span { opacity: 0.5; font-size: 14px; cursor: pointer; transition: 0.3s; }
+.val-nav-links span.active { opacity: 1; border-bottom: 2px solid var(--val-red); padding-bottom: 5px; }
+.val-currency { display: flex; gap: 20px; }
+.val-currency .c-item { background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 4px; font-size: 12px; }
+
+/* Content Stage */
+.val-main-stage { flex: 1; display: flex; gap: 50px; padding: 40px 0; }
+.agent-sidebar { width: 300px; display: flex; flex-direction: column; gap: 20px; border-left: 2px solid var(--val-red); padding-left: 20px; }
+.agent-role { color: rgba(255,255,255,0.4); font-size: 14px; }
+.agent-name { font-size: 64px; font-weight: 900; line-height: 1; }
+.agent-abilities { display: flex; gap: 15px; margin-top: 20px; }
+.ability { width: 50px; height: 50px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); 
+  display: flex; flex-direction: column; items-center; justify-content: center; cursor: pointer; }
+.ability img { width: 25px; height: 25px; }
+.ability span { font-size: 10px; margin-top: 2px; opacity: 0.5; }
+.ability.ult { border-color: var(--val-teal); }
+
+.val-hobby-cards-container { flex: 1; display: flex; flex-wrap: wrap; gap: 20px; }
+.val-hobby-card { 
+  width: 250px; height: 350px; background: rgba(255,255,255,0.02); 
+  border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden;
+  transition: all 0.4s; cursor: pointer; 
+}
+.val-hobby-card:hover { border-color: var(--val-blue); transform: translateY(-10px); background: rgba(0,255,255,0.05); }
+.val-hobby-card.active { border-color: var(--val-red); background: rgba(255,70,85,0.05); }
+
+.card-content { padding: 30px; height: 100%; display: flex; flex-direction: column; }
+.rank-icon { font-size: 40px; font-weight: 900; color: var(--val-blue); margin-bottom: 10px; }
+.val-hobby-card h3 { font-size: 20px; margin-bottom: 10px; }
+.val-hobby-card p { font-size: 12px; opacity: 0.7; }
+.match-history { margin-top: auto; display: flex; gap: 5px; }
+.match-history span { font-size: 10px; font-weight: bold; padding: 2px 5px; }
+.victory { background: var(--val-teal); color: #000; }
+.defeat { background: var(--val-red); color: #fff; }
+
+/* Bottom HUD */
+.val-bottom-hud { height: 100px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); }
+.val-player-card { display: flex; align-items: center; gap: 15px; }
+.p-avatar { width: 50px; height: 50px; background: #fff; clip-path: polygon(0 0, 100% 0, 80% 100%, 0 100%); }
+.p-name { font-weight: bold; }
+.p-title { font-size: 12px; color: var(--val-red); opacity: 0.8; }
+
+.val-start-btn { 
+  background: var(--val-red); color: white; padding: 15px 50px; 
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  font-weight: 900; font-size: 20px; transition: 0.3s;
+}
+.val-start-btn:hover { padding: 15px 70px; background: white; color: var(--val-red); }
+
+
+/* Valorant Match Stinger */
+.val-match-stinger {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.5);
+  background: var(--val-red); color: white; padding: 20px 100px;
+  font-size: 40px; font-weight: 900; z-index: 10002; opacity: 0;
+  pointer-events: none; border: 4px solid var(--val-light);
+  box-shadow: 0 0 50px var(--val-red);
+}
+
+/* Scrollbars for Valorant */
+.val-hobby-cards-container::-webkit-scrollbar { width: 4px; }
+.val-hobby-cards-container::-webkit-scrollbar-thumb { background: var(--val-red); }
+

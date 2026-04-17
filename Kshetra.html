@@ -377,21 +377,108 @@
        HOBBY PAGE: MY LIFE THROUGH A LENS
        ============================================= -->
   
-  <!-- Bird Launcher -->
-  <div id="birdLauncher" class="bird-launcher">
-    <div class="bird-bubble">
-      <p>LIFE THROUGH<br><span>A LENS?</span></p>
+  <!-- 1. CAMERA LAUNCHER & SWITCH -->
+  <div id="cameraLauncher" class="camera-launcher-mini">
+    <div class="launcher-tooltip">CLICK TO OPEN LENS</div>
+    <div class="mini-cam-design">
+        <div class="lens-glass"></div>
     </div>
-    <img src="projects/pixel_bird_branch.png" alt="Hobby Bird" class="bird-img">
   </div>
 
-  <!-- Hobby Transition Overlay -->
-  <div id="hobbyTransition" class="hobby-transition">
-    <div class="transition-half left-half"></div>
-    <div class="transition-half right-half"></div>
-    <img src="projects/pixel_bird_branch.png" class="pulling-bird left-bird">
-    <img src="projects/pixel_bird_branch.png" class="pulling-bird right-bird">
-    <div class="pull-text">PULL!!!</div>
+  <!-- Power Switch Modal -->
+  <div id="powerSwitchOverlay" class="power-switch-overlay" style="display:none;">
+    <div class="switch-box">
+        <p class="font-comic">POWER ON EOS 13000D</p>
+        <div id="mainPowerSwitch" class="power-toggle">
+            <div class="toggle-track">
+                <div class="toggle-knob"></div>
+            </div>
+        </div>
+        <div class="switch-labels">
+            <span>OFF</span>
+            <span>ON</span>
+        </div>
+    </div>
+  </div>
+
+  <!-- 2. GAMING ICON (FOR VALORANT) -->
+  <div id="gamingLauncher" class="gaming-launcher-mini">
+    <div class="launcher-tooltip">INITIATE FLASH</div>
+    <div class="controller-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2m4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5m3-3c-.83 0-1.5-.67-1.5-1.5S17.67 9 18.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5"/></svg>
+    </div>
+  </div>
+
+  <!-- Valorant Flash Animation items -->
+  <div id="valFlashContainer" class="val-flash-container">
+    <img id="valFlashProjectile" src="projects/val_flash_sprite.png" class="val-flash-sprite">
+    <div id="valFlashWhiteout" class="val-flash-whiteout"></div>
+  </div>
+
+  <!-- =============================================
+       VALORANT HOBBY PAGE: "THE GAMER"
+       ============================================= -->
+  <div id="valHobbyUniverse" class="val-hobby-universe">
+    <div class="val-ui-frame">
+        <!-- Top Bar -->
+        <div class="val-top-nav">
+            <div class="val-logo">PATOLE // PROTOCOL</div>
+            <div class="val-nav-links">
+                <span class="active">COLLECTION</span>
+                <span>CAREER</span>
+                <span>STORE</span>
+                <span>PLAY</span>
+            </div>
+            <div class="val-currency">
+                <div class="c-item">VP 2500</div>
+                <div class="c-item">RP 150</div>
+            </div>
+        </div>
+
+        <!-- Main Content: Agent Selection Style -->
+        <div class="val-main-stage">
+            <div class="agent-sidebar">
+                <div class="agent-role font-comic">DUELIST</div>
+                <div class="agent-name">KSHETRA</div>
+                <div class="agent-abilities">
+                    <div class="ability"><img src="https://img.icons8.com/ios-filled/50/ffffff/firework.png"><span>C</span></div>
+                    <div class="ability"><img src="https://img.icons8.com/ios-filled/50/ffffff/flash-bang.png"><span>Q</span></div>
+                    <div class="ability"><img src="https://img.icons8.com/ios-filled/50/ffffff/sword.png"><span>E</span></div>
+                    <div class="ability ult"><img src="https://img.icons8.com/ios-filled/50/ffffff/skull.png"><span>X</span></div>
+                </div>
+            </div>
+
+            <div class="val-hobby-cards-container">
+                <div class="val-hobby-card active">
+                    <div class="card-bg"></div>
+                    <div class="card-content">
+                        <div class="rank-icon">IM</div>
+                        <h3>VALORANT CHAMP</h3>
+                        <p>Consistent Radiant performer. Aim, strategy, and utility mastery.</p>
+                        <div class="match-history">
+                            <span class="victory">VICTORY</span>
+                            <span class="victory">VICTORY</span>
+                            <span class="defeat">DEFEAT</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- ... More logic-controlled cards ... -->
+            </div>
+        </div>
+
+        <!-- Bottom HUD -->
+        <div class="val-bottom-hud">
+            <div class="val-player-card">
+                <div class="p-avatar"></div>
+                <div class="p-info">
+                    <div class="p-name">Kshetradnya</div>
+                    <div class="p-title">The Mastermind</div>
+                </div>
+            </div>
+            <div class="val-party-info">PARTY: 1/5</div>
+            <button id="exitValBtn" class="val-start-btn">EXIT PROTOCOL</button>
+        </div>
+    </div>
   </div>
 
   <!-- Hobby Camera Universe -->
