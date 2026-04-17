@@ -483,10 +483,14 @@ body.ide-active .custom-cursor { display: none; }
 .player-banner { width: 220px; height: 500px; border-color: rgba(255,255,255,0.2); }
 .player-banner.leader { border-color: #ffbc00; }
 .player-card-img { width: 100%; height: 380px; background-size: cover; background-position: center; position: relative; }
-.player-meta { background: #ece8e1; color: #0f1923; padding: 15px; }
-.p-name { font-weight: 900; font-size: 14px; }
-.rank-badge img { width: 50px; }
-.val-bottom-controls { position: absolute; bottom: 40px; display: flex; gap: 20px; }
-.btn-start { background: #ff4655; color: #fff; border: none; padding: 15px 100px; font-weight: 900; font-size: 32px; cursor: pointer; }
-.val-flash-whiteout { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
-.val-flash-projectile { position: absolute; width: 100px; height: 100px; pointer-events: none; }
+.player-meta { background: #ece8e1; color: #0f1923; padding: 15px; height: 85px; position: relative; z-index: 5; }
+.p-name { font-weight: 900; font-size: 14px; margin-bottom: 2px; }
+.p-title { font-size: 10px; font-weight: 800; opacity: 0.7; letter-spacing: 1px; }
+
+/* Competitive Queue Styling */
+.q-val.font-comic { color: #ffbc00; text-shadow: 0 0 15px rgba(255,188,0,0.4); font-size: 32px; font-weight: 900; }
+
+.val-bottom-controls { position: absolute; bottom: 50px; display: flex; gap: 20px; align-items: center; z-index: 20; }
+.btn-start { background: #ff4655; color: #fff; border: none; padding: 15px 100px; font-weight: 900; font-size: 36px; cursor: pointer; transition: 0.2s; box-shadow: 0 0 40px rgba(255,70,85,0.3); }
+.val-flash-whiteout { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 10000; }
+.val-flash-projectile { position: absolute; width: 100px; height: 100px; pointer-events: none; z-index: 10001; }
