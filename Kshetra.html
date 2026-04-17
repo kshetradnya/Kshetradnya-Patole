@@ -135,7 +135,7 @@
               </div>
               
               <div class="camera-ui-real">
-                <img src="projects/canon.jpeg" alt="Canon Camera Background" class="camera-bg-img">
+                <img src="projects/canon.jpg" alt="Canon Camera Background" class="camera-bg-img">
                 
                 <!-- The LCD Screen Mapping -->
                 <div class="camera-lcd" id="viewfinderArea">
@@ -204,109 +204,127 @@
               </div>
             </div>
             
-            <!-- Hobby 3: Travelling -->
-            <div class="hobby-block traveling gsap-fade-up" style="background: #fdfbf7;">
-               <div class="hobby-header" style="text-align:center;">
-                 <h3 style="font-family: var(--font-serif); font-size: 3rem; color: #3a2e28;">Royal Map of Travels</h3>
-                 <p style="color: #6d5e54;">An exploration across the beautiful subcontinent.</p>
-               </div>
-               
-               <div class="altitude-hud" id="altitudeHud">Cruising Altitude: 0ft</div>
-
-               <div class="flight-container" id="flightPathContainer" style="background: transparent;">
-                 <!-- SVG Map Path -->
-                 <svg class="flight-svg" viewBox="0 0 500 1000" preserveAspectRatio="xMidYMid meet">
-                    <!-- Base path (dashed) -->
-                    <path id="airplanePathBase" d="M 100,100 C 350,300 150,550 400,850" fill="transparent" stroke="#d5c8b5" stroke-width="4" stroke-dasharray="10,10" />
-                    <!-- Dynamic path (solid gold, filled via GSAP) -->
-                    <path id="airplanePath" d="M 100,100 C 350,300 150,550 400,850" fill="transparent" stroke="#b8935c" stroke-width="4" />
-                    
-                    <!-- Decorative Clouds -->
-                    <path d="M 30,200 Q 50,180 70,200 Q 90,190 100,210 Q 70,220 30,200" fill="#fff" opacity="0.6"/>
-                    <path d="M 400,100 Q 430,80 450,110 Q 480,100 470,130 Q 420,130 400,100" fill="#fff" opacity="0.6"/>
-                    <path d="M 50,600 Q 80,570 110,600 Q 140,590 120,620 Q 80,630 50,600" fill="#fff" opacity="0.6"/>
-
-                    <!-- Destination Nodes -->
-                     <!-- Node 1: Kashmir -->
-                    <circle class="map-node" cx="100" cy="100" r="14" data-dest="kashmir"></circle>
-                    <text x="125" y="105" class="map-label royal">Kashmir ❄️</text>
-
-                    <!-- Node 2: Amritsar -->
-                    <circle class="map-node" cx="295" cy="245" r="14" data-dest="amritsar"></circle>
-                    <text x="320" y="250" class="map-label royal">Amritsar ☀️</text>
-                    
-                    <!-- Node 3: Goa -->
-                    <circle class="map-node" cx="165" cy="570" r="14" data-dest="goa"></circle>
-                    <text x="190" y="575" class="map-label royal">Goa 🌊</text>
-                    
-                    <!-- Node 4: Kerala -->
-                    <circle class="map-node" cx="400" cy="850" r="14" data-dest="kerala"></circle>
-                    <text x="250" y="855" class="map-label royal">Kerala 🌴</text>
-
-                    <!-- Origin (HOME) target for the loop-back -->
-                    <circle id="originNode" cx="100" cy="100" r="0" fill="transparent"></circle>
-                 </svg>
-
-                 <!-- Plane container - used as the proxy for the GSAP viewport movement -->
-                 <div id="airplane" class="airplane-sprite custom-plane">
-                    <!-- Hand-drawn SVG plane -->
-                    <svg width="60" height="60" viewBox="0 0 100 100">
-                       <circle cx="50" cy="100" r="10" fill="url(#fire)" />
-                       <defs>
-                          <radialGradient id="fire">
-                             <stop offset="0%" stop-color="#ffb84d" />
-                             <stop offset="100%" stop-color="transparent" />
-                          </radialGradient>
-                       </defs>
-                       <path d="M 50,10 C 60,30 65,50 60,90 L 40,90 C 35,50 40,30 50,10 Z" fill="#fff" stroke="#8c6d46" stroke-width="2"/>
-                       <path d="M 45,50 L 10,70 L 10,80 L 45,60 Z" fill="#ccc" stroke="#8c6d46" stroke-width="2"/>
-                       <path d="M 55,50 L 90,70 L 90,80 L 55,60 Z" fill="#ccc" stroke="#8c6d46" stroke-width="2"/>
-                    </svg>
-                 </div>
-
-                 <!-- Detailed Modals -->
-                 <div id="travelModalWrap" class="travel-modal-wrap">
-                    <div id="tModalKashmir" class="t-modal">
-                       <h4>Kashmir Itinerary</h4>
-                       <ul><li>Snow-capped mountain hiking</li><li>Shikara ride on Dal Lake</li><li>Wazwan Cuisine</li></ul>
-                    </div>
-                    <div id="tModalAmritsar" class="t-modal">
-                       <h4>Amritsar Itinerary</h4>
-                       <ul><li>Golden Temple visit</li><li>Wagah Border Parade</li><li>Extra butter Kulcha</li></ul>
-                    </div>
-                    <div id="tModalGoa" class="t-modal">
-                       <h4>Goa Itinerary</h4>
-                       <ul><li>Late night beach walks</li><li>Seafood hopping</li><li>Scooter riding coastlines</li></ul>
-                    </div>
-                    <div id="tModalKerala" class="t-modal">
-                       <h4>Kerala Itinerary</h4>
-                       <ul><li>Houseboat in Alleppey</li><li>Tea gardens of Munnar</li><li>Ayurvedic retreats</li></ul>
-                    </div>
-                 </div>
-                 
-                 <!-- Passport Stamp Visual -->
-                 <div id="passportStamp" class="passport-stamp">PASSPORT<br>STAMPED</div>
-               </div>
-            </div>
 
           </div>
         </div>
       </section>
 
-      <!-- TRUE HOME CINEMATIC OVERLAY -->
-      <div id="trueHomeOverlay" class="true-home-overlay">
-         <div class="true-home-content">
-            <h1 class="true-home-title">TRUE HOME.</h1>
-            <p class="true-home-subtitle">Wherever my family and friends are.</p>
-            <div class="true-home-gallery">
-               <!-- User can drop pictures of friends/fam here -->
-               <div class="home-photo"><img src="projects/family_preview.png" alt="Family"></div>
-               <div class="home-photo"><img src="projects/family_preview.png" alt="Friends"></div>
-               <div class="home-photo"><img src="projects/family_preview.png" alt="Vibes"></div>
-            </div>
-            <button class="magnet-btn back-btn" id="backToOriginBtn">Return to Journey</button>
-         </div>
-      </div>
+      <!-- ============================
+           Pinned Flight Map Section
+           ============================ -->
+      <section id="flightSection" style="position:relative;">
+        <!-- The sticky container that pins for the duration of scrolling -->
+        <div id="flightSticky">
+
+          <!-- Title overlay at the top -->
+          <div id="flightTitle">
+            <h2>Royal Map of Travels</h2>
+            <p>Scroll to fly across the subcontinent</p>
+          </div>
+
+          <!-- Altitude HUD -->
+          <div class="altitude-hud" id="altitudeHud">Altitude: 0 ft</div>
+
+          <!-- Destination label (appears over plane at waypoints) -->
+          <div id="flightDestLabel"></div>
+
+          <!-- The SVG map that the plane flies over -->
+          <svg id="flightSvg" viewBox="0 0 800 2200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Parchment background -->
+            <rect width="800" height="2200" fill="#f5efe6"/>
+
+            <!-- India-ish landmass stylised shape -->
+            <path d="M 60,60 Q 700,40 740,300 Q 780,600 700,900 Q 650,1100 500,1300 Q 380,1500 350,1800 Q 340,2000 380,2100 Q 200,2050 150,1900 Q 80,1700 60,1400 Q 20,900 40,500 Z"
+              fill="#dcedc8" stroke="#aed581" stroke-width="3" opacity="0.6"/>
+
+            <!-- Dashed flight trail -->
+            <path id="flightTrailDash"
+              d="M 200,120 C 350,200 500,350 480,550 C 460,750 280,900 300,1100 C 320,1300 520,1400 500,1650 C 480,1900 300,2050 260,2100"
+              fill="none" stroke="#c8b89a" stroke-width="5" stroke-dasharray="20,15" opacity="0.7"/>
+
+            <!-- Solid progress trail (clipped by scroll) -->
+            <path id="flightTrailSolid"
+              d="M 200,120 C 350,200 500,350 480,550 C 460,750 280,900 300,1100 C 320,1300 520,1400 500,1650 C 480,1900 300,2050 260,2100"
+              fill="none" stroke="#b8935c" stroke-width="5"
+              stroke-dasharray="3000" stroke-dashoffset="3000"/>
+
+            <!-- Clouds -->
+            <ellipse cx="620" cy="180" rx="70" ry="30" fill="white" opacity="0.7"/>
+            <ellipse cx="650" cy="175" rx="50" ry="25" fill="white" opacity="0.8"/>
+            <ellipse cx="120" cy="700" rx="60" ry="24" fill="white" opacity="0.6"/>
+            <ellipse cx="680" cy="1050" rx="65" ry="28" fill="white" opacity="0.65"/>
+            <ellipse cx="150" cy="1500" rx="55" ry="22" fill="white" opacity="0.6"/>
+
+            <!-- Destination nodes + labels -->
+            <!-- Kashmir -->
+            <circle class="map-node" id="nodeKashmir" cx="200" cy="120" r="22" data-dest="kashmir"/>
+            <text x="235" y="125" class="map-label royal">Kashmir ❄️</text>
+
+            <!-- Amritsar -->
+            <circle class="map-node" id="nodeAmritsar" cx="480" cy="550" r="22" data-dest="amritsar"/>
+            <text x="515" y="555" class="map-label royal">Amritsar ☀️</text>
+
+            <!-- Goa -->
+            <circle class="map-node" id="nodeGoa" cx="300" cy="1100" r="22" data-dest="goa"/>
+            <text x="335" y="1105" class="map-label royal">Goa 🌊</text>
+
+            <!-- Kerala -->
+            <circle class="map-node" id="nodeKerala" cx="260" cy="2100" r="22" data-dest="kerala"/>
+            <text x="295" y="2105" class="map-label royal">Kerala 🌴</text>
+          </svg>
+
+          <!-- The plane (pinned center-ish, moves along path) -->
+          <div id="airplane" class="airplane-sprite">
+            <svg width="120" height="120" viewBox="0 0 100 100" style="filter:drop-shadow(0 4px 12px rgba(0,0,0,0.3));">
+              <defs>
+                <radialGradient id="engineGlow" cx="50%" cy="100%">
+                  <stop offset="0%" stop-color="#ff8c00" stop-opacity="0.9"/>
+                  <stop offset="100%" stop-color="#ff8c00" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <!-- Engine glow -->
+              <ellipse cx="50" cy="92" rx="12" ry="8" fill="url(#engineGlow)"/>
+              <!-- Body -->
+              <path d="M50,5 C55,20 58,45 56,88 L44,88 C42,45 45,20 50,5 Z" fill="#ffffff" stroke="#8c6d46" stroke-width="2"/>
+              <!-- Wing left -->
+              <path d="M46,48 L5,72 L5,80 L46,60 Z" fill="#ffe0b2" stroke="#8c6d46" stroke-width="1.5"/>
+              <!-- Wing right -->
+              <path d="M54,48 L95,72 L95,80 L54,60 Z" fill="#ffe0b2" stroke="#8c6d46" stroke-width="1.5"/>
+              <!-- Tail fin -->
+              <path d="M47,80 L32,92 L44,92 Z" fill="#c8a96e" stroke="#8c6d46" stroke-width="1"/>
+              <path d="M53,80 L68,92 L56,92 Z" fill="#c8a96e" stroke="#8c6d46" stroke-width="1"/>
+              <!-- Cockpit -->
+              <ellipse cx="50" cy="22" rx="6" ry="9" fill="#90caf9" opacity="0.8"/>
+              <!-- Window strip -->
+              <rect x="44" y="35" width="12" height="5" rx="2" fill="#b3e5fc" opacity="0.7"/>
+            </svg>
+          </div>
+
+          <!-- Passport stamp (pops on node arrival) -->
+          <div id="passportStamp" class="passport-stamp">PASSPORT<br>STAMPED</div>
+
+          <!-- Destination modal -->
+          <div id="destModal" class="dest-modal-pin">
+            <button id="destModalClose" style="float:right;background:none;border:none;font-size:1.4rem;cursor:pointer;">✕</button>
+            <h4 id="destModalTitle"></h4>
+            <ul id="destModalList"></ul>
+          </div>
+        </div>
+
+        <!-- TRUE HOME ending overlay (fades in after last destination) -->
+        <div id="trueHomeOverlay" class="true-home-overlay">
+           <div class="true-home-content">
+              <h1 class="true-home-title">TRUE HOME.</h1>
+              <p class="true-home-subtitle">Wherever my family and friends are.</p>
+              <div class="true-home-gallery">
+                 <div class="home-photo" style="background:#f0e6d3;display:flex;align-items:center;justify-content:center;font-size:3rem;">🏠</div>
+                 <div class="home-photo" style="background:#f0e6d3;display:flex;align-items:center;justify-content:center;font-size:3rem;">❤️</div>
+                 <div class="home-photo" style="background:#f0e6d3;display:flex;align-items:center;justify-content:center;font-size:3rem;">🌟</div>
+              </div>
+              <button class="back-btn" id="backToOriginBtn">Return to Journey</button>
+           </div>
+        </div>
+      </section>
 
       <!-- Footer -->
       <footer class="pro-footer">

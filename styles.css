@@ -753,67 +753,152 @@ body.ide-active .custom-cursor { display: none; }
 }
 .start-game-btn:hover { background: #333; }
 
-/* Hobby 3: Travelling SVG */
-.traveling { position: relative; }
-.flight-container {
-  position: relative; width: 100%; height: 400vh; overflow: hidden;
-  background: #e9f2fa; border-radius: 12px;
-}
-.flight-svg { 
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 200vw; /* extremely tall */
-  transition: transform 0.1s ease-out; /* GSAP updates origin */
-}
-.map-node { fill: #fdfbf7; stroke: #b8935c; stroke-width: 4; cursor: pointer; transition: transform 0.3s, fill 0.3s; }
-.map-node:hover { transform: scale(1.4); transform-origin: center; fill: #b8935c; }
-.map-label.royal { font-family: var(--font-serif); font-size: 16px; fill: #3a2e28; font-weight: bold; pointer-events: none; }
+/* =========================================
+   PINNED FLIGHT MAP
+   ========================================= */
 
-/* The plane wrapper remains fixed in center while inner SVG moves */
-.airplane-sprite {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  pointer-events: none; z-index: 10;
-  transition: transform 1s cubic-bezier(0.2,0.8,0.2,1);
-}
-.airplane-sprite.zoomed-eye {
-  transform: translate(-50%, -50%) scale(100);
+/* The outer section is VERY tall to give scroll room */
+#flightSection {
+  height: 600vh; /* 6x viewport height - this is the scrollable distance */
+  background: #f5efe6;
 }
 
+/* The sticky wrapper pins to the top of the viewport */
+#flightSticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(160deg, #e8ddd1 0%, #f5efe6 40%, #dcedc8 100%);
+}
+
+/* Title overlay */
+#flightTitle {
+  position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+  text-align: center; z-index: 20; pointer-events: none;
+  font-family: var(--font-serif);
+}
+#flightTitle h2 { font-size: clamp(2rem, 4vw, 3.5rem); color: #3a2e28; letter-spacing: -1px; }
+#flightTitle p { color: #6d5e54; font-size: 1.1rem; margin-top: 0.3rem; }
+
+/* Altitude HUD */
 .altitude-hud {
-  position: absolute; top: 40px; right: 40px; background: rgba(255,255,255,0.9);
-  padding: 10px 15px; border-radius: 8px; font-family: var(--font-mono); font-size: 14px;
-  font-weight: bold; color: #3a2e28; box-shadow: 0 4px 15px rgba(0,0,0,0.05); z-index: 10;
+  position: absolute; top: 30px; right: 30px; background: rgba(255,255,255,0.9);
+  padding: 10px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 14px;
+  font-weight: bold; color: #3a2e28; box-shadow: 0 4px 15px rgba(0,0,0,0.08); z-index: 20;
   border: 1px solid #d5c8b5;
 }
-.travel-modal-wrap { position: absolute; inset: 0; pointer-events: none; }
-.t-modal {
-  position: absolute; background: #fff; border: 2px solid #b8935c; padding: 20px; border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15); font-family: var(--font-sans); width: 220px;
-  opacity: 0; transform: translateY(20px); transition: opacity 0.4s, transform 0.4s; pointer-events: none;
+
+/* Destination arrival label near plane */
+#flightDestLabel {
+  position: absolute; z-index: 25; pointer-events: none;
+  font-family: var(--font-serif); font-size: 1.6rem; font-weight: bold; color: #3a2e28;
+  background: rgba(255,255,255,0.92); padding: 8px 20px; border-radius: 50px;
+  border: 2px solid #b8935c; box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+  opacity: 0; transition: opacity 0.5s; white-space: nowrap;
+  transform: translate(-50%, -140%);
 }
-.t-modal.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.t-modal h4 { font-family: var(--font-serif); font-size: 1.2rem; color: #3a2e28; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;}
-.t-modal ul { list-style: none; padding-left: 0; }
-.t-modal li { font-size: 0.9rem; color: #666; margin-bottom: 6px; display: flex; gap: 8px;}
-.t-modal li::before { content: '✈'; color: #b8935c; }
+#flightDestLabel.visible { opacity: 1; }
+
+/* The SVG Map - positioned absolutely, will be translated by JS */
+#flightSvg {
+  position: absolute;
+  width: 600px; /* fixed render size */
+  height: auto;
+  top: 0; left: 0;
+  transform-origin: top left;
+  will-change: transform;
+}
+
+.map-node {
+  fill: #fff6ee; stroke: #b8935c; stroke-width: 5; cursor: pointer;
+  transition: r 0.3s, fill 0.3s;
+  transform-box: fill-box; transform-origin: center;
+}
+.map-node:hover, .map-node.active { fill: #b8935c; }
+.map-label.royal {
+  font-family: var(--font-serif); font-size: 28px; fill: #3a2e28;
+  font-weight: bold; pointer-events: none;
+}
+
+/* The Plane - fixed at center of sticky viewport */
+.airplane-sprite {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  pointer-events: none;
+  transition: transform 0.2s ease;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
+}
+
+/* Passport stamp */
 .passport-stamp {
-  position: absolute; top: 150px; left: 50px; border: 4px dashed #a33; color: #a33;
-  padding: 10px 20px; font-family: 'Courier New', monospace; font-size: 24px; font-weight: bold;
-  transform: rotate(-15deg) scale(2); opacity: 0; pointer-events: none; z-index: 0;
-  transition: opacity 0.4s, transform 0.4s cubic-bezier(0.2,0.8,0.2,1);
+  position: absolute; top: 50%; left: 50%;
+  border: 5px dashed #c0392b; color: #c0392b;
+  padding: 12px 24px; font-family: 'Courier New', monospace;
+  font-size: 1.2rem; font-weight: bold; text-align: center;
+  transform: translate(-50%, -50%) rotate(-20deg) scale(3);
+  opacity: 0; pointer-events: none; z-index: 40;
+  transition: opacity 0.4s, transform 0.5s cubic-bezier(0.2,0.8,0.2,1);
+  border-radius: 8px;
 }
-.passport-stamp.stamped { opacity: 0.3; transform: rotate(-15deg) scale(1); }
+.passport-stamp.stamped {
+  opacity: 0.8;
+  transform: translate(-50%, -50%) rotate(-20deg) scale(1);
+}
+
+/* Destination modal inside sticky */
+.dest-modal-pin {
+  position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+  background: #fff; border: 2px solid #b8935c; padding: 24px 28px;
+  border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  font-family: var(--font-sans); width: 340px; z-index: 50;
+  opacity: 0; pointer-events: none; transition: opacity 0.4s, transform 0.4s;
+  transform: translateX(-50%) translateY(20px);
+}
+.dest-modal-pin.active {
+  opacity: 1; pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.dest-modal-pin h4 {
+  font-family: var(--font-serif); font-size: 1.4rem; color: #3a2e28;
+  margin-bottom: 12px; border-bottom: 2px solid #f0e8db; padding-bottom: 8px;
+}
+.dest-modal-pin ul { list-style: none; padding: 0; }
+.dest-modal-pin li { color: #555; margin-bottom: 8px; font-size: 0.95rem; }
+.dest-modal-pin li::before { content: '✈ '; color: #b8935c; }
 
 /* TRUE HOME OVERLAY */
 .true-home-overlay {
-  position: fixed; inset: 0; background: #fff; z-index: 99999;
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center, #fff8f0 0%, #fff 60%);
+  z-index: 99999;
   display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity 2s cubic-bezier(0.8, 0, 0.2, 1);
+  opacity: 0; pointer-events: none;
+  transition: opacity 1.5s cubic-bezier(0.8, 0, 0.2, 1);
 }
 .true-home-overlay.active { opacity: 1; pointer-events: auto; }
-.true-home-content { text-align: center; color: #333; font-family: var(--font-serif); }
-.true-home-title { font-size: 5rem; font-weight: bold; letter-spacing: -2px; margin-bottom: 0.5rem; }
+.true-home-content { text-align: center; color: #333; font-family: var(--font-serif); max-width: 900px; padding: 2rem; }
+.true-home-title {
+  font-size: clamp(3rem, 8vw, 7rem); font-weight: bold;
+  letter-spacing: -3px; margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #8c6d46, #c8a96e, #8c6d46);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
 .true-home-subtitle { font-size: 1.5rem; font-family: var(--font-sans); color: #666; margin-bottom: 3rem; }
 .true-home-gallery { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
-.home-photo { width: 250px; height: 300px; background: #eee; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+.home-photo {
+  width: 240px; height: 280px; background: #eee;
+  border-radius: 16px; box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+  overflow: hidden;
+}
 .home-photo img { width: 100%; height: 100%; object-fit: cover; }
-.back-btn { padding: 15px 30px; background: #000; color: #fff; border: none; font-family: var(--font-sans); font-weight: bold; border-radius: 8px; cursor: pointer; }
+.back-btn {
+  padding: 14px 32px; background: #3a2e28; color: #f5efe6;
+  border: none; font-family: var(--font-sans); font-weight: bold;
+  border-radius: 50px; cursor: pointer; font-size: 1rem;
+  transition: background 0.3s, transform 0.2s;
+}
+.back-btn:hover { background: #b8935c; transform: scale(1.04); }
