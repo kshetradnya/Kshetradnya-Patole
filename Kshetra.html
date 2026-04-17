@@ -134,23 +134,11 @@
                 <p>Capturing raw moments. CANON EOS 13000D</p>
               </div>
               
-              <div class="camera-ui">
-                <div class="camera-hud">
-                   <div class="hud-top">
-                      <span class="battery-indicator blinking">🔋</span>
-                      <span class="film-counter">32/36</span>
-                   </div>
-                   <div class="hud-bottom">
-                      <span class="hud-item">ISO 400</span>
-                      <span class="hud-item">f/2.8</span>
-                      <span class="hud-item mock-btn" onclick="alert('Feature locked on this lens.')">Erase</span>
-                      <span class="hud-item filter-toggle" id="filterToggleBtn">Filter: None</span>
-                   </div>
-                </div>
-
-                <div class="viewfinder" id="viewfinderArea">
-                  <div class="vf-corner tl"></div><div class="vf-corner tr"></div>
-                  <div class="vf-corner bl"></div><div class="vf-corner br"></div>
+              <div class="camera-ui-real">
+                <img src="projects/canon.jpeg" alt="Canon Camera Background" class="camera-bg-img">
+                
+                <!-- The LCD Screen Mapping -->
+                <div class="camera-lcd" id="viewfinderArea">
                   <div class="vf-center-focus">
                      <span class="crosshair horizontal"></span>
                      <span class="crosshair vertical"></span>
@@ -158,12 +146,29 @@
                   
                   <video id="webcamVideo" autoplay playsinline style="display:none;"></video>
                   
-                  <div class="camera-actions">
-                     <button class="shutter-btn magnet-btn" id="webcamBtn">Self Portrait</button>
-                     <button class="shutter-btn magnet-btn" id="shutterBtn">Click Shutter (Default)</button>
+                  <!-- HUD mapped inside the screen -->
+                  <div class="camera-hud">
+                     <div class="hud-top">
+                        <span class="battery-indicator blinking">🔋</span>
+                        <span class="film-counter">32/36</span>
+                     </div>
+                     <div class="hud-bottom">
+                        <span class="hud-item">ISO 400</span>
+                        <span class="hud-item">f/2.8</span>
+                     </div>
                   </div>
                 </div>
+
+                <!-- Invisible Clickable Buttons mapped to the physical image buttons -->
+                <!-- Example mappings based on standard EOS layout. These will be positioned via CSS -->
+                <button class="invisible-btn shutter-map" id="webcamBtn" title="Take Photo"></button>
+                <button class="invisible-btn menu-map" id="filterToggleBtn" title="Toggle Filter"></button>
+                <button class="invisible-btn erase-map" onclick="alert('Erase locked.')" title="Erase"></button>
                 
+              </div>
+              
+              <!-- Polaroids drop BELOW the camera now -->
+              <div class="polaroid-spill-zone" style="position:relative; height:100px; width:100%;">
                 <div class="polaroid-wrapper" id="polaroidRender">
                   <div class="polaroid-frame" id="polaroidFrame">
                     <img src="projects/IMG_8729.JPG" alt="Camera Shot" id="polaroidImg">
@@ -222,7 +227,7 @@
                     <path d="M 50,600 Q 80,570 110,600 Q 140,590 120,620 Q 80,630 50,600" fill="#fff" opacity="0.6"/>
 
                     <!-- Destination Nodes -->
-                    <!-- Node 1: Kashmir -->
+                     <!-- Node 1: Kashmir -->
                     <circle class="map-node" cx="100" cy="100" r="14" data-dest="kashmir"></circle>
                     <text x="125" y="105" class="map-label royal">Kashmir ❄️</text>
 
@@ -237,13 +242,15 @@
                     <!-- Node 4: Kerala -->
                     <circle class="map-node" cx="400" cy="850" r="14" data-dest="kerala"></circle>
                     <text x="250" y="855" class="map-label royal">Kerala 🌴</text>
+
+                    <!-- Origin (HOME) target for the loop-back -->
+                    <circle id="originNode" cx="100" cy="100" r="0" fill="transparent"></circle>
                  </svg>
 
-                 <!-- Plane sprite controlled by GSAP -->
+                 <!-- Plane container - used as the proxy for the GSAP viewport movement -->
                  <div id="airplane" class="airplane-sprite custom-plane">
                     <!-- Hand-drawn SVG plane -->
-                    <svg width="40" height="40" viewBox="0 0 100 100">
-                       <!-- Exhaust glow -->
+                    <svg width="60" height="60" viewBox="0 0 100 100">
                        <circle cx="50" cy="100" r="10" fill="url(#fire)" />
                        <defs>
                           <radialGradient id="fire">
@@ -252,8 +259,8 @@
                           </radialGradient>
                        </defs>
                        <path d="M 50,10 C 60,30 65,50 60,90 L 40,90 C 35,50 40,30 50,10 Z" fill="#fff" stroke="#8c6d46" stroke-width="2"/>
-                       <path d="M 45,50 L 10,70 L 10,80 L 45,60 Z" fill="#ddd" stroke="#8c6d46" stroke-width="2"/>
-                       <path d="M 55,50 L 90,70 L 90,80 L 55,60 Z" fill="#ddd" stroke="#8c6d46" stroke-width="2"/>
+                       <path d="M 45,50 L 10,70 L 10,80 L 45,60 Z" fill="#ccc" stroke="#8c6d46" stroke-width="2"/>
+                       <path d="M 55,50 L 90,70 L 90,80 L 55,60 Z" fill="#ccc" stroke="#8c6d46" stroke-width="2"/>
                     </svg>
                  </div>
 
@@ -285,6 +292,21 @@
           </div>
         </div>
       </section>
+
+      <!-- TRUE HOME CINEMATIC OVERLAY -->
+      <div id="trueHomeOverlay" class="true-home-overlay">
+         <div class="true-home-content">
+            <h1 class="true-home-title">TRUE HOME.</h1>
+            <p class="true-home-subtitle">Wherever my family and friends are.</p>
+            <div class="true-home-gallery">
+               <!-- User can drop pictures of friends/fam here -->
+               <div class="home-photo"><img src="projects/family_preview.png" alt="Family"></div>
+               <div class="home-photo"><img src="projects/family_preview.png" alt="Friends"></div>
+               <div class="home-photo"><img src="projects/family_preview.png" alt="Vibes"></div>
+            </div>
+            <button class="magnet-btn back-btn" id="backToOriginBtn">Return to Journey</button>
+         </div>
+      </div>
 
       <!-- Footer -->
       <footer class="pro-footer">

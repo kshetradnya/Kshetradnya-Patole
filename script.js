@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  // --- Hobby 2: Coastal Parallax Running Game ---
+  // --- Hobby 2: Coastal 3-Lane Dodger ---
   const canvas = document.getElementById('dinoCanvas');
   const startGameBtn = document.getElementById('startGameBtn');
   const gameOverlay = document.getElementById('gameOverlay');
@@ -350,43 +350,44 @@ document.addEventListener('DOMContentLoaded', () => {
     let frame = 0, score = 0;
     
     // Day Night Cycle vars
-    let timeCycle = 0; // 0 to 1 wrapping
+    let timeCycle = 0; 
     
-    // Load User Sprite
+    // Audio Contexts
+    const oceanAudio = new Audio("https://cdn.pixabay.com/download/audio/2022/03/10/audio_51cbfaebef.mp3?filename=ocean-waves-112906.mp3");
+    oceanAudio.loop = true; oceanAudio.volume = 0.3;
+    const chatterAudio = new Audio("https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3?filename=people-talking-39074.mp3");
+    chatterAudio.loop = true; chatterAudio.volume = 0.2;
+
+    // Load User Sprite (Spritesheet)
     const runnerSprite = new Image();
     runnerSprite.src = 'projects/runner.png.png';
     let spriteLoaded = false;
     runnerSprite.onload = () => { spriteLoaded = true; };
 
-    // Game Entities
-    const dino = { x: 50, y: 220, w: 40, h: 60, vy: 0, gravity: 0.8, jumpPower: -14, grounded: true };
-    let obstacles = [];
+    // Game Entities (3 Lanes: 230=Top, 250=Mid, 270=Bot)
+    const lanes = [230, 250, 270];
+    const dino = { x: 50, lane: 1, y: 250, w: 30, h: 50 }; // y is visual, lane is logical
+    let pedestrians = [];
     let cars = [];
-    let particles = [];
-    let problemTypes = ["🍔", "📚", "📱"];
     
     function resetGame() {
-      dino.y = 220;
-      dino.vy = 0;
-      obstacles = []; cars = []; particles = [];
+      dino.lane = 1;
+      pedestrians = []; cars = [];
       frame = 0; score = 0; timeCycle = 0;
       isGameRunning = true;
       gameOverlay.style.display = 'none';
+      oceanAudio.play().catch(e=>console.log(e));
+      chatterAudio.play().catch(e=>console.log(e));
       requestAnimationFrame(gameLoop);
     }
 
     startGameBtn.addEventListener('click', resetGame);
     
-    // Jump Controls
-    function jump() {
-      if(dino.grounded && isGameRunning) {
-        dino.vy = dino.jumpPower;
-        dino.grounded = false;
-      }
-    }
-    canvas.addEventListener('mousedown', jump);
+    // Lane Controls (Up/Down)
     window.addEventListener('keydown', (e) => {
-      if(e.code === 'Space' && isGameRunning) { e.preventDefault(); jump(); }
+      if(!isGameRunning) return;
+      if(e.code === 'ArrowUp' || e.code === 'KeyW') { e.preventDefault(); dino.lane = Math.max(0, dino.lane - 1); }
+      if(e.code === 'ArrowDown' || e.code === 'KeyS') { e.preventDefault(); dino.lane = Math.min(2, dino.lane + 1); }
     });
 
     // Helper: color lerp
@@ -398,161 +399,193 @@ document.addEventListener('DOMContentLoaded', () => {
       if(!isGameRunning) return;
       
       // Time cycle math
-      timeCycle += 0.0005; // speed of day passing
+      timeCycle += 0.0005; 
       let t = (Math.sin(timeCycle * Math.PI * 2) + 1) / 2; // 0 to 1 to 0
       
-      // Sky Color (Day: 135,206,235 -> Sunset: 255,140,0 -> Night: 10,10,40)
+      // Sky Color
       let skyColor = lerpColor([135,206,235], [10,10,40], t);
       ctx.fillStyle = skyColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height); // clear with sky
+      ctx.fillRect(0, 0, canvas.width, canvas.height); 
       
       // Draw Ocean Parallax (Back layer)
       ctx.fillStyle = lerpColor([0,105,148], [5,20,50], t);
       let waveOffset = (frame * 1) % 40;
       for(let x = -waveOffset; x < canvas.width; x += 40) {
-         ctx.fillRect(x, 150, 40, canvas.height - 150);
+         ctx.fillRect(x, 100, 40, canvas.height - 100);
          // Wave highlights
          ctx.fillStyle = 'rgba(255,255,255,0.2)';
-         ctx.fillRect(x + 10, 155 + Math.sin(x)*5, 10, 2);
+         ctx.fillRect(x + 10, 105 + Math.sin(x)*5, 10, 2);
          ctx.fillStyle = lerpColor([0,105,148], [5,20,50], t);
       }
 
       // Draw Road Parallax (Mid layer)
       ctx.fillStyle = '#444';
-      ctx.fillRect(0, 200, canvas.width, 100);
+      ctx.fillRect(0, 160, canvas.width, 60);
       // Road markings
       ctx.fillStyle = '#ffcc00';
       let roadOffset = (frame * 3) % 60;
       for(let x = -roadOffset; x < canvas.width; x += 60) {
-         ctx.fillRect(x, 220, 30, 4);
+         ctx.fillRect(x, 190, 30, 4);
       }
 
-      // Traffic Cars
+      // Traffic Cars (zoom past in background)
       if(frame % 150 === 0) {
-         cars.push({ x: canvas.width, y: 205, speed: Math.random()*2 + 4, color: ['#fff','#f00','#000'][Math.floor(Math.random()*3)] });
+         cars.push({ x: canvas.width, y: 175, speed: Math.random()*2 + 4, color: ['#fff','#f00','#000'][Math.floor(Math.random()*3)] });
       }
       for(let i=0; i<cars.length; i++) {
-        let c = cars[i];
-        c.x -= c.speed;
-        ctx.fillStyle = c.color;
-        ctx.fillRect(c.x, c.y, 50, 20); // car body
-        ctx.fillStyle = '#ff0000'; ctx.fillRect(c.x+45, c.y+5, 5, 5); // taillight
+        let c = cars[i]; c.x -= c.speed;
+        ctx.fillStyle = c.color; ctx.fillRect(c.x, c.y, 50, 20); 
+        ctx.fillStyle = '#ff0000'; ctx.fillRect(c.x+45, c.y+5, 5, 5); 
       }
-      if(cars.length && cars[0].x < -100) cars.shift(); // cleanup
+      if(cars.length && cars[0].x < -100) cars.shift(); 
 
       // Draw Sidewalk Parallax (Foreground)
-      ctx.fillStyle = '#aaa';
-      ctx.fillRect(0, 270, canvas.width, 30);
       ctx.fillStyle = '#888';
+      ctx.fillRect(0, 220, canvas.width, 80);
+      ctx.fillStyle = '#666';
       let walkOffset = (frame * 6) % 40;
       for(let x = -walkOffset; x < canvas.width; x += 40) {
-         ctx.fillRect(x, 270, 2, 30); // concrete cracks
+         ctx.fillRect(x, 220, 2, 80); // concrete cracks
       }
 
-      // Physics applied to player
-      dino.vy += dino.gravity;
-      dino.y += dino.vy;
-      if (dino.y >= 210) { // Ground level on sidewalk
-        if(!dino.grounded) {
-          // Explode particles on landing
-          for(let p=0; p<5; p++) particles.push({x: dino.x+20, y: 270, vx: (Math.random()-0.5)*4, vy: -Math.random()*3, life: 1});
-        }
-        dino.y = 210;
-        dino.grounded = true;
-      }
+      // Smooth Lane Transition for Player
+      let targetY = lanes[dino.lane];
+      dino.y += (targetY - dino.y) * 0.2;
       
-      // Draw Player
+      // Draw Player (Spritesheet Slicing)
       if (spriteLoaded) {
-         // Bobbing animation if running
-         let bobOffset = dino.grounded ? Math.sin(frame * 0.4) * 4 : 0;
-         ctx.drawImage(runnerSprite, dino.x, dino.y + bobOffset, dino.w, dino.h);
+         // Assume 4 frames horizontally
+         let numFrames = 4;
+         let frameW = runnerSprite.width / numFrames;
+         let frameH = runnerSprite.height;
+         let aniFrame = Math.floor(frame / 6) % numFrames; // change frame every 6 ticks
+         
+         ctx.drawImage(runnerSprite, aniFrame * frameW, 0, frameW, frameH, dino.x, dino.y - dino.h, dino.w, dino.h);
       } else {
-         ctx.fillStyle = '#333';
-         ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
+         ctx.fillStyle = '#111';
+         ctx.fillRect(dino.x, dino.y - dino.h, dino.w, dino.h);
       }
 
-      // Particles
-      ctx.fillStyle = '#fff';
-      for(let i=particles.length-1; i>=0; i--) {
-        let p = particles[i];
-        p.x += p.vx; p.y += p.vy; p.life -= 0.05;
-        if(p.life <= 0) particles.splice(i,1);
-        else ctx.fillRect(p.x, p.y, 4, 4);
-      }
-
-      // Obstacles
-      let gameSpeed = 6 + (score * 0.005); // progressive speed
+      // Pedestrians (Obstacles)
+      let gameSpeed = 6 + (score * 0.005); 
       if (frame % (Math.max(40, 100 - Math.floor(score/10))) === 0 && frame > 0) {
-        let type = problemTypes[Math.floor(Math.random() * problemTypes.length)];
-        obstacles.push({ x: canvas.width, y: 240, w: 30, h: 30, text: type });
+        let pLane = Math.floor(Math.random() * 3);
+        let emojis = ["🚶", "🏃‍♂️", "🚴", "🐕"];
+        pedestrians.push({ x: canvas.width, lane: pLane, y: lanes[pLane], speed: Math.random()*2, w: 20, h: 40, emoji: emojis[Math.floor(Math.random()*emojis.length)] });
       }
       
-      for(let i=0; i<obstacles.length; i++) {
-        let obs = obstacles[i];
-        obs.x -= gameSpeed; 
+      for(let i=0; i<pedestrians.length; i++) {
+        let p = pedestrians[i];
+        p.x -= (gameSpeed + p.speed); 
         
-        ctx.fillStyle = 'rgba(255,255,255,0.8)';
-        ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
-        ctx.font = '20px sans-serif';
-        ctx.fillText(obs.text, obs.x + 5, obs.y + 22);
+        ctx.font = '30px sans-serif';
+        ctx.fillText(p.emoji, p.x, p.y - 10);
 
-        // Collision detection
-        if (dino.x < obs.x + obs.w - 10 && dino.x + dino.w > obs.x + 10 &&
-            dino.y < obs.y + obs.h && dino.y + dino.h > obs.y) {
-          isGameRunning = false;
-          gameOverlay.style.display = 'flex';
-          startGameBtn.innerHTML = "Oof! Restart Run";
+        // Collision detection (Z-axis / Lane matching)
+        if (dino.lane === p.lane) {
+           if (dino.x < p.x + p.w && dino.x + dino.w > p.x) {
+             isGameRunning = false;
+             oceanAudio.pause(); chatterAudio.pause();
+             gameOverlay.style.display = 'flex';
+             startGameBtn.innerHTML = "Oof, crashed! Restart Run";
+           }
         }
       }
-      if(obstacles.length && obstacles[0].x < -100) obstacles.shift();
+      if(pedestrians.length && pedestrians[0].x < -100) pedestrians.shift();
 
       // UI
       score++;
-      if(scoreUI) scoreUI.innerText = "Score: " + Math.floor(score/10) + "m";
+      if(scoreUI) scoreUI.innerText = "Distance: " + Math.floor(score/10) + "m";
 
       frame++;
       if(isGameRunning) requestAnimationFrame(gameLoop);
     }
   }
 
-  // --- Hobby 3: Royal Flight Map GSAP ---
+  // --- Hobby 3: Royal Flight Map GSAP Cinematic ---
   if (document.getElementById('airplanePathBase') && document.getElementById('airplane')) {
      
      const airplane = document.getElementById('airplane');
+     const flightSvg = document.querySelector('.flight-svg');
      const altitudeHud = document.getElementById('altitudeHud');
      const passportStamp = document.getElementById('passportStamp');
+     const overlay = document.getElementById('trueHomeOverlay');
+     const backBtn = document.getElementById('backToOriginBtn');
      
-     // The main flight animation
-     gsap.to("#airplane", {
+     const flightAudio = new Audio("https://cdn.pixabay.com/download/audio/2022/10/26/audio_970d4fc18d.mp3?filename=airplane-fly-by-01-122996.mp3");
+     
+     // To translate the SVG underneath the stationary airplane:
+     // We animate a dummy proxy object's progress over the ScrollTrigger, 
+     // then use MotionPathPlugin to extract coordinates and physically move the SVG Map.
+     let pathProxy = { p: 0 };
+
+     gsap.to(pathProxy, {
+       p: 1, // 0 to 1 over scroll
        scrollTrigger: {
          trigger: "#flightPathContainer",
-         start: "top 40%",    
-         end: "bottom 80%",   
-         scrub: 1,            
+         start: "top top",    
+         end: "bottom bottom",   
+         scrub: true,            
          scroller: ".pro-scroll-container",
          onUpdate: (self) => {
+            let prog = self.progress;
+
+            // Loop back to Origin logic
+            // If progress > 0.8 (After Kerala), the path forces back to home (p=0 coordinates)
+            let actualPathProg = prog;
+            if(prog > 0.8) {
+               // Map remaining scroll 0.8 -> 1.0 to go backwards 1.0 -> 0.0
+               let over = (prog - 0.8) / 0.2; // 0.0 to 1.0
+               actualPathProg = 1.0 - over; // flies backwards to origin
+               
+               // Cinematic Trigger
+               if (over >= 0.99) {
+                  airplane.classList.add('zoomed-eye');
+                  setTimeout(() => { overlay.classList.add('active'); }, 800);
+               } else {
+                  airplane.classList.remove('zoomed-eye');
+                  overlay.classList.remove('active');
+               }
+            }
+
+            // Extract exact pixel coordinates from SVG path
+            let pt = MotionPathPlugin.getPositionOnPath("#airplanePathBase", actualPathProg, true);
+            
+            // Translate the massive Map wrapping SVG in reverse!
+            // Map offsets so plane remains visually center
+            let mapWidth = flightSvg.viewBox.baseVal.width;
+            let mapHeight = flightSvg.viewBox.baseVal.height;
+            // The canvas is 500x1000 scaled via CSS. 
+            // We use simple percentage translation roughly based on progress
+            gsap.set(flightSvg, { 
+               x: -pt.x + (window.innerWidth / 3), 
+               y: -pt.y + (window.innerHeight / 2) 
+            });
+
+            // Adjust airplane rotation based on motion delta
+            let rotation = MotionPathPlugin.getRotationOnPath("#airplanePathBase", actualPathProg, true);
+            gsap.set(airplane, { rotation: rotation });
+
             // Altitude HUD update
-            if(altitudeHud) altitudeHud.innerText = `Cruising Altitude: ${Math.floor(self.progress * 35000)}ft`;
-            
-            // Dynamic scaling effect based on progress milestones
-            const p = self.progress;
-            // Hotspots roughly mapped to progress based on curve geometry:
-            // Kashmir (~0%), Amritsar (~0.3), Goa (~0.65), Kerala (~1.0)
-            const isNearNode = (Math.abs(p - 0) < 0.05) || (Math.abs(p - 0.3) < 0.05) || 
-                               (Math.abs(p - 0.65) < 0.05) || (Math.abs(p - 1.0) < 0.05);
-            
-            if (isNearNode) airplane.classList.add('scaled');
-            else airplane.classList.remove('scaled');
+            if(altitudeHud) altitudeHud.innerText = `Cruising Altitude: ${Math.floor(prog * 35000)}ft`;
+
+            // Audio Logic based on scroll velocity 
+            if(Math.abs(self.getVelocity()) > 50) {
+               flightAudio.play().catch(e=>e);
+               flightAudio.volume = Math.min(1, Math.abs(self.getVelocity()) / 1000);
+            }
          }
-       },
-       motionPath: {
-         path: "#airplanePathBase",
-         align: "#airplanePathBase",
-         alignOrigin: [0.5, 0.5],
-         autoRotate: 90
        },
        ease: "none"
      });
+
+     if (backBtn) {
+        backBtn.addEventListener('click', () => {
+           overlay.classList.remove('active');
+           airplane.classList.remove('zoomed-eye');
+           // the user would need to scroll immediately to clear the 0.99 threshold 
+        });
+     }
      
      // Travel Modal Node Clicks
      const mapNodes = document.querySelectorAll('.map-node');
@@ -560,7 +593,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
      mapNodes.forEach(node => {
        node.addEventListener('click', (e) => {
-         // Close all modals first
          modals.forEach(m => m.classList.remove('active'));
          passportStamp.classList.remove('stamped');
          
@@ -568,23 +600,19 @@ document.addEventListener('DOMContentLoaded', () => {
          const modal = document.getElementById('tModal' + dest.charAt(0).toUpperCase() + dest.slice(1));
          
          if (modal) {
-            // Position near node
             const containerRect = document.getElementById('flightPathContainer').getBoundingClientRect();
             const nodeRect = node.getBoundingClientRect();
             modal.style.left = (nodeRect.left - containerRect.left + 30) + 'px';
             modal.style.top = (nodeRect.top - containerRect.top - 20) + 'px';
             modal.classList.add('active');
             
-            // Trigger stamp
             passportStamp.style.left = (nodeRect.left - containerRect.left - 100) + 'px';
             passportStamp.style.top = (nodeRect.top - containerRect.top - 50) + 'px';
-            
             setTimeout(() => { passportStamp.classList.add('stamped'); }, 100);
          }
        });
      });
      
-     // Close modals when clicking elsewhere
      document.getElementById('flightPathContainer').addEventListener('click', (e) => {
        if(!e.target.closest('.map-node') && !e.target.closest('.t-modal')) {
          modals.forEach(m => m.classList.remove('active'));

@@ -639,12 +639,20 @@ body.ide-active .custom-cursor { display: none; }
 .hobby-header h3 { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; }
 .hobby-header p { color: var(--pro-text-muted); font-size: 1.1rem; }
 
-/* Hobby 1: Photography */
-.camera-ui {
-  position: relative;
-  width: 100%; height: 450px;
-  background: #000; border-radius: 12px;
-  overflow: hidden; display: flex; align-items: center; justify-content: center;
+/* Hobby 1: Photography real-bg */
+.camera-ui-real {
+  position: relative; width: 100%; max-width: 800px; margin: 0 auto;
+  aspect-ratio: 1.5; /* matches rough dslr back ratio */
+  display: flex; align-items: center; justify-content: center;
+}
+.camera-bg-img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 12px; pointer-events: none;
+}
+.camera-lcd {
+  position: absolute;
+  top: 18%; left: 14%; width: 52%; height: 55%;
+  background: #000; overflow: hidden;
+  border-radius: 2px;
 }
 .camera-hud {
   position: absolute; inset: 10px; pointer-events: none;
@@ -677,21 +685,18 @@ body.ide-active .custom-cursor { display: none; }
 .crosshair.horizontal { top: 50%; left: -10px; right: -10px; height: 1px; }
 .crosshair.vertical { left: 50%; top: -10px; bottom: -10px; width: 1px; }
 
-#webcamVideo { width: 100%; height: 100%; object-fit: cover; }
-.camera-actions { position: absolute; bottom: 20px; display: flex; gap: 15px; z-index: 10; pointer-events: auto;}
-.shutter-btn {
-  background: #fff; color: #000; border: none; padding: 10px 20px;
-  font-family: var(--font-sans); font-weight: bold; cursor: none;
-  border-radius: 4px; letter-spacing: 1px; text-transform: uppercase;
-  transition: transform 0.2s, background 0.2s;
-}
-.shutter-btn:hover { background: #ccc; transform: scale(1.05); }
-
 .camera-flash {
   position: fixed; inset: 0; background: #fff; z-index: 10000;
   opacity: 0; pointer-events: none; transition: opacity 0.1s;
 }
 .camera-flash.flash-active { opacity: 1; transition: none; }
+
+/* Invisible trigger buttons mapped over canon.jpeg */
+.invisible-btn { position: absolute; background: transparent; border: 1px solid rgba(255,0,0,0); cursor: pointer; border-radius: 5px; transition: border 0.3s; }
+.invisible-btn:hover { border: 1px solid rgba(255,255,255,0.4); box-shadow: inset 0 0 10px rgba(255,255,255,0.2); }
+.shutter-map { top: 2%; right: 10%; width: 15%; height: 10%; border-radius: 50%; }
+.menu-map { top: 15%; right: 10%; width: 5%; height: 8%; border-radius: 50%; }
+.erase-map { bottom: 20%; right: 10%; width: 5%; height: 8%; border-radius: 50%; }
 
 .polaroid-wrapper {
   position: absolute; bottom: -100%; left: 50%; width: 280px; transform: translateX(-50%) rotate(0deg);
@@ -749,19 +754,29 @@ body.ide-active .custom-cursor { display: none; }
 .start-game-btn:hover { background: #333; }
 
 /* Hobby 3: Travelling SVG */
+.traveling { position: relative; }
 .flight-container {
-  position: relative; width: 100%; height: 800px; overflow: hidden;
+  position: relative; width: 100%; height: 400vh; overflow: hidden;
+  background: #e9f2fa; border-radius: 12px;
 }
-.flight-svg { width: 100%; height: 100%; }
+.flight-svg { 
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 200vw; /* extremely tall */
+  transition: transform 0.1s ease-out; /* GSAP updates origin */
+}
 .map-node { fill: #fdfbf7; stroke: #b8935c; stroke-width: 4; cursor: pointer; transition: transform 0.3s, fill 0.3s; }
 .map-node:hover { transform: scale(1.4); transform-origin: center; fill: #b8935c; }
 .map-label.royal { font-family: var(--font-serif); font-size: 16px; fill: #3a2e28; font-weight: bold; pointer-events: none; }
+
+/* The plane wrapper remains fixed in center while inner SVG moves */
 .airplane-sprite {
-  position: absolute; top: 0; left: 0; font-size: 2rem; transform: translate(-50%, -50%);
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   pointer-events: none; z-index: 10;
-  transition: transform 0.1s, scale 0.3s cubic-bezier(0.2,0.8,0.2,1);
+  transition: transform 1s cubic-bezier(0.2,0.8,0.2,1);
 }
-.airplane-sprite.scaled { transform: translate(-50%, -50%) scale(1.6) rotate(var(--rotation, 0deg)) !important; }
+.airplane-sprite.zoomed-eye {
+  transform: translate(-50%, -50%) scale(100);
+}
 
 .altitude-hud {
   position: absolute; top: 40px; right: 40px; background: rgba(255,255,255,0.9);
@@ -787,3 +802,18 @@ body.ide-active .custom-cursor { display: none; }
   transition: opacity 0.4s, transform 0.4s cubic-bezier(0.2,0.8,0.2,1);
 }
 .passport-stamp.stamped { opacity: 0.3; transform: rotate(-15deg) scale(1); }
+
+/* TRUE HOME OVERLAY */
+.true-home-overlay {
+  position: fixed; inset: 0; background: #fff; z-index: 99999;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 2s cubic-bezier(0.8, 0, 0.2, 1);
+}
+.true-home-overlay.active { opacity: 1; pointer-events: auto; }
+.true-home-content { text-align: center; color: #333; font-family: var(--font-serif); }
+.true-home-title { font-size: 5rem; font-weight: bold; letter-spacing: -2px; margin-bottom: 0.5rem; }
+.true-home-subtitle { font-size: 1.5rem; font-family: var(--font-sans); color: #666; margin-bottom: 3rem; }
+.true-home-gallery { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+.home-photo { width: 250px; height: 300px; background: #eee; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+.home-photo img { width: 100%; height: 100%; object-fit: cover; }
+.back-btn { padding: 15px 30px; background: #000; color: #fff; border: none; font-family: var(--font-sans); font-weight: bold; border-radius: 8px; cursor: pointer; }
