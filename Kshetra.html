@@ -135,22 +135,51 @@
               </div>
               
               <div class="camera-ui">
-                <div class="viewfinder">
+                <div class="camera-hud">
+                   <div class="hud-top">
+                      <span class="battery-indicator blinking">🔋</span>
+                      <span class="film-counter">32/36</span>
+                   </div>
+                   <div class="hud-bottom">
+                      <span class="hud-item">ISO 400</span>
+                      <span class="hud-item">f/2.8</span>
+                      <span class="hud-item mock-btn" onclick="alert('Feature locked on this lens.')">Erase</span>
+                      <span class="hud-item filter-toggle" id="filterToggleBtn">Filter: None</span>
+                   </div>
+                </div>
+
+                <div class="viewfinder" id="viewfinderArea">
                   <div class="vf-corner tl"></div><div class="vf-corner tr"></div>
                   <div class="vf-corner bl"></div><div class="vf-corner br"></div>
                   <div class="vf-center-focus">
                      <span class="crosshair horizontal"></span>
                      <span class="crosshair vertical"></span>
                   </div>
-                  <button class="shutter-btn magnet-btn" id="shutterBtn">Click Shutter</button>
+                  
+                  <video id="webcamVideo" autoplay playsinline style="display:none;"></video>
+                  
+                  <div class="camera-actions">
+                     <button class="shutter-btn magnet-btn" id="webcamBtn">Self Portrait</button>
+                     <button class="shutter-btn magnet-btn" id="shutterBtn">Click Shutter (Default)</button>
+                  </div>
                 </div>
                 
                 <div class="polaroid-wrapper" id="polaroidRender">
-                  <div class="polaroid-frame">
-                    <img src="projects/IMG_8729.JPG" alt="Camera Shot">
-                    <p class="polaroid-caption">IMG_8729.JPG</p>
+                  <div class="polaroid-frame" id="polaroidFrame">
+                    <img src="projects/IMG_8729.JPG" alt="Camera Shot" id="polaroidImg">
+                    <p class="polaroid-caption" id="polaroidCaption">IMG_8729.JPG</p>
+                    <span class="timestamp" id="polaroidTime"></span>
                   </div>
                 </div>
+              </div>
+
+              <!-- Filler Film Strip -->
+              <div class="film-strip-gallery">
+                 <img src="projects/filler_1_1776426323437.png" alt="Mountain">
+                 <img src="projects/filler_2_1776426340389.png" alt="Cyberpunk">
+                 <img src="projects/filler_3_1776426358153.png" alt="Butterfly">
+                 <img src="projects/filler_4_1776426373781.png" alt="Architecture">
+                 <img src="projects/filler_5_1776426388738.png" alt="Stars">
               </div>
             </div>
 
@@ -162,7 +191,8 @@
               </div>
               
               <div class="game-container" id="runningGameContainer">
-                <canvas id="dinoCanvas" width="600" height="200"></canvas>
+                <div id="scoreUI" class="score-ui">Score: 0m</div>
+                <canvas id="dinoCanvas" width="800" height="300"></canvas>
                 <div class="game-overlay" id="gameOverlay">
                   <button id="startGameBtn" class="magnet-btn start-game-btn">Start Run</button>
                 </div>
@@ -170,37 +200,85 @@
             </div>
             
             <!-- Hobby 3: Travelling -->
-            <div class="hobby-block traveling gsap-fade-up">
-               <div class="hobby-header">
-                 <h3>World Stops</h3>
-                 <p>Scroll down to fly across the subcontinent and explore my favorite spots.</p>
+            <div class="hobby-block traveling gsap-fade-up" style="background: #fdfbf7;">
+               <div class="hobby-header" style="text-align:center;">
+                 <h3 style="font-family: var(--font-serif); font-size: 3rem; color: #3a2e28;">Royal Map of Travels</h3>
+                 <p style="color: #6d5e54;">An exploration across the beautiful subcontinent.</p>
                </div>
                
-               <div class="flight-container" id="flightPathContainer">
-                 <!-- SVG Map Path -->
-                 <svg class="flight-svg" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid meet">
-                    <!-- Base path -->
-                    <path id="airplanePath" d="M 50,50 Q 300,250 200,500 T 350,750" fill="transparent" stroke="rgba(0,122,204,0.3)" stroke-width="2" stroke-dasharray="6,6" />
-                    
-                    <!-- Destination Nodes (Coordinates roughly matched to path) -->
-                    <circle class="map-node" cx="50" cy="50" r="10" data-info="Kashmir: Paradise on Earth, beautiful snow-capped peaks"></circle>
-                    <text x="70" y="55" class="map-label">Kashmir</text>
+               <div class="altitude-hud" id="altitudeHud">Cruising Altitude: 0ft</div>
 
-                    <circle class="map-node" cx="190" cy="200" r="10" data-info="Amritsar: The Golden Temple and incredibly rich Punjabi cuisine."></circle>
-                    <text x="210" y="205" class="map-label">Amritsar</text>
+               <div class="flight-container" id="flightPathContainer" style="background: transparent;">
+                 <!-- SVG Map Path -->
+                 <svg class="flight-svg" viewBox="0 0 500 1000" preserveAspectRatio="xMidYMid meet">
+                    <!-- Base path (dashed) -->
+                    <path id="airplanePathBase" d="M 100,100 C 350,300 150,550 400,850" fill="transparent" stroke="#d5c8b5" stroke-width="4" stroke-dasharray="10,10" />
+                    <!-- Dynamic path (solid gold, filled via GSAP) -->
+                    <path id="airplanePath" d="M 100,100 C 350,300 150,550 400,850" fill="transparent" stroke="#b8935c" stroke-width="4" />
                     
-                    <circle class="map-node" cx="200" cy="500" r="10" data-info="Goa: Late night beach walks and endless ocean breeze."></circle>
-                    <text x="220" y="505" class="map-label">Goa</text>
+                    <!-- Decorative Clouds -->
+                    <path d="M 30,200 Q 50,180 70,200 Q 90,190 100,210 Q 70,220 30,200" fill="#fff" opacity="0.6"/>
+                    <path d="M 400,100 Q 430,80 450,110 Q 480,100 470,130 Q 420,130 400,100" fill="#fff" opacity="0.6"/>
+                    <path d="M 50,600 Q 80,570 110,600 Q 140,590 120,620 Q 80,630 50,600" fill="#fff" opacity="0.6"/>
+
+                    <!-- Destination Nodes -->
+                    <!-- Node 1: Kashmir -->
+                    <circle class="map-node" cx="100" cy="100" r="14" data-dest="kashmir"></circle>
+                    <text x="125" y="105" class="map-label royal">Kashmir ❄️</text>
+
+                    <!-- Node 2: Amritsar -->
+                    <circle class="map-node" cx="295" cy="245" r="14" data-dest="amritsar"></circle>
+                    <text x="320" y="250" class="map-label royal">Amritsar ☀️</text>
                     
-                    <circle class="map-node" cx="350" cy="750" r="10" data-info="Kerala: God's Own Country. Serene backwaters and lush greenery."></circle>
-                    <text x="230" y="755" class="map-label">Kerala</text>
+                    <!-- Node 3: Goa -->
+                    <circle class="map-node" cx="165" cy="570" r="14" data-dest="goa"></circle>
+                    <text x="190" y="575" class="map-label royal">Goa 🌊</text>
+                    
+                    <!-- Node 4: Kerala -->
+                    <circle class="map-node" cx="400" cy="850" r="14" data-dest="kerala"></circle>
+                    <text x="250" y="855" class="map-label royal">Kerala 🌴</text>
                  </svg>
 
                  <!-- Plane sprite controlled by GSAP -->
-                 <div id="airplane" class="airplane-sprite">✈️</div>
+                 <div id="airplane" class="airplane-sprite custom-plane">
+                    <!-- Hand-drawn SVG plane -->
+                    <svg width="40" height="40" viewBox="0 0 100 100">
+                       <!-- Exhaust glow -->
+                       <circle cx="50" cy="100" r="10" fill="url(#fire)" />
+                       <defs>
+                          <radialGradient id="fire">
+                             <stop offset="0%" stop-color="#ffb84d" />
+                             <stop offset="100%" stop-color="transparent" />
+                          </radialGradient>
+                       </defs>
+                       <path d="M 50,10 C 60,30 65,50 60,90 L 40,90 C 35,50 40,30 50,10 Z" fill="#fff" stroke="#8c6d46" stroke-width="2"/>
+                       <path d="M 45,50 L 10,70 L 10,80 L 45,60 Z" fill="#ddd" stroke="#8c6d46" stroke-width="2"/>
+                       <path d="M 55,50 L 90,70 L 90,80 L 55,60 Z" fill="#ddd" stroke="#8c6d46" stroke-width="2"/>
+                    </svg>
+                 </div>
 
-                 <!-- Hover Tooltip -->
-                 <div id="mapTooltip" class="map-tooltip"></div>
+                 <!-- Detailed Modals -->
+                 <div id="travelModalWrap" class="travel-modal-wrap">
+                    <div id="tModalKashmir" class="t-modal">
+                       <h4>Kashmir Itinerary</h4>
+                       <ul><li>Snow-capped mountain hiking</li><li>Shikara ride on Dal Lake</li><li>Wazwan Cuisine</li></ul>
+                    </div>
+                    <div id="tModalAmritsar" class="t-modal">
+                       <h4>Amritsar Itinerary</h4>
+                       <ul><li>Golden Temple visit</li><li>Wagah Border Parade</li><li>Extra butter Kulcha</li></ul>
+                    </div>
+                    <div id="tModalGoa" class="t-modal">
+                       <h4>Goa Itinerary</h4>
+                       <ul><li>Late night beach walks</li><li>Seafood hopping</li><li>Scooter riding coastlines</li></ul>
+                    </div>
+                    <div id="tModalKerala" class="t-modal">
+                       <h4>Kerala Itinerary</h4>
+                       <ul><li>Houseboat in Alleppey</li><li>Tea gardens of Munnar</li><li>Ayurvedic retreats</li></ul>
+                    </div>
+                 </div>
+                 
+                 <!-- Passport Stamp Visual -->
+                 <div id="passportStamp" class="passport-stamp">PASSPORT<br>STAMPED</div>
                </div>
             </div>
 
