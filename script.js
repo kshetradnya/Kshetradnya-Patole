@@ -240,18 +240,52 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.from('.val-left-interface', { x: -100, opacity: 0, duration: 0.8, delay: 1 });
     gsap.from('.val-center-banner', { scale: 0.5, opacity: 0, duration: 0.8, delay: 0.3 });
     
-    // Stinger
-    const stinger = document.createElement('div');
-    stinger.className = 'val-match-stinger font-comic';
-    stinger.innerText = 'MATCH FOUND';
-    document.body.appendChild(stinger);
-    gsap.to(stinger, { opacity: 1, scale: 1.2, duration: 0.4, onComplete: () => {
-        setTimeout(() => gsap.to(stinger, {opacity: 0, scale: 2, duration: 0.3, onComplete: () => stinger.remove()}), 800);
-    }});
+  const valStartBtn = document.getElementById('valStartBtn');
+  if (valStartBtn) {
+    valStartBtn.addEventListener('click', () => {
+      // 1. Change button state to "IN QUEUE"
+      valStartBtn.innerText = "QUEUING...";
+      valStartBtn.style.background = "#000";
+      valStartBtn.style.color = "#ff4655";
+      valStartBtn.style.pointerEvents = "none";
+
+      // 2. Wait 3 seconds
+      setTimeout(() => {
+        // 3. Match Found Stinger
+        const stinger = document.createElement('div');
+        stinger.className = 'val-match-stinger font-comic';
+        stinger.innerText = 'MATCH FOUND';
+        document.body.appendChild(stinger);
+
+        gsap.to(stinger, { opacity: 1, scale: 1, duration: 0.5, ease: "expo.out" });
+
+        // 4. Whiteout and Exit
+        setTimeout(() => {
+          const whiteout = document.createElement('div');
+          whiteout.className = 'val-flash-whiteout';
+          document.body.appendChild(whiteout);
+          
+          gsap.to(whiteout, { opacity: 1, duration: 0.4, onComplete: () => {
+            // Reset and Exit
+            valUniverse.style.display = 'none';
+            stinger.remove();
+            
+            // Fade whiteout back to show professional site
+            gsap.to(whiteout, { opacity: 0, duration: 1.5, onComplete: () => whiteout.remove() });
+            
+            // Reset button for next time
+            valStartBtn.innerText = "START";
+            valStartBtn.style.background = "#ff4655";
+            valStartBtn.style.color = "#fff";
+            valStartBtn.style.pointerEvents = "auto";
+          }});
+        }, 1500);
+      }, 3000);
+    });
   }
 
   document.getElementById('exitValBtn')?.addEventListener('click', () => {
-    gsap.to('#valHobbyUniverse', { opacity: 0, scale: 1.1, duration: 0.5, onComplete: () => {
+    gsap.to('#valHobbyUniverse', { opacity: 0, scale: 1.1, duration: 0.4, onComplete: () => {
         valUniverse.style.display = 'none';
         gsap.set('#valHobbyUniverse', { opacity: 1, scale: 1 });
     }});
