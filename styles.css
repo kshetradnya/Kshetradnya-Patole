@@ -917,3 +917,68 @@ body.ide-active .custom-cursor { display: none; }
 .val-hobby-cards-container::-webkit-scrollbar { width: 4px; }
 .val-hobby-cards-container::-webkit-scrollbar-thumb { background: var(--val-red); }
 
+
+/* =========================================
+   VALORANT LOBBY REPLICATION (HIGH-FIDELITY)
+   ========================================= */
+
+.val-global-header {
+  height: 60px; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 700;
+}
+.vh-left .back-link { color: rgba(255,255,255,0.4); font-size: 10px; margin-right: 5px; }
+.vh-left .page-title { color: #fff; font-size: 16px; letter-spacing: 2px; }
+
+.val-nav-icons { display: flex; gap: 30px; }
+.nav-icon { color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; }
+.nav-icon.active { color: #fff; position: relative; }
+.nav-icon.active::after { content: ''; position: absolute; bottom: -20px; left: 0; width: 100%; height: 2px; background: #fff; }
+
+.vh-right .cur { display: inline-block; margin-left: 20px; font-size: 12px; }
+.vh-right .cur.level { color: #ffbc00; }
+
+.val-lobby-main {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative; background: radial-gradient(circle at center, rgba(15,25,35,0.2) 0%, rgba(15,25,35,0.9) 100%);
+}
+
+.val-center-banner {
+  margin-bottom: 40px; text-align: center; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); padding: 10px 40px;
+}
+.banner-tag { font-weight: 900; font-size: 18px; color: #fff; letter-spacing: 4px; }
+.banner-sub { font-size: 8px; color: rgba(255,255,255,0.5); letter-spacing: 2px; }
+
+.val-party-container { display: flex; gap: 15px; align-items: flex-end; width: 100%; max-width: 1200px; justify-content: center; }
+
+.val-banner-slot { width: 180px; height: 400px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); position: relative; transition: all 0.3s; }
+.val-banner-slot.empty { opacity: 0.3; display: flex; items-center; justify-content: center; }
+.val-banner-slot.empty:hover { opacity: 1; border-color: #fff; }
+.add-icon { font-size: 40px; color: #fff; }
+
+.player-banner { width: 220px; height: 500px; border: 1px solid rgba(255,255,255,0.2); }
+.player-banner.leader { border-color: #ffbc00; box-shadow: 0 0 30px rgba(255,188,0,0.1); }
+.leader-crown { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: #ffbc00; font-size: 20px; }
+
+.player-card-img { width: 100%; height: 380px; background-size: cover; background-position: center; position: relative; }
+.card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #0f1923 0%, transparent 40%); }
+
+.rank-badge { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; }
+.rank-badge img { width: 50px; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
+.rank-tier { font-size: 10px; font-weight: bold; margin-top: 5px; color: #fff; }
+
+.player-meta { background: #ece8e1; color: #0f1923; padding: 15px; }
+.p-name { font-weight: 900; font-size: 14px; }
+.p-title { font-size: 10px; font-weight: bold; opacity: 0.7; }
+
+.rank-tracker { position: absolute; bottom: -40px; width: 100%; text-align: center; font-size: 8px; color: rgba(255,255,255,0.3); letter-spacing: 1px; }
+
+.val-left-interface { position: absolute; left: 60px; top: 40%; transform: translateY(-50%); border-right: 1px solid rgba(255,255,255,0.1); padding-right: 40px; }
+.queue-info label { display: block; font-size: 10px; color: rgba(255,255,255,0.4); margin-bottom: 5px; }
+.q-val { font-size: 24px; font-weight: 900; }
+.party-status { margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.6); }
+
+.val-bottom-controls { position: absolute; bottom: 40px; display: flex; gap: 20px; align-items: center; }
+.btn-secondary { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 10px 30px; font-weight: bold; font-size: 14px; cursor: pointer; }
+.btn-start { background: #ff4655; color: #fff; border: none; padding: 15px 100px; font-weight: 900; font-size: 32px; letter-spacing: 2px; cursor: pointer; transition: 0.2s; }
+.btn-start:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(255,70,85,0.4); }
+

@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // 🔥 VALORANT HOBBY: PROTOCOL 1
+  // 🔥 VALORANT HOBBY: THE PROTOCOL
   // ==========================================
 
   const gamingLauncher = document.getElementById('gamingLauncher');
@@ -164,84 +164,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (gamingLauncher) {
     gamingLauncher.addEventListener('click', () => {
+      const startRect = gamingLauncher.getBoundingClientRect();
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
       flashCont.style.display = 'block';
       
-      // Phoenix-style entry
       const tl = gsap.timeline();
-      tl.set(flashSprite, { x: -200, y: window.innerHeight, scale: 0.5, opacity: 1 })
-        .to(flashSprite, { 
-          bezier: { values: [{x: -200, y: window.innerHeight}, {x: window.innerWidth/2, y: window.innerHeight/2}, {x: window.innerWidth/2, y: window.innerHeight/2}]},
-          duration: 0.6, ease: "power2.out" 
-        })
-        .to(flashSprite, { scale: 15, duration: 0.3, ease: "expo.in" })
-        .to(flashWhite, { opacity: 1, duration: 0.1 }, "-=0.1")
-        .set(valUniverse, { display: 'flex' })
-        .to(flashWhite, { opacity: 0, duration: 1.5, ease: "power2.out", onComplete: () => {
+      tl.set(flashSprite, { 
+        x: startRect.left, 
+        y: startRect.top, 
+        scale: 0.5, 
+        opacity: 1, 
+        rotate: 0 
+      })
+      .to(flashSprite, { 
+        motionPath: {
+            path: [
+                {x: startRect.left, y: startRect.top},
+                {x: centerX - 100, y: centerY - 200},
+                {x: centerX, y: centerY}
+            ],
+            curviness: 1.5
+        },
+        rotate: 720,
+        duration: 0.8, 
+        ease: "power2.out" 
+      })
+      .to(flashSprite, { scale: 20, duration: 0.4, ease: "expo.in" })
+      .to(flashWhite, { opacity: 1, duration: 0.1 }, "-=0.1")
+      .set(valUniverse, { display: 'flex' })
+      .to(flashWhite, { 
+        opacity: 0, 
+        duration: 2.5, 
+        ease: "power3.out", 
+        onComplete: () => {
             flashCont.style.display = 'none';
             initValProtocol();
-        }});
+        }
+      });
     });
   }
 
   function initValProtocol() {
-    gsap.from('.val-top-nav', { y: -50, opacity: 0, duration: 0.8 });
-    gsap.from('.agent-sidebar', { x: -100, opacity: 0, duration: 1, delay: 0.2 });
-    gsap.from('.val-hobby-card', { y: 100, opacity: 0, duration: 0.6, stagger: 0.2, delay: 0.5 });
+    gsap.from('.val-global-header', { y: -60, opacity: 0, duration: 0.8 });
+    gsap.from('.val-party-container .val-banner-slot', { 
+        y: 200, 
+        opacity: 0, 
+        duration: 1, 
+        stagger: 0.15, 
+        ease: "power4.out",
+        delay: 0.5 
+    });
+    gsap.from('.val-left-interface', { x: -100, opacity: 0, duration: 0.8, delay: 1 });
+    gsap.from('.val-center-banner', { scale: 0.5, opacity: 0, duration: 0.8, delay: 0.3 });
     
-    // Play "Match Found" mockup sound or visual
+    // Stinger
     const stinger = document.createElement('div');
     stinger.className = 'val-match-stinger font-comic';
     stinger.innerText = 'MATCH FOUND';
     document.body.appendChild(stinger);
-    gsap.to(stinger, { opacity: 1, scale: 1.5, duration: 0.5, onComplete: () => {
-        setTimeout(() => stinger.remove(), 1000);
+    gsap.to(stinger, { opacity: 1, scale: 1.2, duration: 0.4, onComplete: () => {
+        setTimeout(() => gsap.to(stinger, {opacity: 0, scale: 2, duration: 0.3, onComplete: () => stinger.remove()}), 800);
     }});
   }
 
   document.getElementById('exitValBtn')?.addEventListener('click', () => {
-    gsap.to('.val-ui-frame', { opacity: 0, scale: 0.9, duration: 0.5, onComplete: () => {
+    gsap.to('#valHobbyUniverse', { opacity: 0, scale: 1.1, duration: 0.5, onComplete: () => {
         valUniverse.style.display = 'none';
-        gsap.set('.val-ui-frame', { opacity: 1, scale: 1 });
+        gsap.set('#valHobbyUniverse', { opacity: 1, scale: 1 });
     }});
   });
 
-  // Dynamic abilities hover
-  document.querySelectorAll('.ability').forEach(ab => {
-    ab.addEventListener('mouseenter', () => {
-        gsap.to(ab, { backgroundColor: 'rgba(255,70,85,0.2)', borderColor: '#ff4655', scale: 1.1, duration: 0.2 });
-    });
-    ab.addEventListener('mouseleave', () => {
-        gsap.to(ab, { backgroundColor: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)', scale: 1, duration: 0.2 });
-    });
-  });
-
-  // ==========================================
-  // UNIVERSE 2: THE IDE LOGIC
-  // ==========================================
-
-  const timeEl = document.getElementById('ideTime');
-  if (timeEl) setInterval(() => {
-    const now = new Date();
-    timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second:'2-digit' });
-  }, 1000);
-
-  const fileItems = document.querySelectorAll('.file-item');
-  const tabs = document.querySelectorAll('.tab');
-  const fileContents = document.querySelectorAll('.file-content');
-
-  function openFile(fileId, breadcrumbText) {
-    fileItems.forEach(i => i.classList.remove('active'));
-    tabs.forEach(t => t.classList.remove('active'));
-    fileContents.forEach(c => c.classList.remove('active'));
-    document.querySelector(`.file-item[data-file="${fileId}"]`)?.classList.add('active');
-    document.querySelector(`.tab[data-file="${fileId}"]`)?.classList.add('active');
-    document.getElementById(`file-${fileId}`)?.classList.add('active');
-  }
-
-  fileItems.forEach(item => item.addEventListener('click', () => openFile(item.getAttribute('data-file'), '')));
-  
-  document.querySelectorAll('.line-numbers').forEach(ln => { 
-    let html = ''; for(let i=1; i<=35; i++) html += i + '<br>'; ln.innerHTML = html; 
+  // Scoreboard simulation on Tab
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab' && valUniverse.style.display === 'flex') {
+        e.preventDefault();
+        // Toggle scoreboard mock...
+    }
   });
 
 });

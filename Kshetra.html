@@ -416,67 +416,128 @@
   </div>
 
   <!-- =============================================
-       VALORANT HOBBY PAGE: "THE GAMER"
+       VALORANT HOBBY PAGE: "THE PROTOCOL"
        ============================================= -->
   <div id="valHobbyUniverse" class="val-hobby-universe">
-    <div class="val-ui-frame">
-        <!-- Top Bar -->
-        <div class="val-top-nav">
-            <div class="val-logo">PATOLE // PROTOCOL</div>
-            <div class="val-nav-links">
-                <span class="active">COLLECTION</span>
-                <span>CAREER</span>
-                <span>STORE</span>
-                <span>PLAY</span>
-            </div>
-            <div class="val-currency">
-                <div class="c-item">VP 2500</div>
-                <div class="c-item">RP 150</div>
+    <!-- Top Global Nav -->
+    <div class="val-global-header">
+        <div class="vh-left">
+            <span class="back-link">BACK //</span> <span class="page-title">PLAY</span>
+        </div>
+        <div class="vh-center">
+            <div class="val-nav-icons">
+                <div class="nav-icon"><i class="icon-home"></i></div>
+                <div class="nav-icon"><i class="icon-bp"></i></div>
+                <div class="nav-icon"><i class="icon-agent"></i></div>
+                <div class="nav-icon active">PLAY</div>
+                <div class="nav-icon"><i class="icon-career"></i></div>
+                <div class="nav-icon"><i class="icon-collection"></i></div>
+                <div class="nav-icon"><i class="icon-store"></i></div>
             </div>
         </div>
+        <div class="vh-right">
+            <div class="currency-block">
+                <div class="cur"><span class="icon-vp"></span> 2,786</div>
+                <div class="cur"><span class="icon-rp"></span> 635</div>
+                <div class="cur level"><span class="icon-level"></span> 4,214</div>
+            </div>
+        </div>
+    </div>
 
-        <!-- Main Content: Agent Selection Style -->
-        <div class="val-main-stage">
-            <div class="agent-sidebar">
-                <div class="agent-role font-comic">DUELIST</div>
-                <div class="agent-name">KSHETRA</div>
-                <div class="agent-abilities">
-                    <div class="ability"><img src="https://img.icons8.com/ios-filled/50/ffffff/firework.png"><span>C</span></div>
-                    <div class="ability"><img src="https://img.icons8.com/ios-filled/50/ffffff/flash-bang.png"><span>Q</span></div>
-                    <div class="ability"><img src="https://img.icons8.com/ios-filled/50/ffffff/sword.png"><span>E</span></div>
-                    <div class="ability ult"><img src="https://img.icons8.com/ios-filled/50/ffffff/skull.png"><span>X</span></div>
+    <div class="val-lobby-main">
+        <!-- Top Banner -->
+        <div class="val-center-banner">
+            <div class="banner-tag">DESIGNED BY KP</div>
+            <div class="banner-sub">ALPHA VS OMEGA</div>
+        </div>
+
+        <!-- Party Banners -->
+        <div class="val-party-container">
+            <!-- Empty Slot 1 -->
+            <div class="val-banner-slot empty">
+                <div class="add-icon">+</div>
+            </div>
+
+            <!-- TRIJAL (Middle Left) -->
+            <div class="val-banner-slot player-banner">
+                <div class="player-card-img" style="background-image: url('projects/val_card_trijal.png');">
+                    <div class="card-overlay">
+                        <div class="rank-badge"><img src="projects/ranks/silver1.png" alt="Silver 1"></div>
+                    </div>
+                </div>
+                <div class="player-meta">
+                    <div class="p-name">TRIJAL</div>
+                    <div class="p-title">SIDEKICK</div>
                 </div>
             </div>
 
-            <div class="val-hobby-cards-container">
-                <div class="val-hobby-card active">
-                    <div class="card-bg"></div>
-                    <div class="card-content">
-                        <div class="rank-icon">IM</div>
-                        <h3>VALORANT CHAMP</h3>
-                        <p>Consistent Radiant performer. Aim, strategy, and utility mastery.</p>
-                        <div class="match-history">
-                            <span class="victory">VICTORY</span>
-                            <span class="victory">VICTORY</span>
-                            <span class="defeat">DEFEAT</span>
+            <!-- KSHETRADNYA PATOLE (Center) -->
+            <div class="val-banner-slot player-banner leader">
+                <div class="leader-crown">▲</div>
+                <div class="player-card-img" style="background-image: url('projects/val_player_card_kshetra.png');">
+                    <div class="card-overlay">
+                        <div class="rank-badge main-rank">
+                            <img src="projects/ranks/gold1.png" alt="Gold 1">
+                            <div class="rank-tier">GOLD 1</div>
                         </div>
                     </div>
                 </div>
-                <!-- ... More logic-controlled cards ... -->
+                <div class="player-meta">
+                    <div class="p-name">KSHETRADNYA PATOLE</div>
+                    <div class="p-title">HORSEPOWER</div>
+                </div>
+                <div class="rank-tracker">
+                    PEAK: GOLD 3 // CURRENT: GOLD 1
+                </div>
+            </div>
+
+            <!-- VIVAN (Middle Right) -->
+            <div class="val-banner-slot player-banner">
+                <div class="player-card-img" style="background-image: url('projects/val_card_vivan.png');">
+                    <div class="card-overlay">
+                        <div class="rank-badge"><img src="projects/ranks/silver3.png" alt="Silver 3"></div>
+                    </div>
+                </div>
+                <div class="player-meta">
+                    <div class="p-name">VIVAN</div>
+                    <div class="p-title">INITIATOR</div>
+                </div>
+            </div>
+
+            <!-- Empty Slot 5 -->
+            <div class="val-banner-slot empty">
+                <div class="add-icon">+</div>
             </div>
         </div>
 
-        <!-- Bottom HUD -->
-        <div class="val-bottom-hud">
-            <div class="val-player-card">
-                <div class="p-avatar"></div>
-                <div class="p-info">
-                    <div class="p-name">Kshetradnya</div>
-                    <div class="p-title">The Mastermind</div>
-                </div>
+        <!-- Left Sidebar Interface -->
+        <div class="val-left-interface">
+            <div class="queue-info">
+                <label>QUEUE</label>
+                <div class="q-val">UNRATED</div>
             </div>
-            <div class="val-party-info">PARTY: 1/5</div>
-            <button id="exitValBtn" class="val-start-btn">EXIT PROTOCOL</button>
+            <div class="party-status">
+                <div class="status-item">PARTY CODE <span></span></div>
+                <div class="status-item">PARTY CLOSED <span class="lock-icon">🔒</span></div>
+            </div>
+        </div>
+
+        <!-- Right Social Sidebar -->
+        <div class="val-right-interface">
+            <div class="social-header">FRIENDS</div>
+            <div class="social-list">
+                <!-- Mock friends icons -->
+                <div class="friend-item online"><div class="f-avatar"></div></div>
+                <div class="friend-item online"><div class="f-avatar"></div></div>
+                <div class="friend-item offline"><div class="f-avatar"></div></div>
+            </div>
+        </div>
+
+        <!-- Bottom Controls -->
+        <div class="val-bottom-controls">
+            <button class="btn-secondary">PRACTICE <div class="icon-target"></div></button>
+            <button id="valStartBtn" class="btn-start">START</button>
+            <button id="exitValBtn" class="btn-secondary">LEAVE PARTY</button>
         </div>
     </div>
   </div>
