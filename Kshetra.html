@@ -373,8 +373,107 @@
   <!-- Custom Cursor for Pro Mode -->
   <div id="custom-cursor" class="custom-cursor"></div>
 
-  <!-- Fullscreen Camera Flash -->
-  <div id="cameraFlash" class="camera-flash"></div>
+  <!-- =============================================
+       HOBBY PAGE: MY LIFE THROUGH A LENS
+       ============================================= -->
+  
+  <!-- Bird Launcher -->
+  <div id="birdLauncher" class="bird-launcher">
+    <div class="bird-bubble">
+      <p>LIFE THROUGH<br><span>A LENS?</span></p>
+    </div>
+    <img src="projects/pixel_bird_branch.png" alt="Hobby Bird" class="bird-img">
+  </div>
+
+  <!-- Hobby Transition Overlay -->
+  <div id="hobbyTransition" class="hobby-transition">
+    <div class="transition-half left-half"></div>
+    <div class="transition-half right-half"></div>
+    <img src="projects/pixel_bird_branch.png" class="pulling-bird left-bird">
+    <img src="projects/pixel_bird_branch.png" class="pulling-bird right-bird">
+    <div class="pull-text">PULL!!!</div>
+  </div>
+
+  <!-- Hobby Camera Universe -->
+  <div id="hobbyCameraUniverse" class="hobby-camera-universe">
+    <div class="camera-body">
+      <!-- Flash -->
+      <div id="cameraFlashUnit" class="camera-flash-pop">
+        <div class="flash-glow"></div>
+      </div>
+      
+      <!-- Top Shutter -->
+      <div class="camera-top-controls">
+        <div id="physicalShutter" class="shutter-button"></div>
+      </div>
+
+      <!-- LCD Screen -->
+      <div class="camera-lcd-screen">
+        <div id="lcdBootLoader" class="lcd-loader">
+          <div class="spinner"></div>
+          <p>BOOTING DIGITAL SOUL...</p>
+        </div>
+
+        <div id="lcdContent" class="lcd-content" style="display:none;">
+          <!-- Viewfinder -->
+          <div class="lcd-viewfinder">
+            <img id="hobbyImage" src="" alt="Hobby View">
+            
+            <div class="hud-layer">
+              <div class="hud-top">
+                <div class="hud-stats">
+                  <span id="hudIso">ISO 100</span>
+                  <span id="hudAperture">f/1.8</span>
+                  <span id="hudShutter">1/4000s</span>
+                </div>
+                <div class="rec-dot">REC</div>
+              </div>
+              <div class="focus-square"></div>
+              <div class="hud-bottom">
+                <div id="hobbyDots" class="hobby-dots">
+                  <span class="dot active"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+                <div class="sd-info">SD: 128GB</div>
+              </div>
+            </div>
+
+            <!-- Screen Flash Overlay -->
+            <div id="lcdFlashOverlay" class="lcd-flash-overlay"></div>
+          </div>
+
+          <!-- Info Panel -->
+          <div class="lcd-info-panel">
+            <h2 id="hobbyTitle">PHOTOGRAPHY</h2>
+            <p id="hobbyDesc">Capturing the world through a mechanical eye.</p>
+            <div class="fun-fact-box">
+              <p id="hobbyFunFact">POW! Captured in 0.01s!</p>
+            </div>
+            <button id="exitLensBtn" class="exit-btn">EXIT LENS</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Side Buttons -->
+      <div class="camera-side-controls">
+        <div class="zoom-buttons">
+          <button id="zoomInBtn">+</button>
+          <button id="zoomOutBtn">-</button>
+        </div>
+        <div class="d-pad">
+          <div class="d-pad-row"><button id="camUp" class="dbtn">▲</button></div>
+          <div class="d-pad-row">
+            <button id="camLeft" class="dbtn">◀</button>
+            <button id="camOk" class="dbtn ok">OK</button>
+            <button id="camRight" class="dbtn">▶</button>
+          </div>
+          <div class="d-pad-row"><button id="camDown" class="dbtn">▼</button></div>
+        </div>
+        <button id="camMenuBtn" class="menu-pill">MENU</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

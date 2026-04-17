@@ -247,4 +247,142 @@ document.addEventListener('DOMContentLoaded', () => {
     ln.innerHTML = html; 
   });
 
+
+  // ==========================================
+  // HOBBY CAMERA SYSTEM: MY LIFE THROUGH A LENS
+  // ==========================================
+
+  const HOBBIES_DATA = [
+    {
+      id: 'photography',
+      title: 'Visual Storytelling',
+      desc: 'Capturing moments that tell a story beyond words. My lens, my rules!',
+      img: 'projects/hobby_photography.png',
+      stats: { iso: '100', aperture: 'f/1.8', shutter: '1/4000' },
+      funFact: 'POW! Captured in 0.01s!'
+    },
+    {
+      id: 'running',
+      title: 'The Trail Runner',
+      desc: 'Escaping the simulation one kilometer at a time. Pure adrenaline!',
+      img: 'projects/hobby_running.png',
+      stats: { iso: '800', aperture: 'f/2.8', shutter: '1/8000' },
+      funFact: 'ZAP! Speeding through reality.'
+    },
+    {
+      id: 'sports',
+      title: 'Goal & Checkmate',
+      desc: 'Football on the field, Chess on the board. The duality of strategy.',
+      img: 'projects/hobby_sports_chess.png',
+      stats: { iso: '400', aperture: 'f/4.0', shutter: '1/2000' },
+      funFact: 'BOOM! Strategic dominance.'
+    }
+  ];
+
+  let currentHobbyIdx = 0;
+  let camZoom = 1;
+
+  function initCamera() {
+    gsap.from('.camera-body', { scale: 0.8, opacity: 0, duration: 0.8, ease: "back.out(1.2)" });
+    
+    // Boot sequence
+    setTimeout(() => {
+      const boot = document.getElementById('lcdBootLoader');
+      const content = document.getElementById('lcdContent');
+      if (boot) boot.style.display = 'none';
+      if (content) content.style.display = 'flex';
+      updateHobbyDisplay();
+    }, 2000);
+  }
+
+  function updateHobbyDisplay() {
+    const data = HOBBIES_DATA[currentHobbyIdx];
+    const img = document.getElementById('hobbyImage');
+    const title = document.getElementById('hobbyTitle');
+    const desc = document.getElementById('hobbyDesc');
+    const funFact = document.getElementById('hobbyFunFact');
+    
+    if (img) img.src = data.img;
+    if (title) title.innerText = data.title;
+    if (desc) desc.innerText = data.desc;
+    if (funFact) funFact.innerText = data.funFact;
+    
+    document.getElementById('hudIso').innerText = `ISO ${data.stats.iso}`;
+    document.getElementById('hudAperture').innerText = data.stats.aperture;
+    document.getElementById('hudShutter').innerText = `${data.stats.shutter}s`;
+    
+    const dots = document.querySelectorAll('.hobby-dots .dot');
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === currentHobbyIdx));
+  }
+
+  function snapPhoto() {
+    const flashUnit = document.getElementById('cameraFlashUnit');
+    const lcdOverlay = document.getElementById('lcdFlashOverlay');
+    if (flashUnit) flashUnit.classList.add('active');
+    if (lcdOverlay) {
+      gsap.set(lcdOverlay, { opacity: 1 });
+      gsap.to(lcdOverlay, { opacity: 0, duration: 0.5, delay: 0.1 });
+    }
+    setTimeout(() => { if (flashUnit) flashUnit.classList.remove('active'); }, 200);
+    gsap.fromTo('.camera-body', { x: -5 }, { x: 5, duration: 0.05, repeat: 5, yoyo: true });
+  }
+
+  const birdLauncher = document.getElementById('birdLauncher');
+  if (birdLauncher) {
+    birdLauncher.addEventListener('click', () => {
+      const trans = document.getElementById('hobbyTransition');
+      if (trans) trans.style.display = 'flex';
+      
+      gsap.to('.pull-text', { scale: 1, rotate: 0, duration: 0.5, ease: "back.out" });
+      gsap.set(['.left-bird', '.right-bird'], { display: 'block', opacity: 1 });
+      
+      const tl = gsap.timeline({ onComplete: () => {
+        const universe = document.getElementById('hobbyCameraUniverse');
+        if (universe) universe.style.display = 'flex';
+        initCamera();
+      }});
+
+      tl.to(['.left-half', '.left-bird'], { x: '-100%', duration: 1.5, ease: "power4.inOut" }, "+=0.5")
+        .to(['.right-half', '.right-bird'], { x: '100%', duration: 1.5, ease: "power4.inOut" }, "<")
+        .to('.pull-text', { opacity: 0, scale: 2, duration: 0.5 }, "<0.2");
+    });
+  }
+
+  const camRight = document.getElementById('camRight');
+  const camLeft = document.getElementById('camLeft');
+  const camOk = document.getElementById('camOk');
+  const physicalShutter = document.getElementById('physicalShutter');
+  const zoomIn = document.getElementById('zoomInBtn');
+  const zoomOut = document.getElementById('zoomOutBtn');
+  const exitLens = document.getElementById('exitLensBtn');
+
+  if (camRight) camRight.addEventListener('click', () => {
+    currentHobbyIdx = (currentHobbyIdx + 1) % HOBBIES_DATA.length;
+    updateHobbyDisplay();
+  });
+  if (camLeft) camLeft.addEventListener('click', () => {
+    currentHobbyIdx = (currentHobbyIdx - 1 + HOBBIES_DATA.length) % HOBBIES_DATA.length;
+    updateHobbyDisplay();
+  });
+  if (camOk) camOk.addEventListener('click', snapPhoto);
+  if (physicalShutter) physicalShutter.addEventListener('click', snapPhoto);
+  
+  if (zoomIn) zoomIn.addEventListener('click', () => {
+    camZoom = Math.min(camZoom + 0.2, 2);
+    gsap.to('#hobbyImage', { scale: camZoom, duration: 0.3 });
+  });
+  if (zoomOut) zoomOut.addEventListener('click', () => {
+    camZoom = Math.max(camZoom - 0.2, 0.8);
+    gsap.to('#hobbyImage', { scale: camZoom, duration: 0.3 });
+  });
+
+  if (exitLens) exitLens.addEventListener('click', () => {
+    gsap.to('.camera-body', { scale: 0.5, opacity: 0, duration: 0.5, onComplete: () => {
+      document.getElementById('hobbyCameraUniverse').style.display = 'none';
+      document.getElementById('hobbyTransition').style.display = 'none';
+      gsap.set(['.left-half', '.right-half'], { x: '0%' });
+      gsap.set(['.left-bird', '.right-bird'], { x: '0%', opacity: 0 });
+    }});
+  });
+
 });

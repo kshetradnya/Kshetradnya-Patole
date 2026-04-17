@@ -618,3 +618,159 @@ body.ide-active .custom-cursor { display: none; }
   transform: scaleX(1); transform-origin: bottom left;
 }
 
+
+/* =========================================
+   HOBBY CAMERA SYSTEM (CANON EOS 13000D)
+   ========================================= */
+
+:root {
+  --cam-body: #1a1a1a;
+  --cam-border: #333;
+  --cam-accent: #27c93f;
+  --comic-font: 'Luckiest Guy', cursive;
+}
+
+.font-comic { font-family: var(--comic-font); }
+
+/* Bird Launcher */
+.bird-launcher {
+  position: fixed; bottom: 40px; right: 40px; z-index: 999;
+  cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.bird-launcher:hover { transform: scale(1.1) rotate(-5deg); }
+.bird-launcher .bird-img { width: 120px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)); }
+
+.bird-bubble {
+  position: absolute; top: -80px; right: 0; background: #fff;
+  padding: 10px 15px; border-radius: 15px; border: 3px solid var(--cam-body);
+  opacity: 0; transform: translateY(10px); transition: all 0.3s;
+  pointer-events: none; width: 140px; text-align: center;
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
+}
+.bird-launcher:hover .bird-bubble { opacity: 1; transform: translateY(0); }
+.bird-bubble p { font-family: var(--comic-font); font-size: 14px; color: var(--cam-body); line-height: 1.2; }
+.bird-bubble span { color: var(--cam-accent); font-size: 18px; }
+.bird-bubble::after {
+  content: ''; position: absolute; bottom: -12px; right: 20px;
+  border-left: 10px solid transparent; border-right: 10px solid transparent;
+  border-top: 12px solid var(--cam-body);
+}
+
+/* Transition Overlay */
+.hobby-transition {
+  position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.transition-half {
+  position: absolute; top: 0; height: 100%; width: 50%; background: var(--cam-body);
+  transition: transform 1.2s cubic-bezier(0.8, 0, 0.2, 1);
+}
+.left-half { left: 0; border-right: 4px solid var(--cam-accent); }
+.right-half { right: 0; border-left: 4px solid var(--cam-accent); }
+
+.pulling-bird { position: absolute; top: 50%; width: 180px; transform: translateY(-50%); z-index: 10; display: none; }
+.left-bird { right: -90px; transform: translateY(-50%) scaleX(-1); }
+.right-bird { left: -90px; }
+
+.pull-text {
+  position: relative; z-index: 20; background: #fff; color: var(--cam-body);
+  padding: 20px 50px; border-radius: 999px; font-family: var(--comic-font);
+  font-size: 80px; border: 8px solid var(--cam-body); box-shadow: 15px 15px 0 var(--cam-accent);
+  transform: scale(0) rotate(-10deg); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Camera Universe */
+.hobby-camera-universe {
+  position: fixed; inset: 0; z-index: 9998; background: rgba(0,0,0,0.95);
+  display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px);
+}
+
+.camera-body {
+  position: relative; width: 900px; height: 600px; background: var(--cam-body);
+  border-radius: 60px; border: 6px solid #444; box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+  display: flex; padding: 40px; gap: 30px; transform: scale(0.9); transition: transform 0.5s;
+}
+
+/* Physical Shutter & Flash */
+.camera-flash-pop {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 200px; height: 15px; background: #222; border-radius: 10px 10px 0 0;
+  transition: height 0.3s; overflow: hidden;
+}
+.camera-flash-pop.active { height: 40px; }
+.flash-glow { width: 100%; height: 100%; background: radial-gradient(circle, #fff 0%, transparent 70%); opacity: 0; }
+
+.camera-top-controls { position: absolute; top: -35px; left: 100px; }
+.shutter-button {
+  width: 60px; height: 20px; background: #800; border-radius: 10px 10px 0 0;
+  cursor: pointer; border: 3px solid #444; border-bottom: none;
+}
+.shutter-button:active { transform: translateY(5px); }
+
+/* LCD Screen */
+.camera-lcd-screen {
+  flex: 1; background: #050505; border-radius: 20px; border: 12px solid #252525;
+  position: relative; overflow: hidden; display: flex;
+}
+
+.lcd-loader {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: var(--cam-accent); font-family: var(--font-mono); font-size: 14px;
+}
+.spinner {
+  width: 40px; height: 40px; border: 4px solid rgba(39, 201, 63, 0.2);
+  border-top-color: var(--cam-accent); border-radius: 50%; animation: spin 1s infinite linear; margin-bottom: 15px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.lcd-content { width: 100%; height: 100%; display: flex; }
+
+.lcd-viewfinder { flex: 1.2; position: relative; border-right: 8px solid #252525; }
+.lcd-viewfinder img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+
+.hud-layer {
+  position: absolute; inset: 15px; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between;
+}
+.hud-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.hud-stats { background: rgba(0,0,0,0.6); padding: 5px 10px; border-radius: 4px; color: #fff; font-family: var(--font-mono); font-size: 10px; line-height: 1.4; }
+.rec-dot { background: #f00; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.focus-square {
+  width: 80px; height: 80px; border: 2px dashed var(--cam-accent); align-self: center; border-radius: 50%; opacity: 0.5;
+}
+
+.hud-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+.hobby-dots { display: flex; gap: 8px; }
+.hobby-dots .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 50%; }
+.hobby-dots .dot.active { background: var(--cam-accent); }
+.sd-info { color: #fff; font-size: 10px; font-family: var(--font-mono); }
+
+.lcd-flash-overlay { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+
+.lcd-info-panel { flex: 1; background: #fdfaf0; padding: 25px; display: flex; flex-direction: column; justify-content: center; gap: 15px; }
+.lcd-info-panel h2 { font-family: var(--comic-font); font-size: 32px; color: var(--cam-body); letter-spacing: -1px; }
+.lcd-info-panel p { font-family: var(--font-sans); color: #555; font-size: 14px; line-height: 1.6; }
+
+.fun-fact-box { background: rgba(39, 201, 63, 0.1); padding: 12px; border-radius: 12px; border: 2px solid rgba(39, 201, 63, 0.2); transform: rotate(-2deg); }
+.fun-fact-box p { font-family: var(--comic-font); color: var(--cam-accent); font-size: 16px; margin: 0; }
+
+.exit-btn {
+  margin-top: auto; background: var(--cam-body); color: #fff; border: none; padding: 12px;
+  border-radius: 12px; font-family: var(--comic-font); font-size: 18px; cursor: pointer;
+  box-shadow: 4px 4px 0 var(--cam-accent); transition: transform 0.1s;
+}
+.exit-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--cam-accent); }
+
+/* Buttons Side */
+.camera-side-controls { display: flex; flex-direction: column; gap: 15px; align-items: center; justify-content: center; }
+
+.zoom-buttons { display: flex; flex-direction: column; gap: 5px; }
+.zoom-buttons button { width: 50px; height: 50px; background: #252525; border: 4px solid #333; color: #fff; border-radius: 50%; font-size: 24px; cursor: pointer; }
+
+.d-pad { background: #252525; padding: 15px; border-radius: 20px; border: 4px solid #333; }
+.dbtn { width: 40px; height: 40px; background: #000; border: none; color: #fff; border-radius: 4px; cursor: pointer; margin: 2px; }
+.dbtn.ok { background: var(--cam-accent); font-weight: bold; }
+
+.menu-pill { background: #252525; border: 3px solid #333; color: #aaa; padding: 5px 15px; border-radius: 999px; font-size: 10px; font-weight: bold; cursor: pointer; }
+
