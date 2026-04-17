@@ -11,6 +11,7 @@
   <!-- GSAP for Professional Mode Animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
 </head>
 <body>
 
@@ -26,7 +27,10 @@
       <!-- Nav -->
       <nav class="pro-nav">
         <div class="nav-logo">KP.</div>
-        <button id="launchIdeBtn" class="launch-ide-btn magnet-btn"><span>{'<'} Launch Virtual IDE {'/>'}</span></button>
+        <div class="nav-links" style="display: flex; gap: 1.5rem; align-items: center;">
+          <a href="#pro-hobbies" class="magnet-btn" style="text-decoration:none; color:inherit; font-size:12px; font-weight:bold; letter-spacing:1px; text-transform:uppercase;">Hobbies</a>
+          <button id="launchIdeBtn" class="launch-ide-btn magnet-btn"><span>{'<'} Launch Virtual IDE {'/>'}</span></button>
+        </div>
       </nav>
 
       <!-- Sticky Socials -->
@@ -110,6 +114,94 @@
             <div class="bento-card wide gsap-fade-up">
               <h3>Currently Focused On...</h3>
               <p>Transitioning from pure web development into core AI mechanics, focusing on neural network architectures and data pipelines.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Hobbies Section -->
+      <section class="pro-hobbies" id="pro-hobbies">
+        <div class="pro-container">
+          <h2 class="section-title gsap-fade-up">Off-Screen Life</h2>
+          
+          <div class="hobbies-grid">
+            
+            <!-- Hobby 1: Photography -->
+            <div class="hobby-block photography gsap-fade-up">
+              <div class="hobby-header">
+                <h3>Photography</h3>
+                <p>Capturing raw moments. CANON EOS 13000D</p>
+              </div>
+              
+              <div class="camera-ui">
+                <div class="viewfinder">
+                  <div class="vf-corner tl"></div><div class="vf-corner tr"></div>
+                  <div class="vf-corner bl"></div><div class="vf-corner br"></div>
+                  <div class="vf-center-focus">
+                     <span class="crosshair horizontal"></span>
+                     <span class="crosshair vertical"></span>
+                  </div>
+                  <button class="shutter-btn magnet-btn" id="shutterBtn">Click Shutter</button>
+                </div>
+                
+                <div class="polaroid-wrapper" id="polaroidRender">
+                  <div class="polaroid-frame">
+                    <img src="projects/IMG_8729.JPG" alt="Camera Shot">
+                    <p class="polaroid-caption">IMG_8729.JPG</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hobby 2: Running -->
+            <div class="hobby-block running gsap-fade-up">
+              <div class="hobby-header">
+                <h3>Running the Trail</h3>
+                <p>I clear my head on the trail. Avoid the problems!</p>
+              </div>
+              
+              <div class="game-container" id="runningGameContainer">
+                <canvas id="dinoCanvas" width="600" height="200"></canvas>
+                <div class="game-overlay" id="gameOverlay">
+                  <button id="startGameBtn" class="magnet-btn start-game-btn">Start Run</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Hobby 3: Travelling -->
+            <div class="hobby-block traveling gsap-fade-up">
+               <div class="hobby-header">
+                 <h3>World Stops</h3>
+                 <p>Scroll down to fly across the subcontinent and explore my favorite spots.</p>
+               </div>
+               
+               <div class="flight-container" id="flightPathContainer">
+                 <!-- SVG Map Path -->
+                 <svg class="flight-svg" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid meet">
+                    <!-- Base path -->
+                    <path id="airplanePath" d="M 50,50 Q 300,250 200,500 T 350,750" fill="transparent" stroke="rgba(0,122,204,0.3)" stroke-width="2" stroke-dasharray="6,6" />
+                    
+                    <!-- Destination Nodes (Coordinates roughly matched to path) -->
+                    <circle class="map-node" cx="50" cy="50" r="10" data-info="Kashmir: Paradise on Earth, beautiful snow-capped peaks"></circle>
+                    <text x="70" y="55" class="map-label">Kashmir</text>
+
+                    <circle class="map-node" cx="190" cy="200" r="10" data-info="Amritsar: The Golden Temple and incredibly rich Punjabi cuisine."></circle>
+                    <text x="210" y="205" class="map-label">Amritsar</text>
+                    
+                    <circle class="map-node" cx="200" cy="500" r="10" data-info="Goa: Late night beach walks and endless ocean breeze."></circle>
+                    <text x="220" y="505" class="map-label">Goa</text>
+                    
+                    <circle class="map-node" cx="350" cy="750" r="10" data-info="Kerala: God's Own Country. Serene backwaters and lush greenery."></circle>
+                    <text x="230" y="755" class="map-label">Kerala</text>
+                 </svg>
+
+                 <!-- Plane sprite controlled by GSAP -->
+                 <div id="airplane" class="airplane-sprite">✈️</div>
+
+                 <!-- Hover Tooltip -->
+                 <div id="mapTooltip" class="map-tooltip"></div>
+               </div>
             </div>
 
           </div>
@@ -368,6 +460,9 @@
 
   <!-- Custom Cursor for Pro Mode -->
   <div id="custom-cursor" class="custom-cursor"></div>
+
+  <!-- Fullscreen Camera Flash -->
+  <div id="cameraFlash" class="camera-flash"></div>
 
   <script src="script.js"></script>
 </body>

@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const exitIdeBtns = [document.getElementById('exitIdeBtn'), document.getElementById('exitIdeTopBtn')];
 
   // GSAP ScrollTrigger init
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
   
   // Set initial state
   const elements = gsap.utils.toArray('.gsap-fade-up');
@@ -246,5 +246,165 @@ document.addEventListener('DOMContentLoaded', () => {
     for(let i=1; i<=35; i++) html += i + '<br>'; 
     ln.innerHTML = html; 
   });
+
+  // ==========================================
+  // HOBBIES INTERACTION LOGIC
+  // ==========================================
+
+  // Hobby 1: Photography Camera Click
+  const shutterBtn = document.getElementById('shutterBtn');
+  const cameraFlash = document.getElementById('cameraFlash');
+  const polaroidRender = document.getElementById('polaroidRender');
+  
+  if (shutterBtn && cameraFlash && polaroidRender) {
+    shutterBtn.addEventListener('click', () => {
+      // Flash effect
+      cameraFlash.classList.add('flash-active');
+      setTimeout(() => {
+        cameraFlash.classList.remove('flash-active');
+        // Drop polaroid
+        polaroidRender.classList.add('dropped');
+      }, 100);
+    });
+  }
+
+  // Hobby 2: Running Dino Game
+  const canvas = document.getElementById('dinoCanvas');
+  const startGameBtn = document.getElementById('startGameBtn');
+  const gameOverlay = document.getElementById('gameOverlay');
+  
+  if (canvas && startGameBtn && gameOverlay) {
+    const ctx = canvas.getContext('2d');
+    let isGameRunning = false;
+    let frame = 0;
+    
+    // Game Entities
+    const dino = { x: 50, y: 150, w: 20, h: 40, vy: 0, gravity: 0.6, jumpPower: -10, grounded: true };
+    let obstacles = [];
+    let problemTypes = ["🍔 Junk Food", "📚 Exams", "📱 Doomscrolling"];
+    
+    function resetGame() {
+      dino.y = 150;
+      dino.vy = 0;
+      obstacles = [];
+      frame = 0;
+      isGameRunning = true;
+      gameOverlay.style.display = 'none';
+      requestAnimationFrame(gameLoop);
+    }
+
+    startGameBtn.addEventListener('click', resetGame);
+    
+    // Jump Controls
+    function jump() {
+      if(dino.grounded && isGameRunning) {
+        dino.vy = dino.jumpPower;
+        dino.grounded = false;
+      }
+    }
+    canvas.addEventListener('mousedown', jump);
+    window.addEventListener('keydown', (e) => {
+      if(e.code === 'Space' && isGameRunning) { e.preventDefault(); jump(); }
+    });
+
+    function gameLoop() {
+      if(!isGameRunning) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Physics applied to player
+      dino.vy += dino.gravity;
+      dino.y += dino.vy;
+      if (dino.y >= 150) {
+        dino.y = 150;
+        dino.grounded = true;
+      }
+      
+      // Draw Player (Avatar)
+      ctx.fillStyle = '#333';
+      ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
+      ctx.fillStyle = '#007acc';
+      ctx.fillRect(dino.x + 10, dino.y + 5, 5, 5); // Simple eye
+
+      // Ground Line
+      ctx.strokeStyle = '#bbb';
+      ctx.beginPath(); ctx.moveTo(0, 190); ctx.lineTo(canvas.width, 190); ctx.stroke();
+
+      // Obstacle Logic
+      if (frame % 90 === 0 && frame > 0) {
+        let type = problemTypes[Math.floor(Math.random() * problemTypes.length)];
+        obstacles.push({ x: canvas.width, y: 165, w: 80, h: 25, text: type, passed: false });
+      }
+      
+      for(let i=0; i<obstacles.length; i++) {
+        let obs = obstacles[i];
+        obs.x -= 4; // Move left
+        
+        ctx.fillStyle = '#ff5f56';
+        ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+        ctx.fillStyle = '#fff';
+        ctx.font = '10px sans-serif';
+        ctx.fillText(obs.text, obs.x + 5, obs.y + 16);
+
+        // Collision detection
+        if (dino.x < obs.x + obs.w && dino.x + dino.w > obs.x &&
+            dino.y < obs.y + obs.h && dino.y + dino.h > obs.y) {
+          // Game Over hit
+          isGameRunning = false;
+          gameOverlay.style.display = 'flex';
+          startGameBtn.innerHTML = "Oof! Restart Run";
+        }
+      }
+      
+      // Cleanup passed obstacles
+      if(obstacles.length && obstacles[0].x < -100) obstacles.shift();
+
+      frame++;
+      if(isGameRunning) requestAnimationFrame(gameLoop);
+    }
+  }
+
+  // Hobby 3: Travelling SVG GSAP
+  if (document.getElementById('airplanePath') && document.getElementById('airplane')) {
+     gsap.to("#airplane", {
+       scrollTrigger: {
+         trigger: "#flightPathContainer",
+         start: "top 60%",    // start animation when container reaches 60% of viewport
+         end: "bottom 80%",   // end animation near the bottom
+         scrub: 1,            // bind directly to scroll
+         scroller: ".pro-scroll-container"
+       },
+       motionPath: {
+         path: "#airplanePath",
+         align: "#airplanePath",
+         alignOrigin: [0.5, 0.5],
+         autoRotate: 90
+       },
+       ease: "none"
+     });
+     
+     // Interactions for Map Nodes
+     const mapNodes = document.querySelectorAll('.map-node');
+     const mapTooltip = document.getElementById('mapTooltip');
+     const flightContainer = document.getElementById('flightPathContainer');
+
+     if (mapTooltip && flightContainer) {
+       mapNodes.forEach(node => {
+         node.addEventListener('mouseenter', (e) => {
+           const info = node.getAttribute('data-info');
+           mapTooltip.textContent = info;
+           mapTooltip.classList.add('visible');
+           
+           // Position tooltip relative to container
+           const containerRect = flightContainer.getBoundingClientRect();
+           const nodeRect = node.getBoundingClientRect();
+           mapTooltip.style.left = (nodeRect.left - containerRect.left + 20) + 'px';
+           mapTooltip.style.top = (nodeRect.top - containerRect.top - 10) + 'px';
+         });
+         node.addEventListener('mouseleave', () => {
+           mapTooltip.classList.remove('visible');
+         });
+       });
+     }
+  }
 
 });
