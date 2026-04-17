@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const launchBtn = document.getElementById('launchIdeBtn');
   const exitIdeBtns = [document.getElementById('exitIdeBtn'), document.getElementById('exitIdeTopBtn')];
 
+  // Initial State Enforcement
+  if(ideUniverse) ideUniverse.style.display = 'none';
+  if(proUniverse) proUniverse.style.display = 'block';
+
   gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
   
   const elements = gsap.utils.toArray('.gsap-fade-up');
@@ -33,11 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (launchBtn) {
     launchBtn.addEventListener('click', () => {
-      proUniverse.classList.remove('active');
-      setTimeout(() => {
-        document.body.classList.add('ide-active');
-        ideUniverse.classList.add('active');
-      }, 600);
+      proUniverse.style.display = 'none';
+      document.body.classList.add('ide-active');
+      ideUniverse.classList.add('active');
+      ideUniverse.style.display = 'flex';
+      customCursor.style.display = 'none';
     });
   }
 
@@ -45,8 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!btn) return;
     btn.addEventListener('click', () => {
       ideUniverse.classList.remove('active');
+      ideUniverse.style.display = 'none';
       document.body.classList.remove('ide-active');
-      setTimeout(() => proUniverse.classList.add('active'), 600);
+      proUniverse.style.display = 'block';
+      customCursor.style.display = 'block';
     });
   });
 
@@ -72,11 +78,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (imageFollower && img) {
         imageFollower.style.backgroundImage = `url(${img})`;
         imageFollower.classList.add('visible');
+        imageFollower.classList.remove('ball-mode');
       }
       customCursor?.classList.add('hover');
     });
     row.addEventListener('mouseleave', () => {
-      imageFollower?.classList.remove('visible');
+      imageFollower?.classList.add('ball-mode'); // Curl back into ball
+      setTimeout(() => {
+        if (!imageFollower.classList.contains('visible')) {
+            imageFollower?.classList.remove('visible');
+        }
+      }, 400);
       customCursor?.classList.remove('hover');
     });
   });
