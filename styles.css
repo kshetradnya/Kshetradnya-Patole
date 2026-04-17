@@ -429,125 +429,99 @@ body.ide-active .custom-cursor { display: none; }
    ========================================= */
 
 :root {
-  --cam-body: #1a1a1a;
-  --cam-border: #333;
-  --cam-accent: #27c93f;
-  --comic-font: 'Luckiest Guy', cursive;
+  --cam-hud-green: #27c93f;
+  --cam-hud-red: #ff4655;
+  --cam-hud-white: #ece8e1;
 }
 
-.font-comic { font-family: var(--comic-font); }
-
-/* Launchers */
-.camera-launcher-mini { position: fixed; bottom: 40px; right: 40px; z-index: 1000; cursor: pointer; }
-.mini-cam-design { width: 100px; height: 70px; background: #1a1a1a; border: 4px solid #333; border-radius: 10px; position: relative; display: flex; align-items: center; justify-content: center; }
-.lens-glass { width: 40px; height: 40px; border-radius: 50%; border: 3px solid #555; background: radial-gradient(circle, #222, #000); }
-
-.gaming-launcher-mini { position: fixed; bottom: 40px; right: 180px; z-index: 1000; cursor: pointer; }
-.controller-icon { width: 100px; height: 100px; background: #ff4655; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); display: flex; items-center; justify-content: center; color: white; box-shadow: 10px 10px 0 #0f1923; }
-
-/* Transition Overlay */
-.hobby-transition { position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center; pointer-events: none; }
-.transition-half { position: absolute; top: 0; height: 100%; width: 50%; background: #1a1a1a; }
-.left-half { left: 0; border-right: 4px solid #27c93f; }
-.right-half { right: 0; border-left: 4px solid #27c93f; }
-.pull-text { position: relative; z-index: 20; background: #fff; color: #1a1a1a; padding: 20px 50px; border-radius: 999px; font-family: var(--comic-font); font-size: 80px; border: 8px solid #1a1a1a; box-shadow: 15px 15px 0 #27c93f; transform: scale(0); }
-
-/* Camera Universe */
-.hobby-camera-universe { position: fixed; inset: 0; z-index: 9998; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; }
-.camera-body { position: relative; width: 900px; height: 600px; background: #1a1a1a; border-radius: 60px; border: 6px solid #444; display: flex; padding: 40px; }
-
-/* Power Switch */
-.power-switch-overlay { position: fixed; inset: 0; z-index: 10001; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; }
-.switch-box { background: #ece8e1; border: 8px solid #0f1923; padding: 40px; text-align: center; box-shadow: 20px 20px 0 #ff4655; }
-.power-toggle { width: 120px; height: 60px; background: #333; border-radius: 30px; margin: 20px auto; cursor: pointer; position: relative; border: 4px solid #000; }
-.toggle-knob { width: 50px; height: 50px; background: #fff; border-radius: 50%; position: absolute; left: 5px; top: 5px; transition: 0.3s; }
-.power-toggle.on .toggle-knob { left: 65px; background: #73e5ac; }
-
-/* =========================================
-   VALORANT PROTOCOL LOBBY (FIXED LAYOUT)
-   ========================================= */
-.val-hobby-universe {
-  position: fixed; inset: 0; z-index: 9999; background: #0f1923;
-  display: none; flex-direction: column; color: #ece8e1; font-family: 'JetBrains Mono', monospace;
-  background-image: radial-gradient(circle at center, rgba(15,25,35,0.2) 0%, rgba(15,25,35,1) 100%);
+.hobby-camera-universe {
+  position: fixed; inset: 0; z-index: 9998; background: #000;
+  display: none; align-items: center; justify-content: center;
 }
 
-.val-global-header {
-  height: 60px; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: space-between;
-  padding: 0 40px; border-bottom: 2px solid rgba(255,255,255,0.05); z-index: 100;
-}
-.val-nav-icons { display: flex; gap: 30px; }
-.nav-icon { color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 800; cursor: pointer; position: relative; }
-.nav-icon.active { color: #fff; }
-.nav-icon.active::after { content: ''; position: absolute; bottom: -24px; left: 0; width: 100%; height: 3px; background: #fff; }
-
-.vh-right .currency-block { display: flex; gap: 25px; align-items: center; }
-.cur { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #fff; font-size: 13px; }
-.cur::before { content: '◈'; color: #00ffff; font-size: 16px; }
-.cur.level::before { content: '★'; color: #ffbc00; }
-
-.val-lobby-main {
-  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  position: relative; overflow: hidden; padding-top: 20px;
+.camera-body {
+  position: relative; width: 1000px; height: 680px; background: #0f0f0f;
+  border-radius: 40px; border: 8px solid #222; display: flex; padding: 30px;
+  box-shadow: 0 50px 100px rgba(0,0,0,0.8), inset 0 0 40px #000;
 }
 
-.val-center-banner {
-  margin-bottom: 40px; text-align: center; border: 1px solid rgba(255,255,255,0.1);
-  padding: 10px 60px; background: rgba(255,255,255,0.03); backdrop-filter: blur(5px);
-}
-.banner-tag { font-size: 18px; font-weight: 900; letter-spacing: 5px; color: #fff; }
-.banner-sub { font-size: 10px; opacity: 0.5; letter-spacing: 2px; }
-
-.val-party-container {
-  display: flex; gap: 20px; align-items: flex-end; justify-content: center;
-  width: 100%; max-width: 1400px; height: 550px;
+.camera-lcd-screen {
+  flex: 1; background: #000; border-radius: 10px; border: 4px solid #1a1a1a;
+  position: relative; overflow: hidden; display: flex; flex-direction: column;
 }
 
-.val-banner-slot {
-  width: 220px; height: 420px; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.1);
-  position: relative; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 4px;
+/* Technical HUD Overlays */
+.camera-hud-overlay {
+  position: absolute; inset: 0; z-index: 100; pointer-events: none;
+  padding: 20px; color: var(--cam-hud-white); font-family: var(--font-mono);
 }
-.val-banner-slot.player-banner { height: 500px; border-color: rgba(255,255,255,0.2); }
-.val-banner-slot.leader { border-color: #ffbc00; box-shadow: 0 0 40px rgba(255,188,0,0.1); }
-.val-banner-slot.empty { display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.4; }
-.val-banner-slot.empty:hover { opacity: 1; border-color: #fff; background: rgba(255,255,255,0.05); }
-.add-icon { font-size: 40px; font-weight: 200; }
 
-.leader-crown { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); color: #ffbc00; font-size: 24px; animation: valBounce 2s infinite; }
-@keyframes valBounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -10px); } }
+.hud-corner { position: absolute; display: flex; gap: 15px; align-items: center; }
+.top-left { top: 20px; left: 20px; }
+.top-right { top: 20px; right: 20px; }
 
-.player-card-img { width: 100%; height: 82%; background-size: cover; background-position: center; position: relative; overflow: hidden; }
-.card-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(15,25,35,0.9) 100%); }
+.mode-dial { width: 40px; height: 40px; border: 2px solid #fff; display: flex; items-center; justify-content: center; font-weight: 900; background: #000; border-radius: 4px; }
+.recording-dot { color: var(--cam-hud-red); font-weight: bold; animation: pulseRed 1s infinite; }
 
-.rank-badge { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; }
-.rank-badge img { width: 60px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.8)); }
-.rank-tier { font-size: 11px; font-weight: 900; margin-top: 5px; color: #fff; text-shadow: 0 2px 4px #000; }
-
-.player-meta { background: #ece8e1; color: #0f1923; padding: 15px; height: 90px; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
-.p-name { font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: -0.5px; }
-.p-title { font-size: 10px; font-weight: 800; opacity: 0.6; letter-spacing: 1px; }
-
-.rank-tracker { position: absolute; bottom: -50px; width: 100%; text-align: center; font-size: 10px; font-weight: 800; color: rgba(255,255,255,0.4); letter-spacing: 1.5px; }
-
-.val-left-interface { position: absolute; left: 60px; top: 45%; transform: translateY(-50%); z-index: 10; }
-.queue-info label { font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 800; letter-spacing: 2px; }
-.q-val.font-comic { font-size: 38px; color: #ffbc00; text-shadow: 0 0 20px rgba(255,188,0,0.5); font-weight: 900; line-height: 1; margin-top: 5px; }
-.party-status { margin-top: 60px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.5); }
-
-.val-right-interface { position: absolute; right: 25px; top: 120px; bottom: 120px; width: 65px; background: rgba(0,0,0,0.4); border-left: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; padding: 25px 0; z-index: 10; }
-.friend-item { width: 40px; height: 40px; border-radius: 50%; background: #333; margin-bottom: 25px; border: 2px solid #555; position: relative; }
-.friend-item.online::after { content: ''; position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #73e5ac; border-radius: 50%; border: 2px solid #0f1923; }
-
-.val-bottom-controls { position: absolute; bottom: 60px; display: flex; gap: 20px; align-items: center; z-index: 20; }
-.btn-secondary { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 12px 35px; font-weight: 800; letter-spacing: 1px; cursor: pointer; transition: 0.2s; }
-.btn-secondary:hover { background: rgba(255,255,255,0.1); }
-.btn-start { background: #ff4655; color: #fff; border: none; padding: 18px 140px; font-weight: 900; font-size: 42px; letter-spacing: 3px; cursor: pointer; transition: 0.2s; box-shadow: 0 0 50px rgba(255,70,85,0.4); position: relative; overflow: hidden; }
-.btn-start:hover { transform: scale(1.02); background: #fff; color: #ff4655; }
-
-/* Match Stinger Overlay for Exit */
-.val-match-stinger {
-  position: fixed; inset: 0; background: #ff4655; color: #fff; display: flex; align-items: center; justify-content: center;
-  font-size: 120px; font-weight: 900; z-index: 10005; opacity: 0; pointer-events: none;
+.live-histogram {
+  position: absolute; bottom: 120px; right: 20px; width: 100px; height: 60px;
+  background: rgba(255,255,255,0.05); display: flex; align-items: flex-end; gap: 2px; padding: 2px;
 }
-.val-flash-whiteout { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 10000; }
-.val-flash-projectile { position: absolute; width: 100px; height: 100px; pointer-events: none; z-index: 10001; }
+.h-bar { flex: 1; background: var(--cam-hud-green); opacity: 0.6; transition: height 0.2s; }
+
+.focus-box {
+  position: absolute; width: 80px; height: 80px; border: 1px solid var(--cam-hud-white);
+  transition: all 0.5s cubic-bezier(0.2,0.8,0.2,1);
+}
+.focus-box.primary { top: 50%; left: 50%; transform: translate(-50%, -50%); border-width: 2px; width: 120px; height: 120px; border-color: var(--cam-hud-green); }
+.focus-box::after { content: ''; position: absolute; inset: 30%; border: 1px solid rgba(255,255,255,0.2); }
+
+.horizon-line {
+  position: absolute; top: 50%; left: 10%; width: 80%; height: 1px; background: rgba(255,255,255,0.2);
+  transition: transform 0.1s;
+}
+.horizon-line::after { content: ''; position: absolute; left: 50%; top: -5px; width: 2px; height: 10px; background: var(--cam-hud-green); }
+
+.hud-bottom {
+  position: absolute; bottom: 20px; left: 20px; right: 20px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.main-stats { display: flex; gap: 30px; background: rgba(0,0,0,0.4); padding: 10px 20px; border-left: 3px solid var(--cam-hud-green); }
+.stat-item label { display: block; font-size: 8px; opacity: 0.5; margin-bottom: 2px; }
+.stat-item span { font-size: 20px; font-weight: bold; }
+
+/* Grid Layers */
+.grid-layer { position: absolute; inset: 0; pointer-events: none; opacity: 0.1; }
+.rule-of-thirds {
+  background-image: linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px);
+  background-size: 33.33% 33.33%;
+}
+
+/* Boot Loader */
+.lcd-loader {
+  position: absolute; inset: 0; background: #000; z-index: 200;
+  display: flex; flex-direction: column; items-center; justify-content: center; text-align: center;
+}
+.boot-bar { width: 200px; height: 2px; background: #333; margin-top: 20px; overflow: hidden; }
+.boot-progress { width: 0%; height: 100%; background: var(--cam-hud-green); animation: bootProgress 2s forwards; }
+@keyframes bootProgress { 100% { width: 100%; } }
+
+/* Viewfinder & Grain */
+.lcd-viewfinder { flex: 1; position: relative; background: #111; overflow: hidden; }
+.lcd-viewfinder img { width: 100%; height: 100%; object-fit: cover; }
+.grain-overlay { position: absolute; inset: 0; background: url('https://grain-url-or-svg'); opacity: 0.05; pointer-events: none; }
+
+/* Info Panel */
+.lcd-info-panel { height: 180px; background: #0f0f0f; padding: 25px; border-top: 1px solid #333; position: relative; z-index: 110; }
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.metadata-scroll { display: flex; gap: 30px; margin-top: 20px; font-size: 11px; }
+.meta-row { display: flex; gap: 8px; color: #888; }
+.meta-row span:last-child { color: var(--cam-hud-white); font-weight: bold; }
+
+.exit-btn {
+  position: absolute; bottom: 25px; right: 25px; background: var(--cam-hud-red); color: #fff;
+  border: none; padding: 10px 25px; font-weight: 900; cursor: pointer; border-radius: 4px;
+}
+
+@keyframes pulseRed { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+

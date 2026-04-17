@@ -405,122 +405,6 @@
     </div>
   </div>
 
-  <!-- Hobby Launcher: Valorant -->
-  <div id="gamingLauncher" class="gaming-launcher-mini">
-    <div class="launcher-tooltip">INITIATE FLASH</div>
-    <div class="controller-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2m4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5m3-3c-.83 0-1.5-.67-1.5-1.5S17.67 9 18.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5"/></svg>
-    </div>
-  </div>
-
-  <!-- Valorant Flash Animation items -->
-  <div id="valFlashContainer" class="val-flash-container">
-    <img id="valFlashProjectile" src="projects/val_flash_sprite.png" class="val-flash-sprite">
-    <div id="valFlashWhiteout" class="val-flash-whiteout"></div>
-  </div>
-
-  <div id="valHobbyUniverse" class="val-hobby-universe">
-    <div class="val-global-header">
-        <div class="vh-left">
-            <span class="back-link">BACK //</span> <span class="page-title">PLAY</span>
-        </div>
-        <div class="vh-center">
-            <div class="val-nav-icons">
-                <div class="nav-icon">HOME</div>
-                <div class="nav-icon">BATTLEPASS</div>
-                <div class="nav-icon">AGENTS</div>
-                <div class="nav-icon active">PLAY</div>
-                <div class="nav-icon">CAREER</div>
-                <div class="nav-icon">COLLECTION</div>
-                <div class="nav-icon">STORE</div>
-            </div>
-        </div>
-        <div class="vh-right">
-            <div class="currency-block">
-                <div class="cur" title="Valorant Points">2,786</div>
-                <div class="cur" title="Radianite Points">635</div>
-                <div class="cur level" title="Account Level">4,214</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="val-lobby-main">
-        <div class="val-center-banner">
-            <div class="banner-tag">DESIGNED BY KP</div>
-            <div class="banner-sub">ALPHA VS OMEGA</div>
-        </div>
-
-        <div class="val-party-container">
-            <div class="val-banner-slot empty"><div class="add-icon">+</div></div>
-
-            <div class="val-banner-slot player-banner">
-                <div class="player-card-img" style="background-image: url('projects/val_card_trijal_new.png');">
-                    <div class="card-overlay">
-                        <div class="rank-badge"><img src="projects/silver1.png" alt="S1"></div>
-                    </div>
-                </div>
-                <div class="player-meta">
-                    <div class="p-name">TRIJAL</div>
-                    <div class="p-title">SIDEKICK</div>
-                </div>
-            </div>
-
-            <div class="val-banner-slot player-banner leader">
-                <div class="leader-crown">▲</div>
-                <div class="player-card-img" style="background-image: url('projects/val_card_kshetra_revamp.png');">
-                    <div class="card-overlay">
-                        <div class="rank-badge">
-                            <img src="projects/gold1.png" alt="G1">
-                            <div class="rank-tier">GOLD 1</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="player-meta">
-                    <div class="p-name">KSHETRADNYA PATOLE</div>
-                    <div class="p-title">HORSEPOWER</div>
-                </div>
-                <div class="rank-tracker">PEAK: GOLD 3 // CURRENT: GOLD 1</div>
-            </div>
-
-            <div class="val-banner-slot player-banner">
-                <div class="player-card-img" style="background-image: url('projects/val_card_vivan_new.png');">
-                    <div class="card-overlay">
-                        <div class="rank-badge"><img src="projects/silver3.png" alt="S3"></div>
-                    </div>
-                </div>
-                <div class="player-meta">
-                    <div class="p-name">VIVAN</div>
-                    <div class="p-title">INITIATOR</div>
-                </div>
-            </div>
-
-            <div class="val-banner-slot empty"><div class="add-icon">+</div></div>
-        </div>
-
-        <div class="val-left-interface">
-            <div class="queue-info">
-                <label>QUEUE</label>
-                <div class="q-val font-comic">COMPETITIVE</div>
-            </div>
-            <div class="party-status">
-                <div>PARTY CODE</div>
-                <div>PARTY CLOSED 🔒</div>
-            </div>
-        </div>
-
-        <div class="val-right-interface">
-            <div class="friend-item online"></div>
-            <div class="friend-item online"></div>
-            <div class="friend-item offline"></div>
-        </div>
-
-        <div class="val-bottom-controls">
-            <button class="btn-secondary">PRACTICE</button>
-            <button id="valStartBtn" class="btn-start">EXIT</button>
-            <button id="exitValBtn" class="btn-secondary">LEAVE PARTY</button>
-        </div>
-    </div>
-  </div>
 
   <!-- Hobby Camera Universe -->
   <div id="hobbyCameraUniverse" class="hobby-camera-universe">
@@ -537,48 +421,82 @@
 
       <!-- LCD Screen -->
       <div class="camera-lcd-screen">
+        <!-- Technical HUD Overlays -->
+        <div id="lcdHud" class="camera-hud-overlay">
+          <div class="hud-corner top-left">
+            <div class="mode-dial" data-mode="M">M</div>
+            <div class="metering-mode">◈</div>
+            <div class="battery-status"><span id="batCap">98%</span> 🔋</div>
+          </div>
+          <div class="hud-corner top-right">
+            <div class="recording-dot">● REC</div>
+            <div id="sdSpace">SD: 42.8 GB</div>
+          </div>
+          
+          <!-- Live Histogram -->
+          <div class="live-histogram">
+            <div class="h-bar" style="height:30%"></div>
+            <div class="h-bar" style="height:60%"></div>
+            <div class="h-bar" style="height:80%"></div>
+            <div class="h-bar" style="height:40%"></div>
+            <div class="h-bar" style="height:90%"></div>
+          </div>
+
+          <!-- Face/Eye Detection -->
+          <div id="faceTracker" class="focus-box primary"></div>
+          <div class="focus-box secondary" style="top:30%; left:60%"></div>
+          
+          <!-- Spirit Level -->
+          <div class="horizon-line"></div>
+
+          <div class="hud-bottom">
+            <div class="exp-comp">
+                <span>-3</span>
+                <div class="exp-bar"><div class="exp-point"></div></div>
+                <span>+3</span>
+            </div>
+            <div class="main-stats">
+                <div class="stat-item"><label>SHUTTER</label><span id="valShutter">1/4000</span></div>
+                <div class="stat-item"><label>APERTURE</label><span id="valAperture">ƒ/1.8</span></div>
+                <div class="stat-item"><label>ISO</label><span id="valIso">100</span></div>
+            </div>
+            <div class="file-format">RAW + L</div>
+          </div>
+
+          <!-- Grid Overlays -->
+          <div id="gridThirds" class="grid-layer rule-of-thirds"></div>
+        </div>
+
         <div id="lcdBootLoader" class="lcd-loader">
-          <div class="spinner"></div>
-          <p>BOOTING DIGITAL SOUL...</p>
+          <p class="font-mono">EOS 13000D FIRMWARE v2.0.5</p>
+          <p class="font-mono">LOADING OPTICAL ENGINE...</p>
+          <div class="boot-bar"><div class="boot-progress"></div></div>
         </div>
 
         <div id="lcdContent" class="lcd-content" style="display:none;">
-          <!-- Viewfinder -->
           <div class="lcd-viewfinder">
+            <div id="grainOverlay" class="grain-overlay"></div>
             <img id="hobbyImage" src="" alt="Hobby View">
-            
-            <div class="hud-layer">
-              <div class="hud-top">
-                <div class="hud-stats">
-                  <span id="hudIso">ISO 100</span>
-                  <span id="hudAperture">f/1.8</span>
-                  <span id="hudShutter">1/4000s</span>
-                </div>
-                <div class="rec-dot">REC</div>
-              </div>
-              <div class="focus-square"></div>
-              <div class="hud-bottom">
+            <div id="lcdFlashOverlay" class="lcd-flash-overlay"></div>
+          </div>
+
+          <!-- Info & Gallery Panel -->
+          <div class="lcd-info-panel">
+            <div class="panel-header">
+                <h2 id="hobbyTitle">PHOTOGRAPHY</h2>
                 <div id="hobbyDots" class="hobby-dots">
                   <span class="dot active"></span>
                   <span class="dot"></span>
                   <span class="dot"></span>
                 </div>
-                <div class="sd-info">SD: 128GB</div>
-              </div>
             </div>
-
-            <!-- Screen Flash Overlay -->
-            <div id="lcdFlashOverlay" class="lcd-flash-overlay"></div>
-          </div>
-
-          <!-- Info Panel -->
-          <div class="lcd-info-panel">
-            <h2 id="hobbyTitle">PHOTOGRAPHY</h2>
             <p id="hobbyDesc">Capturing the world through a mechanical eye.</p>
-            <div class="fun-fact-box">
-              <p id="hobbyFunFact">POW! Captured in 0.01s!</p>
+            <div class="metadata-scroll">
+                <div class="meta-row"><span>FILE:</span><span id="fileName">PAT_0042.CR2</span></div>
+                <div class="meta-row"><span>GPS:</span><span>19.0760° N, 72.8777° E</span></div>
+                <div class="meta-row"><span>COLOR:</span><span>CINEMATIC VIVID</span></div>
             </div>
-            <button id="exitLensBtn" class="exit-btn">EXIT LENS</button>
+            <button id="exitLensBtn" class="exit-btn">POWER OFF</button>
           </div>
         </div>
       </div>

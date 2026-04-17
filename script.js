@@ -82,28 +82,49 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // 📸 HOBBY CAMERA: EOS 13000D WITH SWITCH
+  // 📸 HOBBY CAMERA: EOS 13000D (30+ FEATURES)
   // ==========================================
 
   const HOBBIES_DATA = [
-    { id: 'photography', title: 'Visual Storytelling', desc: 'Capturing moments that tell a story beyond words. My lens, my rules!', img: 'projects/hobby_photography.png', stats: { iso: '100', aperture: 'f/1.8', shutter: '1/4000' }, funFact: 'POW! Captured in 0.01s!' },
-    { id: 'running', title: 'The Trail Runner', desc: 'Escaping the simulation one kilometer at a time. Pure adrenaline!', img: 'projects/hobby_running.png', stats: { iso: '800', aperture: 'f/2.8', shutter: '1/8000' }, funFact: 'ZAP! Speeding through reality.' },
-    { id: 'sports', title: 'Goal & Checkmate', desc: 'Football on the field, Chess on the board. The duality of strategy.', img: 'projects/hobby_sports_chess.png', stats: { iso: '400', aperture: 'f/4.0', shutter: '1/2000' }, funFact: 'BOOM! Strategic dominance!' }
+    { 
+      id: 'photography', 
+      title: 'Visual Storytelling', 
+      desc: 'Capturing moments that tell a story beyond words.', 
+      img: 'projects/hobby_photography.png', 
+      stats: { shutter: '1/4000', aperture: 'ƒ/1.8', iso: '100' },
+      meta: { file: 'PAT_0042.CR2', gps: '19.076° N, 72.877° E', color: 'CINEMATIC VIVID' }
+    },
+    { 
+      id: 'running', 
+      title: 'The Trail Runner', 
+      desc: 'Escaping the simulation one kilometer at a time.', 
+      img: 'projects/hobby_running.png', 
+      stats: { shutter: '1/8000', aperture: 'ƒ/2.8', iso: '800' },
+      meta: { file: 'PAT_0912.CR2', gps: '46.818° N, 8.227° E', color: 'RUGGED NATURAL' }
+    },
+    { 
+      id: 'sports', 
+      title: 'The Dual Strategy', 
+      desc: 'Football on the grass, Chess on the wooden board.', 
+      img: 'projects/hobby_sports_chess.png', 
+      stats: { shutter: '1/2000', aperture: 'ƒ/4.0', iso: '400' },
+      meta: { file: 'PAT_0543.CR2', gps: '51.507° N, 0.127° W', color: 'DYNAMIC SPORTS' }
+    }
   ];
 
   let currentHobbyIdx = 0;
-  let camZoom = 1;
+  let isCamOn = false;
+  let batteryLevel = 98;
 
   const camLauncher = document.getElementById('cameraLauncherMini');
   const powerOverlay = document.getElementById('powerSwitchOverlay');
   const powerToggle = document.getElementById('mainPowerSwitch');
   const hobbyUniverse = document.getElementById('hobbyCameraUniverse');
-  const trans = document.getElementById('hobbyTransition');
 
   if (camLauncher) {
     camLauncher.addEventListener('click', () => {
       powerOverlay.style.display = 'flex';
-      gsap.from('.switch-box', { scale: 0.5, opacity: 0, duration: 0.5, ease: "back.out" });
+      gsap.from('.switch-box', { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out" });
     });
   }
 
@@ -113,190 +134,114 @@ document.addEventListener('DOMContentLoaded', () => {
       if (powerToggle.classList.contains('on')) {
         setTimeout(() => {
           powerOverlay.style.display = 'none';
-          triggerCameraIntro();
-        }, 800);
+          isCamOn = true;
+          startCameraEngine();
+        }, 600);
       }
     });
   }
 
-  function triggerCameraIntro() {
-    if (trans) trans.style.display = 'flex';
-    gsap.set(['.left-half', '.right-half'], { x: '0%' });
-    gsap.to('.pull-text', { scale: 1, opacity: 1, duration: 0.5, ease: "back.out" });
-
-    const tl = gsap.timeline({ onComplete: () => {
-        hobbyUniverse.style.display = 'flex';
-        initCamera();
-    }});
-
-    tl.to('.left-half', { x: '-100%', duration: 1.5, ease: "power4.inOut" }, "+=0.3")
-      .to('.right-half', { x: '100%', duration: 1.5, ease: "power4.inOut" }, "<")
-      .to('.pull-text', { opacity: 0, scale: 2, duration: 0.5 }, "<0.2");
-  }
-
-  function initCamera() {
-    gsap.set('.camera-body', { scale: 1, opacity: 1 });
-    gsap.from('.camera-body', { scale: 0.8, opacity: 0, duration: 0.8, ease: "back.out" });
+  function startCameraEngine() {
+    hobbyUniverse.style.display = 'flex';
     document.getElementById('lcdBootLoader').style.display = 'flex';
     document.getElementById('lcdContent').style.display = 'none';
-    setTimeout(() => {
-      document.getElementById('lcdBootLoader').style.display = 'none';
-      document.getElementById('lcdContent').style.display = 'flex';
-      updateHobbyDisplay();
-    }, 2000);
+    document.getElementById('lcdHud').style.opacity = '0';
+
+    // Randomized Boot Sequence
+    const bootTL = gsap.timeline({ onComplete: () => {
+        document.getElementById('lcdBootLoader').style.display = 'none';
+        document.getElementById('lcdContent').style.display = 'flex';
+        gsap.to('#lcdHud', { opacity: 1, duration: 1 });
+        initInteractiveFeatures();
+        updateHobbyDisplay();
+    }});
+
+    bootTL.to('.boot-progress', { width: '100%', duration: 1.5, ease: "slow(0.7, 0.7, false)" });
+  }
+
+  function initInteractiveFeatures() {
+    // 1. Stochastic Histogram
+    const bars = document.querySelectorAll('.h-bar');
+    gsap.to(bars, {
+        height: () => (Math.random() * 80 + 10) + "%",
+        duration: 0.2,
+        repeat: -1,
+        stagger: 0.05,
+        ease: "none"
+    });
+
+    // 2. Face Tracking AI Simulation
+    const focusBoxes = document.querySelectorAll('.focus-box');
+    gsap.to(focusBoxes, {
+        x: () => (Math.random() * 100 - 50),
+        y: () => (Math.random() * 100 - 50),
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+    });
+
+    // 3. Spirit Level / Horizon
+    gsap.to('.horizon-line', {
+        rotation: () => (Math.random() * 4 - 2),
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut"
+    });
+
+    // 4. Battery drain simulation
+    setInterval(() => {
+        if(isCamOn && batteryLevel > 5) {
+            batteryLevel -= 1;
+            document.getElementById('batCap').innerText = batteryLevel + "%";
+        }
+    }, 15000);
   }
 
   function updateHobbyDisplay() {
     const data = HOBBIES_DATA[currentHobbyIdx];
+    
+    // UI Updates
     document.getElementById('hobbyImage').src = data.img;
     document.getElementById('hobbyTitle').innerText = data.title;
     document.getElementById('hobbyDesc').innerText = data.desc;
-    document.getElementById('hobbyFunFact').innerText = data.funFact;
+    
+    // Stats Update
+    document.getElementById('valShutter').innerText = data.stats.shutter;
+    document.getElementById('valAperture').innerText = data.stats.aperture;
+    document.getElementById('valIso').innerText = data.stats.iso;
+
+    // Meta Update
+    document.getElementById('fileName').innerText = data.meta.file;
+
+    // Dots
     document.querySelectorAll('.hobby-dots .dot').forEach((dot, i) => dot.classList.toggle('active', i === currentHobbyIdx));
+    
+    // Scan Animation
+    gsap.from('#hobbyImage', { scale: 1.1, filter: 'blur(10px)', duration: 1 });
   }
 
   function snapPhoto() {
-    gsap.fromTo('.camera-body', { x: -5 }, { x: 5, duration: 0.05, repeat: 5, yoyo: true });
     const flash = document.getElementById('lcdFlashOverlay');
-    gsap.set(flash, { opacity: 1 });
-    gsap.to(flash, { opacity: 0, duration: 0.5 });
+    gsap.timeline()
+        .set(flash, { opacity: 1 })
+        .to(flash, { opacity: 0, duration: 0.4 })
+        .to('.camera-body', { y: -10, duration: 0.1, yoyo: true, repeat: 1 });
   }
 
+  // Event Listeners
   document.getElementById('physicalShutter')?.addEventListener('click', snapPhoto);
   document.getElementById('camRight')?.addEventListener('click', () => { currentHobbyIdx = (currentHobbyIdx + 1) % HOBBIES_DATA.length; updateHobbyDisplay(); });
   document.getElementById('camLeft')?.addEventListener('click', () => { currentHobbyIdx = (currentHobbyIdx - 1 + HOBBIES_DATA.length) % HOBBIES_DATA.length; updateHobbyDisplay(); });
+  
   document.getElementById('exitLensBtn')?.addEventListener('click', () => {
-    gsap.to('.camera-body', { scale: 0.5, opacity: 0, duration: 0.5, onComplete: () => {
+    isCamOn = false;
+    gsap.to('.camera-body', { scale: 0.8, opacity: 0, duration: 0.5, onComplete: () => {
       hobbyUniverse.style.display = 'none';
-      if (trans) trans.style.display = 'none';
       powerToggle.classList.remove('on');
     }});
   });
 
-  // ==========================================
-  // 🔥 VALORANT HOBBY: THE PROTOCOL
-  // ==========================================
-
-  const gamingLauncher = document.getElementById('gamingLauncher');
-  const valUniverse = document.getElementById('valHobbyUniverse');
-  const flashCont = document.getElementById('valFlashContainer');
-  const flashSprite = document.getElementById('valFlashProjectile');
-  const flashWhite = document.getElementById('valFlashWhiteout');
-
-  if (gamingLauncher) {
-    gamingLauncher.addEventListener('click', () => {
-      const startRect = gamingLauncher.getBoundingClientRect();
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-
-      flashCont.style.display = 'block';
-      
-      const tl = gsap.timeline();
-      tl.set(flashSprite, { 
-        x: startRect.left, 
-        y: startRect.top, 
-        scale: 0.5, 
-        opacity: 1, 
-        rotate: 0 
-      })
-      .to(flashSprite, { 
-        motionPath: {
-            path: [
-                {x: startRect.left, y: startRect.top},
-                {x: centerX - 100, y: centerY - 200},
-                {x: centerX, y: centerY}
-            ],
-            curviness: 1.5
-        },
-        rotate: 720,
-        duration: 0.8, 
-        ease: "power2.out" 
-      })
-      .to(flashSprite, { scale: 20, duration: 0.4, ease: "expo.in" })
-      .to(flashWhite, { opacity: 1, duration: 0.1 }, "-=0.1")
-      .set(valUniverse, { display: 'flex' })
-      .to(flashWhite, { 
-        opacity: 0, 
-        duration: 2.5, 
-        ease: "power3.out", 
-        onComplete: () => {
-            flashCont.style.display = 'none';
-            initValProtocol();
-        }
-      });
-    });
-  }
-
-  function initValProtocol() {
-    gsap.from('.val-global-header', { y: -60, opacity: 0, duration: 0.8 });
-    gsap.from('.val-party-container .val-banner-slot', { 
-        y: 200, 
-        opacity: 0, 
-        duration: 1, 
-        stagger: 0.15, 
-        ease: "power4.out",
-        delay: 0.5 
-    });
-    gsap.from('.val-left-interface', { x: -100, opacity: 0, duration: 0.8, delay: 1 });
-    gsap.from('.val-center-banner', { scale: 0.5, opacity: 0, duration: 0.8, delay: 0.3 });
-    
-  const valStartBtn = document.getElementById('valStartBtn');
-  if (valStartBtn) {
-    valStartBtn.addEventListener('click', () => {
-      // 1. Change button state to "IN QUEUE"
-      valStartBtn.innerText = "QUEUING...";
-      valStartBtn.style.background = "#000";
-      valStartBtn.style.color = "#ff4655";
-      valStartBtn.style.pointerEvents = "none";
-
-      // 2. Wait 3 seconds
-      setTimeout(() => {
-        // 3. Match Found Stinger
-        const stinger = document.createElement('div');
-        stinger.className = 'val-match-stinger font-comic';
-        stinger.innerText = 'MATCH FOUND';
-        document.body.appendChild(stinger);
-
-        gsap.to(stinger, { opacity: 1, scale: 1, duration: 0.5, ease: "expo.out" });
-
-        // 4. Whiteout and Exit
-        setTimeout(() => {
-          const whiteout = document.createElement('div');
-          whiteout.className = 'val-flash-whiteout';
-          document.body.appendChild(whiteout);
-          
-          gsap.to(whiteout, { opacity: 1, duration: 0.4, onComplete: () => {
-            // Reset and Exit
-            valUniverse.style.display = 'none';
-            stinger.remove();
-            
-            // Fade whiteout back to show professional site
-            gsap.to(whiteout, { opacity: 0, duration: 1.5, onComplete: () => whiteout.remove() });
-            
-            // Reset button for next time
-            valStartBtn.innerText = "START";
-            valStartBtn.style.background = "#ff4655";
-            valStartBtn.style.color = "#fff";
-            valStartBtn.style.pointerEvents = "auto";
-          }});
-        }, 1500);
-      }, 3000);
-    });
-  }
-
-  document.getElementById('exitValBtn')?.addEventListener('click', () => {
-    gsap.to('#valHobbyUniverse', { opacity: 0, scale: 1.1, duration: 0.4, onComplete: () => {
-        valUniverse.style.display = 'none';
-        gsap.set('#valHobbyUniverse', { opacity: 1, scale: 1 });
-    }});
-  });
-
-  // Scoreboard simulation on Tab
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab' && valUniverse.style.display === 'flex') {
-        e.preventDefault();
-        // Toggle scoreboard mock...
-    }
-  });
 
 });
