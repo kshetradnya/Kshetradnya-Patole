@@ -229,86 +229,118 @@
           <div id="flightDestLabel"></div>
 
           <!-- The SVG map that the plane flies over -->
-          <svg id="flightSvg" viewBox="0 0 800 2200" xmlns="http://www.w3.org/2000/svg">
+          <svg id="flightSvg" viewBox="0 0 800 2000" xmlns="http://www.w3.org/2000/svg">
             <!-- Parchment background -->
-            <rect width="800" height="2200" fill="#f5efe6"/>
+            <rect width="800" height="2000" fill="#f5efe6"/>
 
-            <!-- India-ish landmass stylised shape -->
-            <path d="M 60,60 Q 700,40 740,300 Q 780,600 700,900 Q 650,1100 500,1300 Q 380,1500 350,1800 Q 340,2000 380,2100 Q 200,2050 150,1900 Q 80,1700 60,1400 Q 20,900 40,500 Z"
-              fill="#dcedc8" stroke="#aed581" stroke-width="3" opacity="0.6"/>
+            <!-- India stylised landmass -->
+            <path d="M 120,80 Q 680,60 720,280 Q 760,540 680,820 Q 630,1000 490,1180 Q 380,1340 360,1560 Q 340,1720 300,1820 Q 200,1800 160,1680 Q 100,1500 80,1240 Q 40,860 60,480 Z"
+              fill="#dcedc8" stroke="#aed581" stroke-width="3" opacity="0.55"/>
 
-            <!-- Dashed flight trail -->
+            <!-- 
+              ROUND-TRIP PATH:
+              Leg 1 (Down): Kashmir -> Amritsar -> Goa -> Kerala (bottom turnaround)
+              Leg 2 (Up):   Kerala  -> Goa area -> Amritsar area -> HOME (Kashmir)
+              The path is one continuous loop so MotionPath animates it all.
+            -->
+
+            <!-- Dashed ghost trail showing the full round-trip -->
             <path id="flightTrailDash"
-              d="M 200,120 C 350,200 500,350 480,550 C 460,750 280,900 300,1100 C 320,1300 520,1400 500,1650 C 480,1900 300,2050 260,2100"
-              fill="none" stroke="#c8b89a" stroke-width="5" stroke-dasharray="20,15" opacity="0.7"/>
+              d="M 200,100
+                 C 290,180 410,300 430,460
+                 C 450,620 300,760 310,940
+                 C 320,1120 480,1200 460,1380
+                 C 445,1520 340,1680 300,1780
+                 C 420,1840 540,1760 570,1620
+                 C 600,1480 550,1340 560,1180
+                 C 570,1020 610,880 590,720
+                 C 570,560 540,420 500,300
+                 C 460,200 350,120 200,100"
+              fill="none" stroke="#c8b89a" stroke-width="5" stroke-dasharray="18,12" opacity="0.6"/>
 
-            <!-- Solid progress trail (clipped by scroll) -->
+            <!-- Solid progress trail (animated via stroke-dashoffset) -->
             <path id="flightTrailSolid"
-              d="M 200,120 C 350,200 500,350 480,550 C 460,750 280,900 300,1100 C 320,1300 520,1400 500,1650 C 480,1900 300,2050 260,2100"
-              fill="none" stroke="#b8935c" stroke-width="5"
-              stroke-dasharray="3000" stroke-dashoffset="3000"/>
+              d="M 200,100
+                 C 290,180 410,300 430,460
+                 C 450,620 300,760 310,940
+                 C 320,1120 480,1200 460,1380
+                 C 445,1520 340,1680 300,1780
+                 C 420,1840 540,1760 570,1620
+                 C 600,1480 550,1340 560,1180
+                 C 570,1020 610,880 590,720
+                 C 570,560 540,420 500,300
+                 C 460,200 350,120 200,100"
+              fill="none" stroke="#b8935c" stroke-width="6"
+              stroke-dasharray="6000" stroke-dashoffset="6000"/>
 
-            <!-- Clouds -->
-            <ellipse cx="620" cy="180" rx="70" ry="30" fill="white" opacity="0.7"/>
-            <ellipse cx="650" cy="175" rx="50" ry="25" fill="white" opacity="0.8"/>
-            <ellipse cx="120" cy="700" rx="60" ry="24" fill="white" opacity="0.6"/>
-            <ellipse cx="680" cy="1050" rx="65" ry="28" fill="white" opacity="0.65"/>
-            <ellipse cx="150" cy="1500" rx="55" ry="22" fill="white" opacity="0.6"/>
+            <!-- Decorative Clouds -->
+            <ellipse cx="620" cy="160" rx="70" ry="28" fill="white" opacity="0.7"/>
+            <ellipse cx="650" cy="150" rx="50" ry="22" fill="white" opacity="0.8"/>
+            <ellipse cx="100" cy="620" rx="55" ry="22" fill="white" opacity="0.6"/>
+            <ellipse cx="700" cy="960" rx="65" ry="26" fill="white" opacity="0.6"/>
+            <ellipse cx="130" cy="1360" rx="50" ry="20" fill="white" opacity="0.55"/>
+            <ellipse cx="680" cy="1580" rx="60" ry="24" fill="white" opacity="0.55"/>
 
-            <!-- Destination nodes + labels -->
-            <!-- Kashmir -->
-            <circle class="map-node" id="nodeKashmir" cx="200" cy="120" r="22" data-dest="kashmir"/>
-            <text x="235" y="125" class="map-label royal">Kashmir ❄️</text>
+            <!-- === DESTINATION NODES (Leg 1 — Going Down) === -->
 
-            <!-- Amritsar -->
-            <circle class="map-node" id="nodeAmritsar" cx="480" cy="550" r="22" data-dest="amritsar"/>
-            <text x="515" y="555" class="map-label royal">Amritsar ☀️</text>
+            <!-- HOME / Kashmir (START) -->
+            <circle class="map-node home-node" id="nodeHome" cx="200" cy="100" r="26" data-dest="home"/>
+            <text x="240" y="95" class="map-label royal">HOME / Kashmir ❄️</text>
 
-            <!-- Goa -->
-            <circle class="map-node" id="nodeGoa" cx="300" cy="1100" r="22" data-dest="goa"/>
-            <text x="335" y="1105" class="map-label royal">Goa 🌊</text>
+            <!-- Amritsar (going down ~progress 0.18) -->
+            <circle class="map-node" id="nodeAmritsar" cx="430" cy="460" r="22" data-dest="amritsar"/>
+            <text x="462" y="455" class="map-label royal">Amritsar ☀️</text>
 
-            <!-- Kerala -->
-            <circle class="map-node" id="nodeKerala" cx="260" cy="2100" r="22" data-dest="kerala"/>
-            <text x="295" y="2105" class="map-label royal">Kerala 🌴</text>
+            <!-- Goa (going down ~progress 0.36) -->
+            <circle class="map-node" id="nodeGoa" cx="310" cy="940" r="22" data-dest="goa"/>
+            <text x="345" y="935" class="map-label royal">Goa 🌊</text>
+
+            <!-- Kerala (TURNAROUND ~progress 0.50) -->
+            <circle class="map-node turnaround-node" id="nodeKerala" cx="300" cy="1780" r="28" data-dest="kerala"/>
+            <text x="342" y="1775" class="map-label royal">Kerala 🌴 ↩</text>
+
+            <!-- === RETURN LEG nodes (just for visual reference, no click needed) === -->
+            <!-- Goa return (~0.65) -->
+            <circle class="map-node return-node" cx="560" cy="1180" r="16" opacity="0.5" data-dest="goa_return"/>
+            <!-- Amritsar return (~0.82) -->
+            <circle class="map-node return-node" cx="590" cy="720" r="16" opacity="0.5" data-dest="amritsar_return"/>
           </svg>
 
-          <!-- The plane (pinned center-ish, moves along path) -->
+          <!-- The plane (stays in center while map scrolls below it) -->
           <div id="airplane" class="airplane-sprite">
-            <svg width="120" height="120" viewBox="0 0 100 100" style="filter:drop-shadow(0 4px 12px rgba(0,0,0,0.3));">
+            <svg width="120" height="120" viewBox="0 0 100 100" style="filter:drop-shadow(0 4px 16px rgba(0,0,0,0.35));">
               <defs>
                 <radialGradient id="engineGlow" cx="50%" cy="100%">
                   <stop offset="0%" stop-color="#ff8c00" stop-opacity="0.9"/>
                   <stop offset="100%" stop-color="#ff8c00" stop-opacity="0"/>
                 </radialGradient>
               </defs>
-              <!-- Engine glow -->
-              <ellipse cx="50" cy="92" rx="12" ry="8" fill="url(#engineGlow)"/>
-              <!-- Body -->
+              <ellipse cx="50" cy="92" rx="14" ry="9" fill="url(#engineGlow)"/>
               <path d="M50,5 C55,20 58,45 56,88 L44,88 C42,45 45,20 50,5 Z" fill="#ffffff" stroke="#8c6d46" stroke-width="2"/>
-              <!-- Wing left -->
               <path d="M46,48 L5,72 L5,80 L46,60 Z" fill="#ffe0b2" stroke="#8c6d46" stroke-width="1.5"/>
-              <!-- Wing right -->
               <path d="M54,48 L95,72 L95,80 L54,60 Z" fill="#ffe0b2" stroke="#8c6d46" stroke-width="1.5"/>
-              <!-- Tail fin -->
               <path d="M47,80 L32,92 L44,92 Z" fill="#c8a96e" stroke="#8c6d46" stroke-width="1"/>
               <path d="M53,80 L68,92 L56,92 Z" fill="#c8a96e" stroke="#8c6d46" stroke-width="1"/>
-              <!-- Cockpit -->
               <ellipse cx="50" cy="22" rx="6" ry="9" fill="#90caf9" opacity="0.8"/>
-              <!-- Window strip -->
               <rect x="44" y="35" width="12" height="5" rx="2" fill="#b3e5fc" opacity="0.7"/>
             </svg>
           </div>
 
-          <!-- Passport stamp (pops on node arrival) -->
+          <!-- Passport stamp -->
           <div id="passportStamp" class="passport-stamp">PASSPORT<br>STAMPED</div>
 
-          <!-- Destination modal -->
+          <!-- Destination label bubble near the plane -->
+          <div id="flightDestLabel"></div>
+
+          <!-- Destination detail modal -->
           <div id="destModal" class="dest-modal-pin">
             <button id="destModalClose" style="float:right;background:none;border:none;font-size:1.4rem;cursor:pointer;">✕</button>
             <h4 id="destModalTitle"></h4>
             <ul id="destModalList"></ul>
           </div>
+
+          <!-- White flash used for cinematic home reveal -->
+          <div id="flightFlash" style="position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:200;transition:opacity 0.6s;"></div>
         </div>
 
         <!-- TRUE HOME ending overlay (fades in after last destination) -->

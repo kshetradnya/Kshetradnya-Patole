@@ -80,13 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
       customCursor.style.top = e.clientY + 'px';
     }
 
-    if(followerImage && followerImage.classList.contains('visible')) {
+    if(followerImage) {
       followerImage.style.left = e.clientX + 'px';
       followerImage.style.top = e.clientY + 'px';
     }
   });
 
-  const hoverables = document.querySelectorAll('a, button, .project-row, .magnet-btn');
+  const hoverables = document.querySelectorAll('a, button, .magnet-btn');
   hoverables.forEach(el => {
     el.addEventListener('mouseenter', () => {
       if(customCursor) customCursor.classList.add('hover');
@@ -503,117 +503,166 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =============================================
-  // FLIGHT MAP: Pinned Scroll (LandoNorris-style)
+  // FLIGHT MAP: Pinned Scroll — Full Round Trip
   // =============================================
   (function() {
-    const airplane    = document.getElementById('airplane');
-    const flightSvg   = document.getElementById('flightSvg');
-    const section     = document.getElementById('flightSection');
-    const altHud      = document.getElementById('altitudeHud');
-    const destLabel   = document.getElementById('flightDestLabel');
-    const stamp       = document.getElementById('passportStamp');
-    const destModal   = document.getElementById('destModal');
-    const modalTitle  = document.getElementById('destModalTitle');
-    const modalList   = document.getElementById('destModalList');
-    const modalClose  = document.getElementById('destModalClose');
-    const overlay     = document.getElementById('trueHomeOverlay');
-    const backBtn     = document.getElementById('backToOriginBtn');
-    const trailSolid  = document.getElementById('flightTrailSolid');
+    const airplane   = document.getElementById('airplane');
+    const flightSvg  = document.getElementById('flightSvg');
+    const section    = document.getElementById('flightSection');
+    const altHud     = document.getElementById('altitudeHud');
+    const destLabel  = document.getElementById('flightDestLabel');
+    const stamp      = document.getElementById('passportStamp');
+    const destModal  = document.getElementById('destModal');
+    const modalTitle = document.getElementById('destModalTitle');
+    const modalList  = document.getElementById('destModalList');
+    const modalClose = document.getElementById('destModalClose');
+    const overlay    = document.getElementById('trueHomeOverlay');
+    const backBtn    = document.getElementById('backToOriginBtn');
+    const trailSolid = document.getElementById('flightTrailSolid');
+    const flash      = document.getElementById('flightFlash');
 
     if (!airplane || !flightSvg || !section) return;
 
-    // Destination data
-    const destinations = {
-      kashmir:  { name: 'Kashmir ❄️', progress: 0.0, items: ['Snow-capped Himalayan hiking', 'Shikara ride on Dal Lake', 'Wazwan royal cuisine', 'Gondola ride to Gulmarg'] },
-      amritsar: { name: 'Amritsar ☀️', progress: 0.28, items: ['Golden Temple sunrise visit', 'Wagah Border parade ceremony', 'Butter-soaked Kulcha feast', 'Jallianwala Bagh memorial'] },
-      goa:      { name: 'Goa 🌊',     progress: 0.58, items: ['Late night Baga beach walks', 'Seafood shack hopping', 'Coastal road scooter rides', 'Dudhsagar waterfall trek'] },
-      kerala:   { name: 'Kerala 🌴',  progress: 1.0,  items: ['Houseboat through Alleppey', 'Tea gardens of Munnar', 'Kathakali performance', 'Ayurvedic spa retreat'] }
-    };
+    // ── Round-trip SVG path (matches path d in HTML exactly) ──────────────
+    // Leg 1 (0→0.5): Kashmir down to Kerala
+    // Leg 2 (0.5→1): Kerala back up to Kashmir (Home)
+    const PATH_D = [
+      'M 200,100',
+      'C 290,180 410,300 430,460',
+      'C 450,620 300,760 310,940',
+      'C 320,1120 480,1200 460,1380',
+      'C 445,1520 340,1680 300,1780',   // Kerala turnaround ≈ 0.50
+      'C 420,1840 540,1760 570,1620',
+      'C 600,1480 550,1340 560,1180',
+      'C 570,1020 610,880 590,720',
+      'C 570,560 540,420 500,300',
+      'C 460,200 350,120 200,100'        // back at HOME ≈ 1.0
+    ].join(' ');
 
-    // The SVG path data matches the <path> in HTML
-    const PATH_D = "M 200,120 C 350,200 500,350 480,550 C 460,750 280,900 300,1100 C 320,1300 520,1400 500,1650 C 480,1900 300,2050 260,2100";
+    // Waypoints: { progress 0-1, name, items, isReturn }
+    const waypoints = [
+      { p: 0.01, name: 'HOME \u2014 Kashmir \u2744\ufe0f', dest: 'home',     isReturn: false,
+        items: ['Paradise on Earth', 'Dal Lake Shikara rides', 'Wazwan royal feast', 'Gondola to Gulmarg peak'] },
+      { p: 0.20, name: 'Amritsar \u2600\ufe0f',           dest: 'amritsar', isReturn: false,
+        items: ['Golden Temple sunrise', 'Wagah Border Parade', 'Butter-drenched Kulcha', 'Jallianwala Bagh'] },
+      { p: 0.38, name: 'Goa \ud83c\udf0a',               dest: 'goa',      isReturn: false,
+        items: ['Midnight beach bonfires', 'Seafood shack-hopping', 'Coastal scooter rides', 'Dudhsagar waterfall'] },
+      { p: 0.50, name: 'Kerala \ud83c\udf34 \u2014 Turning Home', dest: 'kerala',   isReturn: false,
+        items: ['Houseboat through Alleppey', 'Tea gardens of Munnar', 'Kathakali performance', 'Ayurvedic retreat'] },
+      { p: 0.65, name: 'Goa \u2014 Return Leg', dest: 'goa_r',   isReturn: true,  items: [] },
+      { p: 0.82, name: 'Amritsar \u2014 Return Leg', dest: 'amr_r',  isReturn: true,  items: [] },
+      { p: 0.98, name: 'HOME \ud83c\udfe0', dest: 'home_end', isReturn: true,  items: [] },
+    ];
 
-    // Move airplane along the MotionPath using GSAP + ScrollTrigger
-    // We create a GSAP tween from 0->1 that is scrubbed by scroll
+    let homeRevealDone = false;
+
+    // ── Altitude: goes up then comes back down ──────────────────────────────
+    function altFromProgress(p) {
+      // Triangle curve: 0→35000 at p=0.5, then back to 0 at p=1
+      return Math.round((1 - Math.abs(p * 2 - 1)) * 35000);
+    }
+
+    // ── GSAP Timeline scrubbed by ScrollTrigger ────────────────────────────
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1.2,
+        scrub: 1.4,
         scroller: '.pro-scroll-container',
         onUpdate(self) {
           const p = self.progress;
 
-          // Update altitude
-          if (altHud) altHud.innerText = 'Altitude: ' + Math.round(p * 35000).toLocaleString() + ' ft';
+          // Altitude display
+          if (altHud) altHud.innerText = 'Altitude: ' + altFromProgress(p).toLocaleString() + ' ft';
 
-          // Draw trail by animating dashoffset
-          const totalLen = 3000;
-          if (trailSolid) trailSolid.style.strokeDashoffset = totalLen * (1 - p);
+          // Gold trail draw (full 6000 total)
+          if (trailSolid) trailSolid.style.strokeDashoffset = 6000 * (1 - p);
 
-          // Highlights at waypoints
-          const active = Object.entries(destinations).find(([, d]) => Math.abs(p - d.progress) < 0.04);
-          if (active) {
-            const [key, d] = active;
-            // Scale plane up on arrival
-            gsap.to(airplane, { scale: 1.6, duration: 0.4, ease: 'back.out' });
-            // Stamp
+          // Waypoint detection
+          const hit = waypoints.find(w => Math.abs(p - w.p) < 0.025);
+          if (hit) {
+            gsap.to(airplane, { scale: 1.7, duration: 0.35, ease: 'back.out(2)' });
             stamp.classList.add('stamped');
-            // Destination label
-            destLabel.textContent = d.name;
-            destLabel.style.left = '50%';
-            destLabel.style.top = '42%';
-            destLabel.classList.add('visible');
-            // True Home
-            if (key === 'kerala' && p > 0.96) {
-              setTimeout(() => { overlay.classList.add('active'); }, 600);
+            if (destLabel) {
+              destLabel.textContent = hit.name;
+              destLabel.style.left = '50%';
+              destLabel.style.top = '40%';
+              destLabel.classList.add('visible');
+            }
+
+            // TRUE HOME cinematic — only trigger once
+            if (hit.dest === 'home_end' && !homeRevealDone) {
+              homeRevealDone = true;
+              // 1. Plane rapidly scales up to fill screen
+              gsap.to(airplane, { scale: 80, opacity: 0, duration: 0.9, ease: 'power4.in',
+                onComplete() {
+                  // 2. Flash white
+                  if (flash) { flash.style.opacity = '1'; }
+                  setTimeout(() => {
+                    // 3. Show True Home overlay
+                    overlay.classList.add('active');
+                    // 4. Fade flash out
+                    if (flash) flash.style.opacity = '0';
+                  }, 700);
+                }
+              });
             }
           } else {
-            gsap.to(airplane, { scale: 1, duration: 0.6, ease: 'power2.out' });
+            gsap.to(airplane, { scale: 1, opacity: 1, duration: 0.5, ease: 'power2.out' });
             stamp.classList.remove('stamped');
-            destLabel.classList.remove('visible');
+            if (destLabel) destLabel.classList.remove('visible');
+            // Reset home reveal flag so scrolling back re-enables it
+            if (p < 0.93) homeRevealDone = false;
           }
         }
       }
     });
 
-    // The actual motion: move airplane along path
+    // ── Move the plane along the round-trip path ───────────────────────────
     tl.to(airplane, {
       motionPath: {
         path: PATH_D,
         align: flightSvg,
         alignOrigin: [0.5, 0.5],
-        autoRotate: true,
+        autoRotate: true,   // plane nose follows curve direction
         start: 0,
-        end: 1
+        end: 1,
       },
       ease: 'none',
       duration: 1
     }, 0);
 
-    // Also pan the SVG map so it feels like you're looking out of a window
-    // The map scrolls upward as the plane moves down it
+    // ── Pan the map so it feels like a camera tracking the plane ──────────
+    // The full SVG (2000px tall) needs to travel so that at p=0, top is visible
+    // and at p=0.5 the bottom (Kerala) is visible, then back up at p=1.
+    // We push it to -100% at the midpoint then back to 0
     tl.to(flightSvg, {
-      y: '-130%',
-      ease: 'none',
+      keyframes: [
+        { y: '0%',    ease: 'none' },
+        { y: '-100%', ease: 'none', progress: 0.5 },
+        { y: '0%',    ease: 'none', progress: 1   }
+      ],
       duration: 1
     }, 0);
 
-    // Node click handlers
-    document.querySelectorAll('.map-node').forEach(node => {
+    // ── Node click handlers ────────────────────────────────────────────────
+    document.querySelectorAll('.map-node:not(.return-node)').forEach(node => {
       node.addEventListener('click', () => {
         const dest = node.getAttribute('data-dest');
-        const d = destinations[dest];
-        if (!d || !destModal) return;
-        modalTitle.textContent = d.name;
-        modalList.innerHTML = d.items.map(i => `<li>${i}</li>`).join('');
+        const w = waypoints.find(w => w.dest === dest);
+        if (!w || !w.items.length || !destModal) return;
+        modalTitle.textContent = w.name;
+        modalList.innerHTML = w.items.map(i => `<li>${i}</li>`).join('');
         destModal.classList.add('active');
       });
     });
 
     if (modalClose) modalClose.addEventListener('click', () => destModal.classList.remove('active'));
-    if (backBtn) backBtn.addEventListener('click', () => overlay.classList.remove('active'));
+    if (backBtn) backBtn.addEventListener('click', () => {
+      overlay.classList.remove('active');
+      gsap.set(airplane, { scale: 1, opacity: 1 });
+    });
   })();
 
 });

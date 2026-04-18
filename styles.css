@@ -757,9 +757,9 @@ body.ide-active .custom-cursor { display: none; }
    PINNED FLIGHT MAP
    ========================================= */
 
-/* The outer section is VERY tall to give scroll room */
+/* The outer section is VERY tall to give scroll room for full round-trip */
 #flightSection {
-  height: 600vh; /* 6x viewport height - this is the scrollable distance */
+  height: 800vh; /* 8x viewport — down to Kerala + back home */
   background: #f5efe6;
 }
 
@@ -813,10 +813,13 @@ body.ide-active .custom-cursor { display: none; }
 
 .map-node {
   fill: #fff6ee; stroke: #b8935c; stroke-width: 5; cursor: pointer;
-  transition: r 0.3s, fill 0.3s;
+  transition: fill 0.3s;
   transform-box: fill-box; transform-origin: center;
 }
 .map-node:hover, .map-node.active { fill: #b8935c; }
+.map-node.home-node { fill: #fff; stroke: #3a2e28; stroke-width: 6; }
+.map-node.turnaround-node { fill: #ffe0b2; stroke: #e65100; stroke-width: 6; }
+.map-node.return-node { fill: #e8ddd1; stroke: #b8935c; stroke-width: 3; cursor: default; }
 .map-label.royal {
   font-family: var(--font-serif); font-size: 28px; fill: #3a2e28;
   font-weight: bold; pointer-events: none;
