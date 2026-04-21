@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  const hoverables = document.querySelectorAll('a, button, .magnet-btn');
+  const hoverables = document.querySelectorAll('a, button, .magnet-btn, .skill-pill');
   hoverables.forEach(el => {
     el.addEventListener('mouseenter', () => {
       customCursor?.classList.add('hover');
@@ -109,6 +109,95 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+
+  // Bento Spotlight Logic
+  document.querySelectorAll('.bento-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+
+  // ==========================================
+  // VIRTUAL IDE INTERACTIVITY
+  // ==========================================
+
+  const ideTabs = document.querySelectorAll('.ide-editor .tab');
+  const ideFiles = document.querySelectorAll('.ide-sidebar .file-item');
+  const ideContents = document.querySelectorAll('.ide-editor .file-content');
+  const breadcrumbPath = document.getElementById('breadcrumbPath');
+  
+  function switchIdeFile(fileId) {
+    ideTabs.forEach(tab => {
+      if(tab.getAttribute('data-file') === fileId) tab.classList.add('active');
+      else tab.classList.remove('active');
+    });
+    ideFiles.forEach(file => {
+      if(file.getAttribute('data-file') === fileId) {
+        file.classList.add('active');
+        if (breadcrumbPath) {
+           let fileName = file.innerText.replace(/M$|U$/,'').trim();
+           breadcrumbPath.innerText = `ML_PORTFOLIO_V2 > ${fileName}`;
+        }
+      }
+      else file.classList.remove('active');
+    });
+    ideContents.forEach(content => {
+      if(content.id === `file-${fileId}`) content.style.display = 'flex';
+      else content.style.display = 'none';
+    });
+  }
+  
+  ideTabs.forEach(tab => {
+    tab.addEventListener('click', () => { switchIdeFile(tab.getAttribute('data-file')); });
+  });
+  ideFiles.forEach(file => {
+    file.addEventListener('click', () => { switchIdeFile(file.getAttribute('data-file')); });
+  });
+
+  // Terminal Typing Simulation
+  const runCodeBtn = document.getElementById('runCodeBtn');
+  const terminalOutput = document.getElementById('terminalOutput');
+  if(runCodeBtn && terminalOutput) {
+    let isRunning = false;
+    runCodeBtn.addEventListener('click', () => {
+      if(isRunning) return;
+      isRunning = true;
+      runCodeBtn.style.opacity = '0.5';
+      const promptLine = document.createElement('div');
+      promptLine.innerHTML = `<span class="prompt">kshetra@macbook:~/ML_PORTFOLIO_V2$</span> python src/train_model.py`;
+      terminalOutput.appendChild(promptLine);
+      
+      let texts = [
+        "Initializing PortfolioNet Architecture...",
+        "Epoch 1/10 - loss: 0.892 - val_accuracy: 0.91",
+        "Epoch 2/10 - loss: 0.710 - val_accuracy: 0.93",
+        "Epoch 3/10 - loss: 0.520 - val_accuracy: 0.95",
+        "Training Complete. Model saved to disk.",
+      ];
+      let i = 0;
+      let interval = setInterval(() => {
+        if(i < texts.length) {
+          const line = document.createElement('div');
+          line.innerText = texts[i];
+          terminalOutput.appendChild(line);
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+          i++;
+        } else {
+          const finalPrompt = document.createElement('div');
+          finalPrompt.innerHTML = `<br><span class="prompt">kshetra@macbook:~/ML_PORTFOLIO_V2$</span>`;
+          terminalOutput.appendChild(finalPrompt);
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+          clearInterval(interval);
+          isRunning = false;
+          runCodeBtn.style.opacity = '1';
+        }
+      }, 600);
+    });
+  }
 
   // ==========================================
   // 📸 HOBBY CAMERA: EOS 13000D (30+ FEATURES)
