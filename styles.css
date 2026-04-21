@@ -393,7 +393,7 @@ body.ide-active .custom-cursor { display: none; }
 .cert-header .section-title { border-bottom: none; margin-bottom: 0; padding-bottom: 1rem; }
 .cert-row {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 3rem 0; border-bottom: 1px solid rgba(0,0,0,0.05);
+  padding: 5rem 0; border-bottom: 1px solid rgba(0,0,0,0.05);
   cursor: none; transition: transform 0.4s ease, padding 0.4s ease, background 0.4s ease;
 }
 .cert-row.align-right { flex-direction: row-reverse; text-align: right; }
@@ -412,17 +412,18 @@ body.ide-active .custom-cursor { display: none; }
 
 /* Certificate logo styling */
 .cert-logo {
-  height: 60px;
+  height: 180px;
   width: auto;
   filter: grayscale(100%);
   transition: filter 0.3s ease, transform 0.3s ease;
+  mix-blend-mode: multiply;
 }
 .cert-logo:hover {
   filter: grayscale(0%);
   transform: scale(1.1);
 }
 .cert-logo.gcloud {
-  height: 120px;
+  height: 320px;
 }
 /* Sleek Addition: Magnetic Pills hover state */
 .skill-pill:hover { background: rgba(0,0,0,0.05); color: var(--pro-text); transform: scale(1.05); }
