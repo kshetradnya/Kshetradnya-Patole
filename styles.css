@@ -145,7 +145,7 @@ body.ide-active {
 
 /* Git Status */
 .git-status { font-family: sans-serif; font-size: 11px; font-weight: bold; }
-.git-status.modified { color: #e2c08d; }
+.git-status.modified { color: #f14c4c; }
 .git-status.untracked { color: #73c991; }
 
 /* Editor */
@@ -165,7 +165,7 @@ body.ide-active {
 .tab.active { background-color: var(--ide-bg); color: #fff; border-top-color: var(--ide-accent); }
 .close-tab { opacity: 0; padding: 2px; cursor: pointer; margin-left: 5px; }
 .tab:hover .close-tab { opacity: 1; }
-.git-m { color: #e2c08d; font-size: 10px; margin-left: 4px; }
+.git-m { color: #f14c4c; font-size: 10px; margin-left: 4px; }
 .git-u { color: #73c991; font-size: 10px; margin-left: 4px; }
 
 .breadcrumbs {
@@ -407,6 +407,7 @@ body.ide-active .custom-cursor { display: none; }
 .skill-pill {
   font-family: var(--font-mono); font-size: 0.75rem; padding: 4px 10px;
   border-radius: 999px; border: 1px solid rgba(0,0,0,0.1); color: var(--pro-text-muted);
+  background: transparent; transition: all 0.3s ease; display: inline-block; cursor: none;
 }
 
 /* Certificate logo styling */
@@ -418,8 +419,6 @@ body.ide-active .custom-cursor { display: none; }
 }
 .cert-logo:hover {
   filter: grayscale(0%);
-}
-  background: transparent; transition: all 0.3s ease; display: inline-block; cursor: none;
 }
 /* Sleek Addition: Magnetic Pills hover state */
 .skill-pill:hover { background: rgba(0,0,0,0.05); color: var(--pro-text); transform: scale(1.05); }
