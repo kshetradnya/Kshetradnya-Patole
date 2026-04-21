@@ -292,12 +292,12 @@ body.ide-active .custom-cursor { display: none; }
 
 /* Pro Nav */
 .pro-nav {
-  position: fixed; top: 0; left: 0; width: 100%; padding: 2.5rem 5rem;
-  display: flex; justify-content: space-between; align-items: center;
-  z-index: 100; color: var(--pro-text); mix-blend-mode: multiply;
+  position: fixed; top: 0; left: 0; width: 100%; padding: 1rem 2rem;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  z-index: 1000; color: var(--pro-text); mix-blend-mode: multiply;
 }
 .nav-logo { font-size: 2rem; font-weight: 700; font-family: var(--font-serif); }
-.nav-logo-img { height: 180px; width: auto; object-fit: contain; cursor: none; filter: grayscale(100%); transition: transform 0.3s ease, filter 0.3s ease; }
+.nav-logo-img { height: 180px; width: auto; object-fit: contain; cursor: none; filter: grayscale(100%); transition: transform 0.3s ease, filter 0.3s ease; margin-top: -20px; margin-left: -20px; }
 .nav-logo-img:hover { filter: grayscale(0%); transform: scale(1.05); }
 
 /* IDE Glowing Button Sleek Addition */
@@ -412,13 +412,17 @@ body.ide-active .custom-cursor { display: none; }
 
 /* Certificate logo styling */
 .cert-logo {
-  height: 30px;
+  height: 60px;
   width: auto;
   filter: grayscale(100%);
-  transition: filter 0.3s ease;
+  transition: filter 0.3s ease, transform 0.3s ease;
 }
 .cert-logo:hover {
   filter: grayscale(0%);
+  transform: scale(1.1);
+}
+.cert-logo.gcloud {
+  height: 120px;
 }
 /* Sleek Addition: Magnetic Pills hover state */
 .skill-pill:hover { background: rgba(0,0,0,0.05); color: var(--pro-text); transform: scale(1.05); }
@@ -533,7 +537,7 @@ body.ide-active .custom-cursor { display: none; }
 .top-left { top: 20px; left: 20px; }
 .top-right { top: 20px; right: 20px; }
 
-.mode-dial { width: 40px; height: 40px; border: 2px solid #fff; display: flex; items-center; justify-content: center; font-weight: 900; background: #000; border-radius: 4px; }
+.mode-dial { width: 40px; height: 40px; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; background: #000; border-radius: 4px; }
 .recording-dot { color: var(--cam-hud-red); font-weight: bold; animation: pulseRed 1s infinite; }
 
 .live-histogram {
@@ -573,7 +577,7 @@ body.ide-active .custom-cursor { display: none; }
 /* Boot Loader */
 .lcd-loader {
   position: absolute; inset: 0; background: #000; z-index: 200;
-  display: flex; flex-direction: column; items-center; justify-content: center; text-align: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
 }
 .boot-bar { width: 200px; height: 2px; background: #333; margin-top: 20px; overflow: hidden; }
 .boot-progress { width: 0%; height: 100%; background: var(--cam-hud-green); animation: bootProgress 2s forwards; }
