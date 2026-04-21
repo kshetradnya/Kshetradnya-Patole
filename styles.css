@@ -407,6 +407,18 @@ body.ide-active .custom-cursor { display: none; }
 .skill-pill {
   font-family: var(--font-mono); font-size: 0.75rem; padding: 4px 10px;
   border-radius: 999px; border: 1px solid rgba(0,0,0,0.1); color: var(--pro-text-muted);
+}
+
+/* Certificate logo styling */
+.cert-logo {
+  height: 30px;
+  width: auto;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+.cert-logo:hover {
+  filter: grayscale(0%);
+}
   background: transparent; transition: all 0.3s ease; display: inline-block; cursor: none;
 }
 /* Sleek Addition: Magnetic Pills hover state */
