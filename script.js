@@ -37,11 +37,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (launchBtn) {
     launchBtn.addEventListener('click', () => {
-      proUniverse.style.display = 'none';
-      document.body.classList.add('ide-active');
-      ideUniverse.classList.add('active');
-      ideUniverse.style.display = 'flex';
-      customCursor.style.display = 'none';
+      proUniverse.classList.remove('active');
+      setTimeout(() => {
+        proUniverse.style.display = 'none';
+        document.body.classList.add('ide-active');
+        ideUniverse.style.display = 'flex';
+        void ideUniverse.offsetWidth;
+        ideUniverse.classList.add('active');
+        customCursor.style.display = 'none';
+      }, 500);
     });
   }
 
@@ -49,10 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!btn) return;
     btn.addEventListener('click', () => {
       ideUniverse.classList.remove('active');
-      ideUniverse.style.display = 'none';
-      document.body.classList.remove('ide-active');
-      proUniverse.style.display = 'block';
-      customCursor.style.display = 'block';
+      setTimeout(() => {
+        ideUniverse.style.display = 'none';
+        document.body.classList.remove('ide-active');
+        proUniverse.style.display = 'block';
+        void proUniverse.offsetWidth;
+        proUniverse.classList.add('active');
+        customCursor.style.display = 'block';
+        ScrollTrigger.refresh();
+      }, 500);
     });
   });
 
