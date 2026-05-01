@@ -1,374 +1,284 @@
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize Lenis for Smooth Scrolling
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  direction: 'vertical',
+  gestureDirection: 'vertical',
+  smooth: true,
+  mouseMultiplier: 1,
+  smoothTouch: false,
+  touchMultiplier: 2,
+  infinite: false,
+})
 
-  // ==========================================
-  // UNIVERSE 1: THE PRO MODE (NOW DEFAULT)
-  // ==========================================
+function raf(time) {
+  lenis.raf(time)
+  requestAnimationFrame(raf)
+}
+
+requestAnimationFrame(raf)
+
+// Integrate Lenis with GSAP ScrollTrigger
+gsap.registerPlugin(ScrollTrigger);
+
+lenis.on('scroll', ScrollTrigger.update);
+
+gsap.ticker.add((time)=>{
+  lenis.raf(time * 1000)
+});
+
+gsap.ticker.lagSmoothing(0);
+
+// Custom Cursor Logic
+const cursor = document.querySelector('.cursor');
+const follower = document.querySelector('.cursor-follower');
+const hoverTargets = document.querySelectorAll('.hover-target');
+
+let mouseX = 0, mouseY = 0;
+let followerX = 0, followerY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
   
-  const ideUniverse = document.getElementById('ide-universe');
-  const proUniverse = document.getElementById('pro-universe');
-  const launchBtn = document.getElementById('launchIdeBtn');
-  const exitIdeBtns = [document.getElementById('exitIdeBtn'), document.getElementById('exitIdeTopBtn')];
+  // Instant cursor follow
+  gsap.to(cursor, {
+    x: mouseX,
+    y: mouseY,
+    duration: 0.1,
+    ease: "power2.out"
+  });
+});
 
-  // Initial State Enforcement
-  if(ideUniverse) ideUniverse.style.display = 'none';
-  if(proUniverse) proUniverse.style.display = 'block';
-
-  gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+// Smooth follower logic
+gsap.ticker.add(() => {
+  followerX += (mouseX - followerX) * 0.15;
+  followerY += (mouseY - followerY) * 0.15;
   
-  const elements = gsap.utils.toArray('.gsap-fade-up');
-  elements.forEach(el => gsap.set(el, { y: 60, opacity: 0 }));
+  gsap.set(follower, {
+    x: followerX,
+    y: followerY
+  });
+});
 
-  function initGsap() {
-    ScrollTrigger.getAll().forEach(st => st.kill());
-    elements.forEach(el => {
-      ScrollTrigger.create({
+// Hover effects
+hoverTargets.forEach(target => {
+  target.addEventListener('mouseenter', (e) => {
+    follower.classList.add('hover-active');
+    const customText = target.getAttribute('data-cursor');
+    if (customText) {
+      follower.setAttribute('data-text', customText);
+      cursor.style.opacity = '0';
+    } else {
+      follower.setAttribute('data-text', '');
+    }
+  });
+  
+  target.addEventListener('mouseleave', () => {
+    follower.classList.remove('hover-active');
+    follower.setAttribute('data-text', '');
+    cursor.style.opacity = '1';
+  });
+});
+
+// Animations
+const tl = gsap.timeline();
+
+tl.fromTo('.role-badge', 
+  { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 1, ease: 'power3.out', delay: 0.2 }
+)
+.fromTo('.hero-title .line',
+  { y: 150, opacity: 0 },
+  { y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: 'expo.out' },
+  '-=0.8'
+)
+.fromTo('.scroll-indicator',
+  { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
+  '-=0.5'
+);
+
+// Scroll Animations
+const fadeUps = document.querySelectorAll('.fade-up:not(.role-badge):not(.scroll-indicator)');
+
+fadeUps.forEach(el => {
+  gsap.fromTo(el,
+    { y: 40, opacity: 0 },
+    {
+      y: 0,
+      opacity: 1,
+      duration: 1,
+      ease: 'power3.out',
+      scrollTrigger: {
         trigger: el,
-        scroller: ".pro-scroll-container",
-        start: "top 85%",
-        onEnter: () => {
-          gsap.to(el, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out", clearProps: "all" });
-        },
-        once: true
-      });
-    });
-  }
-  
-  setTimeout(initGsap, 100);
+        start: 'top 85%',
+        toggleActions: 'play none none reverse'
+      }
+    }
+  );
+});
 
-  if (launchBtn) {
-    launchBtn.addEventListener('click', () => {
-      proUniverse.classList.remove('active');
-      setTimeout(() => {
-        proUniverse.style.display = 'none';
-        document.body.classList.add('ide-active');
-        ideUniverse.style.display = 'flex';
-        void ideUniverse.offsetWidth;
-        ideUniverse.classList.add('active');
-        customCursor.style.display = 'none';
-      }, 500);
-    });
-  }
+// About Text specific fade
+const aboutText = document.querySelector('.about-text');
+if (aboutText) {
+  gsap.fromTo(aboutText, 
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 1.5,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: aboutText,
+        start: 'top 80%',
+      }
+    }
+  );
+}
 
-  exitIdeBtns.forEach(btn => {
-    if(!btn) return;
-    btn.addEventListener('click', () => {
-      ideUniverse.classList.remove('active');
-      setTimeout(() => {
-        ideUniverse.style.display = 'none';
-        document.body.classList.remove('ide-active');
-        proUniverse.style.display = 'block';
-        void proUniverse.offsetWidth;
-        proUniverse.classList.add('active');
-        customCursor.style.display = 'block';
-        ScrollTrigger.refresh();
-      }, 500);
-    });
-  });
-
-  // CUSTOM MAGNETIC CURSOR & PROJECT HOVER
-  const customCursor = document.getElementById('custom-cursor');
-  const imageFollower = document.getElementById('image-follower');
-  const projectRows = document.querySelectorAll('.project-row');
-
-  document.addEventListener('mousemove', (e) => {
-    if(document.body.classList.contains('ide-active')) return;
-    
-    // Smooth cursor movement
-    gsap.to(customCursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
-
-    if (imageFollower) {
-      gsap.to(imageFollower, { x: e.clientX, y: e.clientY, duration: 0.6, ease: "power2.out" });
+// Project Images Parallax
+const projectImages = document.querySelectorAll('.project-image img');
+projectImages.forEach(img => {
+  gsap.to(img, {
+    yPercent: 15,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: img.parentElement,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true
     }
   });
+});
 
-  const hoverables = document.querySelectorAll('a, button, .magnet-btn, .skill-pill');
-  hoverables.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      customCursor?.classList.add('hover');
-    });
-    el.addEventListener('mouseleave', () => {
-      customCursor?.classList.remove('hover');
-    });
+// Certificates Modal Logic
+const openBtn = document.getElementById('openCertsBtn');
+const closeBtn = document.getElementById('closeCertsBtn');
+const certModal = document.getElementById('certModal');
+
+let modalTl = gsap.timeline({ paused: true });
+modalTl.to(certModal, {
+  y: 0,
+  duration: 0.8,
+  ease: 'power4.inOut'
+})
+.fromTo('.cert-card', 
+  { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power2.out' },
+  '-=0.3'
+);
+
+openBtn.addEventListener('click', () => {
+  certModal.style.display = 'flex';
+  lenis.stop(); // Disable scrolling on main page
+  modalTl.play();
+});
+
+closeBtn.addEventListener('click', () => {
+  modalTl.reverse().then(() => {
+    lenis.start(); // Re-enable scrolling
   });
+});
 
-  projectRows.forEach(row => {
-    row.addEventListener('mouseenter', () => {
-      const img = row.getAttribute('data-img');
-      if (imageFollower && img) {
-        imageFollower.style.backgroundImage = `url(${img})`;
-        imageFollower.classList.add('visible');
-        imageFollower.classList.remove('ball-mode');
-      }
-    });
-
-    row.addEventListener('mouseleave', () => {
-      if (imageFollower) {
-        imageFollower.classList.remove('visible');
-        imageFollower.classList.remove('ball-mode');
-      }
-    });
-
-    const viewLink = row.querySelector('.view-link');
-    if (viewLink) {
-      viewLink.addEventListener('mouseenter', () => {
-        imageFollower?.classList.add('ball-mode');
-      });
-      viewLink.addEventListener('mouseleave', () => {
-        imageFollower?.classList.remove('ball-mode');
-      });
+// Text Scramble Effect
+class TextScramble {
+  constructor(el) {
+    this.el = el;
+    this.chars = '!<>-_\\/[]{}—=+*^?#________';
+    this.update = this.update.bind(this);
+  }
+  setText(newText) {
+    const oldText = this.el.innerText;
+    const length = Math.max(oldText.length, newText.length);
+    const promise = new Promise((resolve) => this.resolve = resolve);
+    this.queue = [];
+    for (let i = 0; i < length; i++) {
+      const from = oldText[i] || '';
+      const to = newText[i] || '';
+      const start = Math.floor(Math.random() * 40);
+      const end = start + Math.floor(Math.random() * 40);
+      this.queue.push({ from, to, start, end });
     }
-  });
-
-  // Bento Spotlight Logic
-  document.querySelectorAll('.bento-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
-    });
-  });
-
-  // ==========================================
-  // VIRTUAL IDE INTERACTIVITY
-  // ==========================================
-
-  const ideTabs = document.querySelectorAll('.ide-editor .tab');
-  const ideFiles = document.querySelectorAll('.ide-sidebar .file-item');
-  const ideContents = document.querySelectorAll('.ide-editor .file-content');
-  const breadcrumbPath = document.getElementById('breadcrumbPath');
-  
-  function switchIdeFile(fileId) {
-    ideTabs.forEach(tab => {
-      if(tab.getAttribute('data-file') === fileId) tab.classList.add('active');
-      else tab.classList.remove('active');
-    });
-    ideFiles.forEach(file => {
-      if(file.getAttribute('data-file') === fileId) {
-        file.classList.add('active');
-        if (breadcrumbPath) {
-           let fileName = file.innerText.replace(/M$|U$/,'').trim();
-           breadcrumbPath.innerText = `ML_PORTFOLIO_V2 > ${fileName}`;
+    cancelAnimationFrame(this.frameRequest);
+    this.frame = 0;
+    this.update();
+    return promise;
+  }
+  update() {
+    let output = '';
+    let complete = 0;
+    for (let i = 0, n = this.queue.length; i < n; i++) {
+      let { from, to, start, end, char } = this.queue[i];
+      if (this.frame >= end) {
+        complete++;
+        output += to;
+      } else if (this.frame >= start) {
+        if (!char || Math.random() < 0.28) {
+          char = this.randomChar();
+          this.queue[i].char = char;
         }
+        output += `<span class="dud" style="opacity:0.3">${char}</span>`;
+      } else {
+        output += from;
       }
-      else file.classList.remove('active');
-    });
-    ideContents.forEach(content => {
-      if(content.id === `file-${fileId}`) content.style.display = 'flex';
-      else content.style.display = 'none';
-    });
-  }
-  
-  ideTabs.forEach(tab => {
-    tab.addEventListener('click', () => { switchIdeFile(tab.getAttribute('data-file')); });
-  });
-  ideFiles.forEach(file => {
-    file.addEventListener('click', () => { switchIdeFile(file.getAttribute('data-file')); });
-  });
-
-  // Terminal Typing Simulation
-  const runCodeBtn = document.getElementById('runCodeBtn');
-  const terminalOutput = document.getElementById('terminalOutput');
-  if(runCodeBtn && terminalOutput) {
-    let isRunning = false;
-    runCodeBtn.addEventListener('click', () => {
-      if(isRunning) return;
-      isRunning = true;
-      runCodeBtn.style.opacity = '0.5';
-      const promptLine = document.createElement('div');
-      promptLine.innerHTML = `<span class="prompt">kshetra@macbook:~/ML_PORTFOLIO_V2$</span> python src/train_model.py`;
-      terminalOutput.appendChild(promptLine);
-      
-      let texts = [
-        "Initializing PortfolioNet Architecture...",
-        "Epoch 1/10 - loss: 0.892 - val_accuracy: 0.91",
-        "Epoch 2/10 - loss: 0.710 - val_accuracy: 0.93",
-        "Epoch 3/10 - loss: 0.520 - val_accuracy: 0.95",
-        "Training Complete. Model saved to disk.",
-      ];
-      let i = 0;
-      let interval = setInterval(() => {
-        if(i < texts.length) {
-          const line = document.createElement('div');
-          line.innerText = texts[i];
-          terminalOutput.appendChild(line);
-          terminalOutput.scrollTop = terminalOutput.scrollHeight;
-          i++;
-        } else {
-          const finalPrompt = document.createElement('div');
-          finalPrompt.innerHTML = `<br><span class="prompt">kshetra@macbook:~/ML_PORTFOLIO_V2$</span>`;
-          terminalOutput.appendChild(finalPrompt);
-          terminalOutput.scrollTop = terminalOutput.scrollHeight;
-          clearInterval(interval);
-          isRunning = false;
-          runCodeBtn.style.opacity = '1';
-        }
-      }, 600);
-    });
-  }
-
-  // ==========================================
-  // 📸 HOBBY CAMERA: EOS 13000D (30+ FEATURES)
-  // ==========================================
-
-  const HOBBIES_DATA = [
-    { 
-      id: 'photography', 
-      title: 'Visual Storytelling', 
-      desc: 'Capturing moments that tell a story beyond words.', 
-      img: 'projects/hobby_photography.png', 
-      stats: { shutter: '1/4000', aperture: 'ƒ/1.8', iso: '100' },
-      meta: { file: 'PAT_0042.CR2', gps: '19.076° N, 72.877° E', color: 'CINEMATIC VIVID' }
-    },
-    { 
-      id: 'running', 
-      title: 'The Trail Runner', 
-      desc: 'Escaping the simulation one kilometer at a time.', 
-      img: 'projects/hobby_running.png', 
-      stats: { shutter: '1/8000', aperture: 'ƒ/2.8', iso: '800' },
-      meta: { file: 'PAT_0912.CR2', gps: '46.818° N, 8.227° E', color: 'RUGGED NATURAL' }
-    },
-    { 
-      id: 'sports', 
-      title: 'The Dual Strategy', 
-      desc: 'Football on the grass, Chess on the wooden board.', 
-      img: 'projects/hobby_sports_chess.png', 
-      stats: { shutter: '1/2000', aperture: 'ƒ/4.0', iso: '400' },
-      meta: { file: 'PAT_0543.CR2', gps: '51.507° N, 0.127° W', color: 'DYNAMIC SPORTS' }
     }
-  ];
-
-  let currentHobbyIdx = 0;
-  let isCamOn = false;
-  let batteryLevel = 98;
-
-  const camLauncher = document.getElementById('cameraLauncherMini');
-  const powerOverlay = document.getElementById('powerSwitchOverlay');
-  const powerToggle = document.getElementById('mainPowerSwitch');
-  const hobbyUniverse = document.getElementById('hobbyCameraUniverse');
-
-  if (camLauncher) {
-    camLauncher.addEventListener('click', () => {
-      powerOverlay.style.display = 'flex';
-      gsap.from('.switch-box', { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out" });
-    });
+    this.el.innerHTML = output;
+    if (complete === this.queue.length) {
+      this.resolve();
+    } else {
+      this.frameRequest = requestAnimationFrame(this.update);
+      this.frame++;
+    }
   }
-
-  if (powerToggle) {
-    powerToggle.addEventListener('click', () => {
-      powerToggle.classList.toggle('on');
-      if (powerToggle.classList.contains('on')) {
-        setTimeout(() => {
-          powerOverlay.style.display = 'none';
-          isCamOn = true;
-          startCameraEngine();
-        }, 600);
-      }
-    });
+  randomChar() {
+    return this.chars[Math.floor(Math.random() * this.chars.length)];
   }
+}
 
-  function startCameraEngine() {
-    hobbyUniverse.style.display = 'flex';
-    document.getElementById('lcdBootLoader').style.display = 'flex';
-    document.getElementById('lcdContent').style.display = 'none';
-    document.getElementById('lcdHud').style.opacity = '0';
+const phrases = [
+  "Transitioning from pure web development into core AI mechanics.",
+  "Focusing on neural network architectures.",
+  "Building high-performance data pipelines.",
+  "Obsessed with building seamless full-stack ecosystems."
+];
 
-    // Randomized Boot Sequence
-    const bootTL = gsap.timeline({ onComplete: () => {
-        document.getElementById('lcdBootLoader').style.display = 'none';
-        document.getElementById('lcdContent').style.display = 'flex';
-        gsap.to('#lcdHud', { opacity: 1, duration: 1 });
-        initInteractiveFeatures();
-        updateHobbyDisplay();
-    }});
-
-    bootTL.to('.boot-progress', { width: '100%', duration: 1.5, ease: "slow(0.7, 0.7, false)" });
-  }
-
-  function initInteractiveFeatures() {
-    // 1. Stochastic Histogram
-    const bars = document.querySelectorAll('.h-bar');
-    gsap.to(bars, {
-        height: () => (Math.random() * 80 + 10) + "%",
-        duration: 0.2,
-        repeat: -1,
-        stagger: 0.05,
-        ease: "none"
+const el = document.querySelector('.scramble-text');
+if (el) {
+  const fx = new TextScramble(el);
+  let counter = 0;
+  const next = () => {
+    fx.setText(phrases[counter]).then(() => {
+      setTimeout(next, 3000);
     });
+    counter = (counter + 1) % phrases.length;
+  };
+  // Start the scramble sequence after a short delay
+  setTimeout(next, 1000);
+}
 
-    // 2. Face Tracking AI Simulation
-    const focusBoxes = document.querySelectorAll('.focus-box');
-    gsap.to(focusBoxes, {
-        x: () => (Math.random() * 100 - 50),
-        y: () => (Math.random() * 100 - 50),
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
-    });
-
-    // 3. Spirit Level / Horizon
-    gsap.to('.horizon-line', {
-        rotation: () => (Math.random() * 4 - 2),
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut"
-    });
-
-    // 4. Battery drain simulation
-    setInterval(() => {
-        if(isCamOn && batteryLevel > 5) {
-            batteryLevel -= 1;
-            document.getElementById('batCap').innerText = batteryLevel + "%";
-        }
-    }, 15000);
-  }
-
-  function updateHobbyDisplay() {
-    const data = HOBBIES_DATA[currentHobbyIdx];
+// Magnetic Elements
+const magnetics = document.querySelectorAll('.magnetic-pill, .magnetic-btn');
+magnetics.forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
     
-    // UI Updates
-    document.getElementById('hobbyImage').src = data.img;
-    document.getElementById('hobbyTitle').innerText = data.title;
-    document.getElementById('hobbyDesc').innerText = data.desc;
-    
-    // Stats Update
-    document.getElementById('valShutter').innerText = data.stats.shutter;
-    document.getElementById('valAperture').innerText = data.stats.aperture;
-    document.getElementById('valIso').innerText = data.stats.iso;
-
-    // Meta Update
-    document.getElementById('fileName').innerText = data.meta.file;
-
-    // Dots
-    document.querySelectorAll('.hobby-dots .dot').forEach((dot, i) => dot.classList.toggle('active', i === currentHobbyIdx));
-    
-    // Scan Animation
-    gsap.from('#hobbyImage', { scale: 1.1, filter: 'blur(10px)', duration: 1 });
-  }
-
-  function snapPhoto() {
-    const flash = document.getElementById('lcdFlashOverlay');
-    gsap.timeline()
-        .set(flash, { opacity: 1 })
-        .to(flash, { opacity: 0, duration: 0.4 })
-        .to('.camera-body', { y: -10, duration: 0.1, yoyo: true, repeat: 1 });
-  }
-
-  // Event Listeners
-  document.getElementById('physicalShutter')?.addEventListener('click', snapPhoto);
-  document.getElementById('camRight')?.addEventListener('click', () => { currentHobbyIdx = (currentHobbyIdx + 1) % HOBBIES_DATA.length; updateHobbyDisplay(); });
-  document.getElementById('camLeft')?.addEventListener('click', () => { currentHobbyIdx = (currentHobbyIdx - 1 + HOBBIES_DATA.length) % HOBBIES_DATA.length; updateHobbyDisplay(); });
-  
-  document.getElementById('exitLensBtn')?.addEventListener('click', () => {
-    isCamOn = false;
-    gsap.to('.camera-body', { scale: 0.8, opacity: 0, duration: 0.5, onComplete: () => {
-      hobbyUniverse.style.display = 'none';
-      powerToggle.classList.remove('on');
-    }});
+    gsap.to(btn, {
+      x: x * 0.3,
+      y: y * 0.3,
+      duration: 0.4,
+      ease: 'power2.out'
+    });
   });
-
-
+  
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, {
+      x: 0,
+      y: 0,
+      duration: 0.7,
+      ease: 'elastic.out(1, 0.3)'
+    });
+  });
 });
