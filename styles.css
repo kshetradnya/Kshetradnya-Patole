@@ -226,22 +226,39 @@ body {
   padding: 8rem 0;
 }
 
-.section-header {
-  margin-bottom: 6rem;
+/* Text Scroll Styles */
+.text-scroll-wrap {
+  margin: 0 0 2rem;
+  padding: 2rem 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-.section-title {
+.text-scroll-row {
+  display: flex;
+  gap: 3rem;
+  white-space: nowrap;
+  font-size: clamp(4rem, 12vw, 10rem);
   font-family: var(--font-heading);
-  font-size: 3.5rem;
-  font-weight: 500;
-  letter-spacing: -1px;
+  font-weight: 800;
+  line-height: 0.9;
+  text-transform: uppercase;
+  will-change: transform;
 }
 
-.title-line {
-  width: 100%;
-  height: 1px;
-  background-color: var(--border);
-  margin-top: 2rem;
+.ts-solid {
+  color: var(--text);
+}
+
+.ts-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.2);
+}
+
+.light-theme .ts-outline {
+  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.2);
 }
 
 .projects-wrapper {

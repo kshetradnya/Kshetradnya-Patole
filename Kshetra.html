@@ -59,13 +59,26 @@
       </div>
     </section>
 
-    <section class="work" id="work" style="display: none;">
-      <div class="container">
-        <div class="section-header fade-up">
-          <h2 class="section-title">Selected Works</h2>
-          <div class="title-line"></div>
+    <section class="work" id="work">
+      <!-- Text Scroll Animation Container -->
+      <div class="text-scroll-wrap" id="workScrollWrap">
+        <div class="text-scroll-row text-scroll-right">
+          <span class="ts-solid">SELECTED</span>
+          <span class="ts-outline">SELECTED</span>
+          <span class="ts-solid">SELECTED</span>
+          <span class="ts-outline">SELECTED</span>
+          <span class="ts-solid">SELECTED</span>
         </div>
+        <div class="text-scroll-row text-scroll-left">
+          <span class="ts-outline">WORKS.</span>
+          <span class="ts-solid">WORKS.</span>
+          <span class="ts-outline">WORKS.</span>
+          <span class="ts-solid">WORKS.</span>
+          <span class="ts-outline">WORKS.</span>
+        </div>
+      </div>
 
+      <div class="container" style="margin-top: 4rem;">
         <div class="projects-wrapper">
           <!-- Project 1 -->
           <div class="project-item fade-up hover-target" data-cursor="View">
@@ -75,19 +88,20 @@
             <div class="project-info">
               <h3>Patole.in Portfolio</h3>
               <p>Cinematic Layered GSAP Experience featuring strict Neumorphic Soft UI design systems, interactive sliders, and custom frame-sequence video rendering.</p>
-              <div class="tags"><span>React</span><span>Tailwind</span></div>
+              <div class="tags"><span>React</span><span>Tailwind</span><span>GSAP</span></div>
             </div>
           </div>
           
           <!-- Project 2 -->
           <div class="project-item fade-up hover-target" data-cursor="View">
             <div class="project-image">
-               <img src="projects/biology_preview.png" alt="Interactive ML Biology" onerror="this.src='https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&q=80&w=800'">
+               <img src="https://images.unsplash.com/photo-1501167786227-4cba60f6d58f?auto=format&fit=crop&w=800&q=80" alt="Sparks Foundation" onerror="this.src='https://images.unsplash.com/photo-1501167786227-4cba60f6d58f?auto=format&fit=crop&w=800&q=80'">
             </div>
             <div class="project-info">
-              <h3>Interactive ML Biology</h3>
-              <p>A WebGL Sandbox Simulation exploring biological patterns through machine learning algorithms and real-time rendering techniques.</p>
-              <div class="tags"><span>Three.js</span><span>Python</span></div>
+              <h3>Sparks Foundation</h3>
+              <p>Banking System Website for Sparks Foundation Internship.</p>
+              <div class="tags"><span>HTML</span><span>CSS</span><span>JS</span></div>
+              <a href="https://kshetradnya.github.io/Sparks/" target="_blank" class="rw-link" style="color:var(--text); text-decoration:underline; font-weight:600; font-family:var(--font-mono); font-size:0.8rem; text-transform:uppercase;">View Project</a>
             </div>
           </div>
 
@@ -102,6 +116,13 @@
               <div class="tags"><span>Canvas API</span><span>AI</span></div>
             </div>
           </div>
+        </div>
+
+        <div class="view-all-wrapper fade-up" style="text-align: center; margin-top: 6rem;">
+          <button id="openWorksBtn" class="creative-btn magnetic-btn hover-target" data-cursor="Open" style="border: 1px solid var(--text);">
+            <span class="btn-text" style="color: var(--text);">View All Selected Works</span>
+            <span class="btn-bg"></span>
+          </button>
         </div>
       </div>
     </section>
@@ -228,6 +249,43 @@
         <img src="projects/gcloud.png" alt="Google Cloud" class="cert-logo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg'">
         <h4>Innovating with Google Cloud AI</h4>
         <p>Google Cloud</p>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Works Modal -->
+  <div class="cert-modal" id="worksModal">
+    <div class="cert-modal-header">
+      <h2>All Projects</h2>
+      <button class="close-modal-btn hover-target" id="closeWorksBtn">Close</button>
+    </div>
+    <div class="cert-grid">
+      
+      <!-- Featured Projects -->
+      <a href="#" class="cert-card hover-target" data-cursor="View">
+        <img src="projects/KP.png" alt="Patole.in Portfolio" class="cert-logo" style="width:100%; height:150px; object-fit:cover; margin-bottom:1.5rem; filter:none; border-radius:8px;">
+        <h4>Patole.in Portfolio</h4>
+        <p>Cinematic Layered GSAP Experience featuring strict Neumorphic Soft UI design systems.</p>
+      </a>
+
+      <a href="https://kshetradnya.github.io/Sparks/" target="_blank" class="cert-card hover-target" data-cursor="View">
+        <img src="https://images.unsplash.com/photo-1501167786227-4cba60f6d58f?auto=format&fit=crop&w=800&q=80" alt="Sparks Foundation" class="cert-logo" style="width:100%; height:150px; object-fit:cover; margin-bottom:1.5rem; filter:none; border-radius:8px;">
+        <h4>Sparks Foundation</h4>
+        <p>Banking System Website for Sparks Foundation Internship.</p>
+      </a>
+
+      <a href="#" class="cert-card hover-target" data-cursor="View">
+        <img src="projects/transform_preview.png" alt="Transform Editor" class="cert-logo" style="width:100%; height:150px; object-fit:cover; margin-bottom:1.5rem; filter:none; border-radius:8px;">
+        <h4>Transform Editor</h4>
+        <p>An AI-Powered Photo Grading application utilizing the Canvas API for high-performance image manipulation.</p>
+      </a>
+
+      <!-- Other Projects -->
+      <a href="#" class="cert-card hover-target" data-cursor="View">
+        <img src="projects/biology_preview.png" alt="Interactive ML Biology" class="cert-logo" style="width:100%; height:150px; object-fit:cover; margin-bottom:1.5rem; filter:none; border-radius:8px;">
+        <h4>Interactive ML Biology</h4>
+        <p>A WebGL Sandbox Simulation exploring biological patterns through machine learning algorithms and real-time rendering techniques.</p>
       </a>
 
     </div>

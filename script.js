@@ -152,34 +152,104 @@ projectImages.forEach(img => {
   });
 });
 
+// Massive Text Scroll Animation
+const textScrollWrap = document.getElementById('workScrollWrap');
+if (textScrollWrap) {
+  gsap.to('.text-scroll-right', {
+    xPercent: -30,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: textScrollWrap,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: 0.5
+    }
+  });
+  
+  gsap.fromTo('.text-scroll-left', 
+    { xPercent: -30 },
+    {
+      xPercent: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: textScrollWrap,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 0.5
+      }
+    }
+  );
+}
+
 // Certificates Modal Logic
 const openBtn = document.getElementById('openCertsBtn');
 const closeBtn = document.getElementById('closeCertsBtn');
 const certModal = document.getElementById('certModal');
 
 let modalTl = gsap.timeline({ paused: true });
-modalTl.to(certModal, {
-  y: 0,
-  duration: 0.8,
-  ease: 'power4.inOut'
-})
-.fromTo('.cert-card', 
-  { y: 40, opacity: 0 },
-  { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power2.out' },
-  '-=0.3'
-);
+if (certModal) {
+  modalTl.to(certModal, {
+    y: 0,
+    duration: 0.8,
+    ease: 'power4.inOut'
+  })
+  .fromTo('#certModal .cert-card', 
+    { y: 40, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power2.out' },
+    '-=0.3'
+  );
 
-openBtn.addEventListener('click', () => {
-  certModal.style.display = 'flex';
-  lenis.stop(); // Disable scrolling on main page
-  modalTl.play();
-});
+  if (openBtn) {
+    openBtn.addEventListener('click', () => {
+      certModal.style.display = 'flex';
+      lenis.stop(); // Disable scrolling on main page
+      modalTl.play();
+    });
+  }
 
-closeBtn.addEventListener('click', () => {
-  modalTl.reverse().then(() => {
-    lenis.start(); // Re-enable scrolling
-  });
-});
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modalTl.reverse().then(() => {
+        lenis.start(); // Re-enable scrolling
+      });
+    });
+  }
+}
+
+// Works Modal Logic
+const openWorksBtn = document.getElementById('openWorksBtn');
+const closeWorksBtn = document.getElementById('closeWorksBtn');
+const worksModal = document.getElementById('worksModal');
+
+let worksModalTl = gsap.timeline({ paused: true });
+if (worksModal) {
+  worksModalTl.to(worksModal, {
+    y: 0,
+    duration: 0.8,
+    ease: 'power4.inOut'
+  })
+  .fromTo('#worksModal .cert-card', 
+    { y: 40, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power2.out' },
+    '-=0.3'
+  );
+
+  if (openWorksBtn) {
+    openWorksBtn.addEventListener('click', () => {
+      worksModal.style.display = 'flex';
+      lenis.stop();
+      worksModalTl.play();
+    });
+  }
+
+  if (closeWorksBtn) {
+    closeWorksBtn.addEventListener('click', () => {
+      worksModalTl.reverse().then(() => {
+        lenis.start();
+      });
+    });
+  }
+}
 
 // Text Scramble Effect
 class TextScramble {
