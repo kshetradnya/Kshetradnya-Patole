@@ -43,16 +43,6 @@ export function SelectedWorks() {
   return (
     <section className="react-works">
       <div className="rw-container">
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="rw-header"
-        >
-          <h2 className="rw-title">Selected Works</h2>
-          <div className="rw-line"></div>
-        </motion.div>
 
         <div className="rw-grid">
           {featuredProjects.map((proj, i) => (
