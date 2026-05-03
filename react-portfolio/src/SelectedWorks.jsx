@@ -12,7 +12,7 @@ const featuredProjects = [
   { 
     id: 2, 
     title: "Sparks Foundation", 
-    img: "https://images.unsplash.com/photo-1501167786227-4cba60f6d58f?auto=format&fit=crop&w=800&q=80", 
+    img: "/projects/sparks.png", 
     tags: ["HTML", "CSS", "JS"], 
     desc: "Banking System Website for Sparks Foundation Internship.", 
     link: "https://kshetradnya.github.io/Sparks/" 
