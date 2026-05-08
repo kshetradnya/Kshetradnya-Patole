@@ -14,8 +14,8 @@ export default function App() {
     <main className="app-shell">
       <motion.div className="progress-bar" style={{ scaleX }} />
       <header className="react-head">
-        <h1>React Wrapper Enabled</h1>
-        <p>Your current portfolio is now mounted inside a React app.</p>
+        <h1>Kshetradnya Patole</h1>
+        <p>AI & ML Engineer crafting high-end cinematic web experiences. Bridging the gap between premium frontend architectures (React, Framer Motion) and complex machine learning algorithms. I build intelligent systems that wow users.</p>
       </header>
 
       <TextScroll />
