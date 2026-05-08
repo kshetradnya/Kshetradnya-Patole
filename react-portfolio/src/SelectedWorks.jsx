@@ -7,7 +7,8 @@ const featuredProjects = [
     title: "Patole.in Portfolio", 
     img: "/projects/patole-new.png", 
     tags: ["React", "Tailwind", "GSAP"], 
-    desc: "Cinematic Layered GSAP Experience featuring strict Neumorphic Soft UI design systems, interactive sliders, and custom frame-sequence video rendering." 
+    desc: "Cinematic Layered GSAP Experience featuring strict Neumorphic Soft UI design systems, interactive sliders, and custom frame-sequence video rendering.",
+    link: "https://patole.in"
   },
   { 
     id: 2, 
@@ -22,7 +23,8 @@ const featuredProjects = [
     title: "Transform Editor", 
     img: "/projects/transform_preview.png", 
     tags: ["Canvas API", "AI"], 
-    desc: "An AI-Powered Photo Grading application utilizing the Canvas API for high-performance image manipulation and filtering in the browser." 
+    desc: "An AI-Powered Photo Grading application utilizing the Canvas API for high-performance image manipulation and filtering in the browser.",
+    link: "https://kshetradnya.github.io/transform/"
   }
 ];
 
